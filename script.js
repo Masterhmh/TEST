@@ -1033,12 +1033,28 @@ window.fetchMonthlyData = async function() {
       <div class="stat-box balance"><div class="title">Số dư</div><div class="amount">${totalBalance.toLocaleString('vi-VN')}đ</div></div>
     `;
 
-    // Vẽ bar chart (không có legend)
+    // Vẽ bar chart theo range tháng người dùng chọn
     const ctx = document.getElementById('monthlyChart').getContext('2d');
     if (window.monthlyChartInstance) window.monthlyChartInstance.destroy();
-    const labels = monthlyData.map(item => `Tháng ${item.month}`);
-    const incomeData = monthlyData.map(item => item.income);
-    const expenseData = monthlyData.map(item => item.expense);
+    
+    // Tạo mảng tháng từ startMonth đến endMonth
+    const monthRange = [];
+    for (let m = startMonth; m <= endMonth; m++) {
+      monthRange.push(m);
+    }
+    
+    const labels = monthRange.map(month => `Tháng ${month}`);
+    
+    // Tạo map từ data hiện có
+    const dataMap = {};
+    monthlyData.forEach(item => {
+      dataMap[item.month] = item;
+    });
+    
+    // Fill data cho các tháng trong range (0 nếu không có data)
+    const incomeData = monthRange.map(month => dataMap[month]?.income || 0);
+    const expenseData = monthRange.map(month => dataMap[month]?.expense || 0);
+    
     window.monthlyChartInstance = new Chart(ctx, {
       type: 'bar',
       data: {
@@ -1046,14 +1062,14 @@ window.fetchMonthlyData = async function() {
         datasets: [{
           label: 'Thu nhập',
           data: incomeData,
-          backgroundColor: 'rgba(46, 204, 113, 0.8)',
-          borderColor: 'rgba(46, 204, 113, 1)',
+          backgroundColor: 'rgba(16, 185, 129, 0.8)',
+          borderColor: 'rgba(16, 185, 129, 1)',
           borderWidth: 1
         }, {
           label: 'Chi tiêu',
           data: expenseData,
-          backgroundColor: 'rgba(231, 76, 60, 0.8)',
-          borderColor: 'rgba(231, 76, 60, 1)',
+          backgroundColor: 'rgba(244, 63, 94, 0.8)',
+          borderColor: 'rgba(244, 63, 94, 1)',
           borderWidth: 1
         }]
       },
@@ -1061,11 +1077,40 @@ window.fetchMonthlyData = async function() {
         responsive: true,
         maintainAspectRatio: false,
         scales: {
-          y: { beginAtZero: true, ticks: { callback: value => value.toLocaleString('vi-VN') + 'đ' } }
+          x: {
+            ticks: {
+              autoSkip: false,
+              maxRotation: 45,
+              minRotation: 0,
+              font: {
+                family: 'Nunito, sans-serif',
+                size: 11
+              }
+            }
+          },
+          y: { 
+            beginAtZero: true, 
+            ticks: { 
+              callback: value => value.toLocaleString('vi-VN') + 'đ',
+              font: {
+                family: 'Nunito, sans-serif'
+              }
+            } 
+          }
         },
         plugins: {
-          legend: { display: false }, // Ẩn legend mặc định
-          tooltip: { callbacks: { label: context => `${context.dataset.label}: ${context.raw.toLocaleString('vi-VN')}đ` } }
+          legend: { display: false },
+          tooltip: { 
+            callbacks: { 
+              label: context => `${context.dataset.label}: ${context.raw.toLocaleString('vi-VN')}đ` 
+            },
+            titleFont: {
+              family: 'Nunito, sans-serif'
+            },
+            bodyFont: {
+              family: 'Nunito, sans-serif'
+            }
+          }
         }
       }
     });
@@ -1165,16 +1210,17 @@ function drawMonthlyPieChart(data) {
       afterDatasetsDraw(chart) {
         const { ctx } = chart;
         ctx.save();
-        const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color').trim() || '#333';
+        const expenseColor = getComputedStyle(document.documentElement).getPropertyValue('--expense-color').trim() || '#F43F5E';
+        const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color').trim() || '#1E293B';
         const centerX = chart.width / 2;
         const centerY = chart.height / 2;
-        ctx.font = 'bold 18px Inter, sans-serif';
+        ctx.font = '600 18px Nunito, sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillStyle = textColor;
         ctx.fillText('Tổng chi tiêu', centerX, centerY - 35);
-        ctx.font = 'bold 26px Inter, sans-serif';
-        ctx.fillStyle = textColor;
+        ctx.font = '800 26px Nunito, sans-serif';
+        ctx.fillStyle = expenseColor;
         ctx.fillText(centerText, centerX, centerY + 10);
         ctx.restore();
       }
@@ -1185,12 +1231,12 @@ function drawMonthlyPieChart(data) {
   const customLegend = document.getElementById('monthlyCustomLegend');
   customLegend.innerHTML = '';
   
-  // Map icon cho từng danh mục (20 danh mục)
+  // Map icon cho từng danh mục (20 danh mục) - tên khớp chính xác
   const categoryIcons = {
     'Đi lại': 'fa-car',
     'Ăn uống': 'fa-utensils',
     'Mua sắm': 'fa-shopping-cart',
-    'Dịch vụ giải trí': 'fa-gamepad',
+    'Dịch vụ giải trí': 'fa-glass-cheers',
     'Hóa đơn': 'fa-file-invoice',
     'Giải trí': 'fa-film',
     'Y tế': 'fa-heart-pulse',
@@ -1206,6 +1252,8 @@ function drawMonthlyPieChart(data) {
     'Quà tặng & Đồ lưu niệm': 'fa-gift',
     'Bảo hiểm & Tài chính cá nhân': 'fa-shield-halved',
     'Sức khỏe & Đời sống': 'fa-heart',
+    'Dịch vụ tài chính & Ngân hàng': 'fa-building-columns',
+    'Nhà cửa': 'fa-house',
     'Khác': 'fa-circle-question'
   };
   
@@ -1829,4 +1877,70 @@ document.getElementById('nextPageSearch').addEventListener('click', () => {
 
   // Mở tab mặc định
   window.openTab('tab1');
+  
+  // Tự động điều chỉnh font size cho stat-box amount khi có thay đổi DOM
+  setupStatBoxObserver();
 });
+
+/**
+ * Tự động điều chỉnh font size của .stat-box .amount dựa trên độ dài
+ */
+function adjustStatBoxFontSize() {
+  const amountElements = document.querySelectorAll('.stat-box .amount:not(.no-data)');
+  amountElements.forEach(el => {
+    const text = el.textContent;
+    const length = text.length;
+    
+    // Xóa attribute và style cũ
+    el.removeAttribute('data-length');
+    el.style.fontSize = '';
+    
+    // Desktop: điều chỉnh dựa trên độ dài text
+    if (window.innerWidth > 1023) {
+      if (length > 15) {
+        el.style.fontSize = '1rem';
+      } else if (length > 12) {
+        el.style.fontSize = '1.2rem';
+      } else {
+        el.style.fontSize = '1.6rem';
+      }
+    } else {
+      // Mobile: sử dụng clamp từ CSS
+      if (length > 15) {
+        el.style.fontSize = 'clamp(0.75rem, 2.5vw, 1rem)';
+      } else if (length > 12) {
+        el.style.fontSize = 'clamp(0.85rem, 2.8vw, 1.2rem)';
+      } else {
+        el.style.fontSize = 'clamp(1rem, 3vw, 1.6rem)';
+      }
+    }
+  });
+}
+
+/**
+ * Setup MutationObserver để theo dõi thay đổi DOM
+ */
+function setupStatBoxObserver() {
+  // Gọi lần đầu
+  adjustStatBoxFontSize();
+  
+  // Theo dõi thay đổi
+  const observer = new MutationObserver(() => {
+    adjustStatBoxFontSize();
+  });
+  
+  // Observe các container có stat-box
+  const containers = document.querySelectorAll('#dailySummary, #monthlyStatsContainer, #monthlyExpenseSummary');
+  containers.forEach(container => {
+    if (container) {
+      observer.observe(container, {
+        childList: true,
+        subtree: true,
+        characterData: true
+      });
+    }
+  });
+  
+  // Điều chỉnh lại khi resize
+  window.addEventListener('resize', adjustStatBoxFontSize);
+}
