@@ -24,8 +24,7 @@
   </div>
   <div class="top-nav">
     <div class="nav-item active" data-tab="tab1"><i class="fas fa-list"></i><span>Giao dịch</span></div>
-    <div class="nav-item" data-tab="tab2"><i class="fas fa-table"></i><span>Thống kê</span></div>
-    <div class="nav-item" data-tab="tab3"><i class="fas fa-chart-bar"></i><span>Biểu đồ</span></div>
+    <div class="nav-item" data-tab="tab3"><i class="fas fa-chart-bar"></i><span>Báo Cáo</span></div>
     <div class="nav-item" data-tab="tab4"><i class="fas fa-info-circle"></i><span>Giới thiệu</span></div>
     <div class="nav-item" data-tab="tab5"><i class="fas fa-money-bill-wave"></i><span>Liệt kê</span></div>
     <div class="nav-item" data-tab="tab6"><i class="fas fa-search"></i><span>Tìm kiếm</span></div>
@@ -64,35 +63,9 @@
       </div>
     </div>
 
-    <!-- Tab 2: Thống Kê -->
-    <div id="tab2" class="tab-content">
-      <h1>THỐNG KÊ</h1>
-      <p class="notification">Vui lòng chọn khoảng thời gian và ấn "Lọc" để xem dữ liệu.</p>
-      <div id="errorMessageTab2" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
-      <div id="successMessageTab2" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
-      <div id="loadingTab2" style="display: none; text-align: center; margin: 1rem 0;">
-        <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--primary-color);"></i>
-      </div>
-      <div class="input-group">
-        Từ: <input type="date" id="startDate">
-        Đến: <input type="date" id="endDate">
-        <button id="fetchDataBtn">Lọc</button>
-      </div>
-      <div class="stats-container" id="statsContainer">
-        <div class="stat-box income"><div class="title">Tổng thu nhập</div><div class="amount">0đ</div></div>
-        <div class="stat-box expense"><div class="title">Tổng chi tiêu</div><div class="amount">0đ</div></div>
-        <div class="stat-box balance"><div class="title">Số dư</div><div class="amount">0đ</div></div>
-      </div>
-      <div class="chart-container">
-        <h1>BIỂU ĐỒ CHI TIÊU</h1>
-        <canvas id="myChart"></canvas>
-      </div>
-      <div class="custom-legend" id="customLegend"></div>
-    </div>
-
-    <!-- Tab 3: Biểu Đồ Thu Chi Theo Tháng -->
+    <!-- Tab 3: Báo Cáo Thu Chi Theo Tháng -->
 <div id="tab3" class="tab-content">
-  <h1>BIỂU ĐỒ THU CHI THEO THÁNG</h1>
+  <h1>BÁO CÁO THU CHI THEO THÁNG</h1>
   <p class="notification">Vui lòng chọn khoảng thời gian và ấn "Lọc" để xem dữ liệu.</p>
   <div id="errorMessageTab3" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
   <div id="successMessageTab3" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
@@ -121,10 +94,8 @@
     <div class="stat-box expense"><div class="title">Tổng chi tiêu</div><div class="amount">0đ</div></div>
     <div class="stat-box balance"><div class="title">Số dư</div><div class="amount">0đ</div></div>
   </div>
-  <div class="chart-container">
-    <h1>BIỂU ĐỒ THU CHI THEO THÁNG</h1>
-    <canvas id="monthlyChart"></canvas>
-  </div>
+  <h1 style="margin-top: 2rem;">BIỂU ĐỒ THU CHI THEO THÁNG</h1>
+  <canvas id="monthlyChart"></canvas>
   <div class="chart-container">
     <h1>BIỂU ĐỒ CHI TIÊU THEO PHÂN LOẠI (%)</h1>
     <canvas id="monthlyPieChart"></canvas>
@@ -148,26 +119,18 @@
           <p><i class="fas fa-credit-card" style="color: var(--primary-color);"></i><strong>Số tài khoản:</strong> 6666.6789.9999</p>
         </div>
         <div class="qr-container">
-          <a href="https://momo.vn/" target="_blank" class="cta-button">Ủng hộ ngay</a>
           <div class="qr-frame">
-            <img id="qrImage" src="https://i.pinimg.com/736x/7c/13/53/7c135389e26cbc6460626deb9e2aa5c6.jpg" alt="QR Code" class="qr-image">
+            <img src="https://i.imgur.com/vd4v56k.png" alt="QR Code Ủng Hộ" class="qr-image">
+            <p class="qr-caption">Quét mã QR để ủng hộ</p>
           </div>
-          <p class="qr-caption">Quét mã QR để ủng hộ qua Momo</p>
-        </div>
-        <div class="info-card">
-          <h1>Liên Hệ</h1>
-          <div class="contact-columns">
-            <p><i class="fab fa-telegram-plane" style="color: var(--primary-color);"></i><strong>Telegram:</strong> <a href="https://t.me/masterhmh" target="_blank">@masterhmh</a></p>
-            <p><i class="fab fa-facebook" style="color: var(--primary-color);"></i><strong>Facebook:</strong> <a href="https://facebook.com/masterhmh" target="_blank">facebook.com/masterhmh</a></p>
-            </div>
         </div>
       </div>
     </div>
 
-    <!-- Tab 5: Chi Tiêu Trong Tháng -->
+    <!-- Tab 5: Liệt Kê Chi Tiêu Theo Tháng -->
     <div id="tab5" class="tab-content">
-      <h1>CHI TIÊU TRONG THÁNG</h1>
-      <p class="notification">Vui lòng chọn tháng và ấn "Lọc" để xem dữ liệu.</p>
+      <h1>LIỆT KÊ CHI TIÊU THEO THÁNG</h1>
+      <p class="notification">Chọn tháng và ấn "Lọc" để xem danh sách chi tiêu theo phân loại chi tiết.</p>
       <div id="errorMessageTab5" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
       <div id="successMessageTab5" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
       <div id="loadingTab5" style="display: none; text-align: center; margin: 1rem 0;">
@@ -175,20 +138,15 @@
       </div>
       <div class="input-group">
         Tháng:
-        <select id="expenseMonth">
+        <select id="monthSelect">
           <option value="1">Tháng 1</option><option value="2">Tháng 2</option><option value="3">Tháng 3</option>
           <option value="4">Tháng 4</option><option value="5">Tháng 5</option><option value="6">Tháng 6</option>
           <option value="7">Tháng 7</option><option value="8">Tháng 8</option><option value="9">Tháng 9</option>
           <option value="10">Tháng 10</option><option value="11">Tháng 11</option><option value="12">Tháng 12</option>
         </select>
-        <button id="fetchMonthlyExpensesBtn">Lọc</button>
+        <button id="fetchExpensesBtn">Lọc</button>
       </div>
-      <div class="stats-container" id="monthlyExpenseSummary">
-        <div class="stat-box income"><div class="title">Tổng thu nhập</div><div class="amount">0đ</div></div>
-        <div class="stat-box expense"><div class="title">Tổng chi tiêu</div><div class="amount">0đ</div></div>
-        <div class="stat-box balance"><div class="title">Số dư</div><div class="amount">0đ</div></div>
-      </div>
-      <div class="transactions-list" id="monthlyExpensesContainer"></div>
+      <div class="transactions-list" id="expensesContainer"></div>
       <div id="paginationMonthly" style="text-align: center; margin-top: 1rem;">
         <button id="prevPageMonthly" class="pagination-btn" disabled>Trang trước</button>
         <span id="pageInfoMonthly"></span>
@@ -199,7 +157,7 @@
     <!-- Tab 6: Tìm Kiếm Giao Dịch -->
     <div id="tab6" class="tab-content">
       <h1>TÌM KIẾM GIAO DỊCH</h1>
-      <p class="notification">Nhập ít nhất một tiêu chí (nội dung, số tiền, hoặc phân loại chi tiết) để tìm kiếm. Tháng là tùy chọn.</p>
+      <p class="notification">Nhập các tiêu chí tìm kiếm và ấn "Tìm kiếm" để xem kết quả.</p>
       <div id="errorMessageTab6" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
       <div id="successMessageTab6" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
       <div id="loadingTab6" style="display: none; text-align: center; margin: 1rem 0;">
