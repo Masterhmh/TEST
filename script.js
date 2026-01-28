@@ -1071,8 +1071,8 @@ window.fetchMonthlyData = async function() {
     });
 
     // Gọi API cho pie chart (% chi tiêu theo category cho range months)
-    const expenseData = await fetchExpensesByCategoryForMonths(startMonth, endMonth);
-    drawMonthlyPieChart(expenseData);
+    const expenseCategoryData = await fetchExpensesByCategoryForMonths(startMonth, endMonth);
+    drawMonthlyPieChart(expenseCategoryData);
   } catch (error) {
     showToast("Lỗi khi lấy dữ liệu: " + error.message, "error");
   } finally {
@@ -1095,7 +1095,7 @@ async function fetchExpensesByCategoryForMonths(startMonth, endMonth) {
 }
 
 /**
- * Vẽ doughnut chart % chi tiêu theo phân loại (giống tab2).
+ * Vẽ pie chart % chi tiêu theo phân loại (giống tab2).
  * @param {Array} data - Dữ liệu expense by category.
  */
 function drawMonthlyPieChart(data) {
@@ -1107,7 +1107,7 @@ function drawMonthlyPieChart(data) {
   const totalExpense = amounts.reduce((sum, amount) => sum + amount, 0);
   const backgroundColors = data.map((_, index) => getColorByIndex(index));
 
-  // Định dạng tổng chi tiêu để hiển thị ở giữa
+  // Định dạng tổng chi tiêu
   let centerText = totalExpense.toLocaleString('vi-VN') + 'đ';
 
   window.monthlyPieChartInstance = new Chart(ctxPie, {
@@ -1165,30 +1165,23 @@ function drawMonthlyPieChart(data) {
       afterDatasetsDraw(chart) {
         const { ctx } = chart;
         ctx.save();
-
         const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color').trim() || '#333';
-
         const centerX = chart.width / 2;
         const centerY = chart.height / 2;
-
-        // "Tổng chi tiêu" nhỏ, đẩy lên
         ctx.font = 'bold 18px Inter, sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillStyle = textColor;
         ctx.fillText('Tổng chi tiêu', centerX, centerY - 35);
-
-        // Giá trị tổng
         ctx.font = 'bold 26px Inter, sans-serif';
         ctx.fillStyle = textColor;
         ctx.fillText(centerText, centerX, centerY + 10);
-
         ctx.restore();
       }
     }]
   });
 
-  // Tạo custom legend (liệt kê % và giá trị) - 2 cột như Tab 2
+  // Tạo custom legend 2 cột
   const customLegend = document.getElementById('monthlyCustomLegend');
   customLegend.innerHTML = '';
   const leftColumn = document.createElement('div');
@@ -1214,44 +1207,14 @@ function drawMonthlyPieChart(data) {
   customLegend.appendChild(rightColumn);
 }
 
-// Hàm hỗ trợ lấy màu theo index (cho pie chart) - sử dụng cùng bảng màu với Tab 2
+// Hàm hỗ trợ lấy màu theo index (cho pie chart)
 function getColorByIndex(index) {
   const colors = [
-    '#FF6B6B', // Đỏ san hô
-    '#FF8E53', // Cam cháy
-    '#FFC107', // Vàng hổ phách
-    '#4CAF50', // Xanh lá cây
-    '#40C4FF', // Xanh dương nhạt
-    '#3F51B5', // Xanh indigo
-    '#AB47BC', // Tím đậm
-    '#EC407A', // Hồng phấn
-    '#EF5350', // Đỏ tươi
-    '#FF7043', // Cam đào
-    '#FDD835', // Vàng nắng
-    '#66BB6A', // Xanh lá nhạt
-    '#29B6F6', // Xanh lam
-    '#5C6BC0', // Xanh tím
-    '#D81B60', // Hồng đậm
-    '#F06292', // Hồng đào
-    '#26A69A', // Xanh ngọc
-    '#FFA726', // Cam sáng
-    '#E91E63', // Hồng ruby
-    '#7CB342', // Xanh olive
-    '#0288D1', // Xanh sapphire
-    '#8E24AA', // Tím hoàng gia
-    '#FFCA28', // Vàng kim
-    '#FF5252', // Đỏ cherry
-    '#FFB300', // Vàng cam
-    '#689F38', // Xanh rừng
-    '#039BE5', // Xanh biển
-    '#9575CD', // Tím nhạt
-    '#F48FB1', // Hồng pastel
-    '#FFAB91', // Cam san hô
-    '#4DD0E1', // Xanh cyan
-    '#D4E157', // Vàng chanh
-    '#EF9A9A', // Đỏ pastel
-    '#80DEEA', // Xanh nhạt
-    '#CE93D8', // Tím pastel
+    '#FF6B6B', '#FF8E53', '#FFC107', '#4CAF50', '#40C4FF', '#3F51B5', '#AB47BC', '#EC407A',
+    '#EF5350', '#FF7043', '#FDD835', '#66BB6A', '#29B6F6', '#5C6BC0', '#D81B60', '#F06292',
+    '#26A69A', '#FFA726', '#E91E63', '#7CB342', '#0288D1', '#8E24AA', '#FFCA28', '#FF5252',
+    '#FFB300', '#689F38', '#039BE5', '#9575CD', '#F48FB1', '#FFAB91', '#4DD0E1', '#D4E157',
+    '#EF9A9A', '#80DEEA', '#CE93D8'
   ];
   return colors[index % colors.length];
 }
