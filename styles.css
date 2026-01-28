@@ -1525,3 +1525,8 @@ input[type="date"] {
     max-width: 450px;
   }
 }
+/* Điều chỉnh pie chart ở tab3 */
+#monthlyPieChart {
+  max-width: 100%;
+  height: auto;
+}
