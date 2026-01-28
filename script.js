@@ -1005,183 +1005,159 @@ function updateChartData(response) {
 window.fetchMonthlyData = async function() {
   const startMonth = parseInt(document.getElementById('startMonth').value);
   const endMonth = parseInt(document.getElementById('endMonth').value);
-  const year = new Date().getFullYear();
-  if (startMonth > endMonth) {
-    showToast("Tháng bắt đầu không thể lớn hơn tháng kết thúc!", "warning");
-    return;
-  }
+  if (startMonth > endMonth) return showToast("Tháng bắt đầu phải nhỏ hơn hoặc bằng tháng kết thúc!", "warning");
 
   showLoading(true, 'tab3');
   try {
-    const targetUrl = `${apiUrl}?action=getMonthlyData&year=${year}&sheetId=${sheetId}`;
+    // Gọi API cho bar chart (thu/chi theo tháng)
+    const targetUrl = `${apiUrl}?action=getMonthlyData&startMonth=${startMonth}&endMonth=${endMonth}&sheetId=${sheetId}`;
     const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
     const response = await fetch(finalUrl);
-    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     const monthlyData = await response.json();
     if (monthlyData.error) throw new Error(monthlyData.error);
 
-    const fullYearData = Array.from({ length: 12 }, (_, i) => {
-      const month = i + 1;
-      const existingData = monthlyData.find(item => item.month === month);
-      return existingData || { month, income: 0, expense: 0 };
+    // Tính tổng thu, tổng chi, số dư từ dữ liệu monthly
+    let totalIncome = 0;
+    let totalExpense = 0;
+    monthlyData.forEach(item => {
+      totalIncome += item.income || 0;
+      totalExpense += item.expense || 0;
+    });
+    const totalBalance = totalIncome - totalExpense;
+
+    // Hiển thị tổng thu/chi/số dư
+    const statsContainer = document.getElementById('monthlyStatsContainer');
+    statsContainer.innerHTML = `
+      <div class="stat-box income"><div class="title">Tổng thu nhập</div><div class="amount">${totalIncome.toLocaleString('vi-VN')}đ</div></div>
+      <div class="stat-box expense"><div class="title">Tổng chi tiêu</div><div class="amount">${totalExpense.toLocaleString('vi-VN')}đ</div></div>
+      <div class="stat-box balance"><div class="title">Số dư</div><div class="amount">${totalBalance.toLocaleString('vi-VN')}đ</div></div>
+    `;
+
+    // Vẽ bar chart (không có legend)
+    const ctx = document.getElementById('monthlyChart').getContext('2d');
+    if (window.monthlyChartInstance) window.monthlyChartInstance.destroy();
+    const labels = monthlyData.map(item => `Tháng ${item.month}`);
+    const incomeData = monthlyData.map(item => item.income);
+    const expenseData = monthlyData.map(item => item.expense);
+    window.monthlyChartInstance = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Thu nhập',
+          data: incomeData,
+          backgroundColor: 'rgba(46, 204, 113, 0.8)',
+          borderColor: 'rgba(46, 204, 113, 1)',
+          borderWidth: 1
+        }, {
+          label: 'Chi tiêu',
+          data: expenseData,
+          backgroundColor: 'rgba(231, 76, 60, 0.8)',
+          borderColor: 'rgba(231, 76, 60, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: { beginAtZero: true, ticks: { callback: value => value.toLocaleString('vi-VN') + 'đ' } }
+        },
+        plugins: {
+          legend: { display: false }, // Ẩn legend mặc định
+          tooltip: { callbacks: { label: context => `${context.dataset.label}: ${context.raw.toLocaleString('vi-VN')}đ` } }
+        }
+      }
     });
 
-    const filteredData = Array.from({ length: endMonth - startMonth + 1 }, (_, i) => {
-      const month = startMonth + i;
-      const existingData = fullYearData.find(item => item.month === month);
-      return existingData || { month, income: 0, expense: 0 };
-    });
-
-    updateMonthlyChart(filteredData);
+    // Gọi API cho pie chart (% chi tiêu theo category cho range months)
+    const expenseData = await fetchExpensesByCategoryForMonths(startMonth, endMonth);
+    drawMonthlyPieChart(expenseData);
   } catch (error) {
-    showToast("Lỗi khi lấy dữ liệu biểu đồ tháng: " + error.message, "error");
-    const filteredData = Array.from({ length: endMonth - startMonth + 1 }, (_, i) => ({
-      month: startMonth + i,
-      income: 0,
-      expense: 0
-    }));
-    updateMonthlyChart(filteredData);
+    showToast("Lỗi khi lấy dữ liệu: " + error.message, "error");
   } finally {
     showLoading(false, 'tab3');
   }
 };
+/**
+ * Lấy dữ liệu chi tiêu theo phân loại cho khoảng tháng từ API.
+ * @param {number} startMonth - Tháng bắt đầu.
+ * @param {number} endMonth - Tháng kết thúc.
+ * @returns {Promise<Array>} Dữ liệu expense by category.
+ */
+async function fetchExpensesByCategoryForMonths(startMonth, endMonth) {
+  const targetUrl = `${apiUrl}?action=getExpensesByCategoryForMonths&startMonth=${startMonth}&endMonth=${endMonth}&sheetId=${sheetId}`;
+  const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
+  const response = await fetch(finalUrl);
+  const data = await response.json();
+  if (data.error) throw new Error(data.error);
+  return data;
+}
 
 /**
- * Cập nhật biểu đồ thu chi theo tháng.
- * @param {Array} filteredData - Dữ liệu thu chi theo tháng.
+ * Vẽ pie chart % chi tiêu theo phân loại (giống tab2).
+ * @param {Array} data - Dữ liệu expense by category.
  */
-function updateMonthlyChart(filteredData) {
-  const ctx = document.getElementById('monthlyChart').getContext('2d');
-  if (window.monthlyChart && typeof window.monthlyChart.destroy === 'function') {
-    window.monthlyChart.destroy();
-  }
+function drawMonthlyPieChart(data) {
+  const ctxPie = document.getElementById('monthlyPieChart').getContext('2d');
+  if (window.monthlyPieChartInstance) window.monthlyPieChartInstance.destroy();
 
-  if (!filteredData || filteredData.length === 0) {
-    window.monthlyChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Không có dữ liệu'],
-        datasets: [
-          { label: 'Thu nhập', data: [0], backgroundColor: '#10B981' },
-          { label: 'Chi tiêu', data: [0], backgroundColor: '#EF4444' }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: true,
-        aspectRatio: 1,
-        scales: {
-          y: { 
-            beginAtZero: true, 
-            title: { display: true, text: 'Số tiền (đ)', font: { size: 14 } }, 
-            ticks: { font: { size: 12 } } 
-          },
-          x: { 
-            title: { display: true, text: 'Tháng', font: { size: 14 } }, 
-            ticks: { font: { size: 12 } } 
-          }
-        },
-        plugins: {
-          legend: { display: true, labels: { font: { size: 12 } } },
-          tooltip: {
-            titleFont: { size: 12 },
-            bodyFont: { size: 12 },
-            callbacks: {
-              label: function(tooltipItem) {
-                return `${tooltipItem.dataset.label}: ${tooltipItem.raw.toLocaleString('vi-VN')}đ`;
-              }
-            }
-          },
-          datalabels: { display: false }
-        }
-      }
-    });
-    document.getElementById('monthlyLegend').innerHTML = '<div>Không có dữ liệu</div>';
-    return;
-  }
+  const labels = data.map(item => item.category);
+  const amounts = data.map(item => item.amount);
+  const totalExpense = amounts.reduce((sum, amount) => sum + amount, 0);
+  const backgroundColors = data.map((_, index) => getColorByIndex(index));
 
-  const labels = filteredData.map(item => `Tháng ${item.month}`);
-  const incomes = filteredData.map(item => item.income || 0);
-  const expenses = filteredData.map(item => item.expense || 0);
-
-  window.monthlyChart = new Chart(ctx, {
-    type: 'bar',
+  window.monthlyPieChartInstance = new Chart(ctxPie, {
+    type: 'pie',
     data: {
       labels: labels,
-      datasets: [
-        { label: 'Thu nhập', data: incomes, backgroundColor: '#10B981', borderColor: '#10B981', borderWidth: 1 },
-        { label: 'Chi tiêu', data: expenses, backgroundColor: '#EF4444', borderColor: '#EF4444', borderWidth: 1 }
-      ]
+      datasets: [{
+        data: amounts,
+        backgroundColor: backgroundColors,
+        borderColor: '#FFFFFF',
+        borderWidth: 2
+      }]
     },
     options: {
       responsive: true,
-      maintainAspectRatio: true,
-      aspectRatio: 1,
-      scales: {
-        y: {
-          beginAtZero: true,
-          title: { display: true, text: 'Số tiền (đ)', font: { size: 14 } },
-          ticks: {
-            callback: function(value) { return value.toLocaleString('vi-VN') + 'đ'; },
-            font: { size: 12 }
-          }
-        },
-        x: {
-          title: { display: true, text: 'Tháng', font: { size: 14 } },
-          ticks: {
-            font: { size: 10 },
-            maxRotation: 45,
-            minRotation: 45,
-            autoSkip: false
-          }
-        }
-      },
+      maintainAspectRatio: false,
       plugins: {
-        legend: { display: true, labels: { font: { size: 12 } } },
-        tooltip: {
-          titleFont: { size: 12 },
-          bodyFont: { size: 12 },
-          callbacks: {
-            label: function(tooltipItem) {
-              return `${tooltipItem.dataset.label}: ${tooltipItem.raw.toLocaleString('vi-VN')}đ`;
-            }
-          }
-        },
+        legend: { display: false },
         datalabels: {
-          display: true,
-          align: 'end',
-          anchor: 'end',
-          formatter: (value) => value.toLocaleString('vi-VN') + 'đ',
-          color: '#1F2A44',
-          font: { weight: 'bold', size: 12 }
+          color: '#FFFFFF',
+          formatter: (value, ctx) => {
+            const percentage = ((value / totalExpense) * 100).toFixed(1) + '%';
+            return percentage;
+          },
+          font: { weight: 'bold', size: 14 }
         }
       }
-    }
+    },
+    plugins: [ChartDataLabels]
   });
 
-  const monthlyLegend = document.getElementById('monthlyLegend');
-  monthlyLegend.innerHTML = '';
-  const column = document.createElement('div');
-  column.className = 'monthly-column';
-
-  filteredData.forEach(item => {
-    const difference = (item.income || 0) - (item.expense || 0);
-    const diffClass  = difference >= 0 ? 'positive' : 'negative';
-    const diffIcon = difference >= 0 ? 'fa-arrow-up' : 'fa-arrow-down';
-    const monthItem = document.createElement('div');
-    monthItem.className = 'month-item';
-    monthItem.innerHTML = `
-      <h3>Tháng ${item.month}:</h3>
-      <p><span class="color-box" style="background-color: #10B981;"></span>Tổng thu nhập: <strong>${(item.income || 0).toLocaleString('vi-VN')}đ</strong></p>
-      <p><span class="color-box" style="background-color: #EF4444;"></span>Tổng chi tiêu: <strong>${(item.expense || 0).toLocaleString('vi-VN')}đ</strong></p>
-      <p><i class="fas ${diffIcon} difference-icon ${diffClass}"></i>Chênh lệch: <span class="difference ${diffClass}"><strong>${difference.toLocaleString('vi-VN')}đ</strong></span></p>
+  // Tạo custom legend (liệt kê % và giá trị)
+  const customLegend = document.getElementById('monthlyCustomLegend');
+  customLegend.innerHTML = '';
+  data.forEach((item, index) => {
+    const percentage = ((item.amount / totalExpense) * 100).toFixed(1);
+    const legendItem = document.createElement('div');
+    legendItem.className = 'legend-item';
+    legendItem.innerHTML = `
+      <span class="color-box" style="background-color: ${backgroundColors[index]};"></span>
+      <span class="label">${item.category}</span>
+      <span class="percentage">${percentage}%</span>
+      <span class="value">(${item.amount.toLocaleString('vi-VN')}đ)</span>
     `;
-    column.appendChild(monthItem);
+    customLegend.appendChild(legendItem);
   });
-
-  monthlyLegend.appendChild(column);
 }
 
+// Hàm hỗ trợ lấy màu theo index (cho pie chart)
+function getColorByIndex(index) {
+  const colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#E7E9ED', '#C9CBCF'];
+  return colors[index % colors.length];
+}
 /* ==========================================================================
    8. Tab 5: Chi tiêu trong tháng (Monthly Expenses Tab)
    Các hàm lấy và hiển thị giao dịch trong tháng.
