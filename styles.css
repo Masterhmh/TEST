@@ -607,30 +607,21 @@ button:hover {
 }
 .stat-box .amount { 
   font-weight: 800; 
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   text-align: center;
   width: 100%;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: clip;
-  line-height: 1.1;
+  overflow: visible;
+  line-height: 1.2;
 }
 
-/* Tự động giảm font size cho số tiền dài */
+/* Keep consistent font size across all screen sizes */
 @media (max-width: 1023px) {
   .stat-box .amount {
-    font-size: clamp(0.85rem, 3vw, 1.6rem);
+    font-size: 1.3rem;
   }
 }
 
-/* Thêm class để JavaScript có thể điều chỉnh font-size động */
-.stat-box .amount[data-length="long"] {
-  font-size: 1.2rem;
-}
-
-.stat-box .amount[data-length="very-long"] {
-  font-size: 1rem;
-}
 .stat-box .amount.no-data { font-size: 1rem; white-space: pre-line; text-align: center; line-height: 1.2; }
 .income .amount { color: var(--income-color); }
 .expense .amount { color: var(--expense-color); }
@@ -1436,7 +1427,14 @@ input[type="date"] {
     max-width: 100px;
     padding: 0.8rem;
     min-height: 70px;
-    font-size: 0.8rem;
+  }
+  
+  .stat-box .title {
+    font-size: 0.85rem;
+  }
+  
+  .stat-box .amount {
+    font-size: 1.1rem;
   }
 
   canvas#myChart {
@@ -1596,7 +1594,7 @@ input[type="date"] {
 }
 
 .chart-container {
-  margin-top: 2rem;
+  margin-top: 0.5rem;
 }
 
 .custom-legend {
@@ -1604,6 +1602,8 @@ input[type="date"] {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 0.75rem;
   margin-top: 1.5rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
   padding: 1rem;
   background: var(--card-bg);
   border-radius: 12px;
@@ -1650,7 +1650,7 @@ input[type="date"] {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.1rem;
 }
 
 .legend-label {
@@ -1663,7 +1663,7 @@ input[type="date"] {
 .legend-value {
   display: flex;
   align-items: baseline;
-  gap: 0.5rem;
+  gap: 0.3rem;
   font-size: 0.85rem;
   color: var(--secondary-color);
 }
@@ -1686,6 +1686,8 @@ input[type="date"] {
     grid-template-columns: 1fr;
     gap: 0.5rem;
     padding: 0.75rem;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
   }
   
   .legend-item {
