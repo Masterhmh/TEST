@@ -262,8 +262,8 @@ function displayTransactions(data) {
   if (!data || data.error || !Array.isArray(data) || data.length === 0) {
     container.innerHTML = '<div>Không có giao dịch nào trong ngày này</div>';
     summaryContainer.innerHTML = `
-      <div class="stat-box income"><div class="title">Tổng thu nhập</div><div class="amount no-data">Không có<br>dữ liệu</div></div>
-      <div class="stat-box expense"><div class="title">Tổng chi tiêu</div><div class="amount no-data">Không có<br>dữ liệu</div></div>
+      <div class="stat-box income"><div class="title">Thu nhập</div><div class="amount no-data">Không có<br>dữ liệu</div></div>
+      <div class="stat-box expense"><div class="title">Chi tiêu</div><div class="amount no-data">Không có<br>dữ liệu</div></div>
       <div class="stat-box balance"><div class="title">Số dư</div><div class="amount no-data">Không có<br>dữ liệu</div></div>
     `;
     pageInfo.textContent = '';
@@ -282,8 +282,8 @@ function displayTransactions(data) {
   const balance = totalIncome - totalExpense;
 
   summaryContainer.innerHTML = `
-    <div class="stat-box income"><div class="title">Tổng thu nhập</div><div class="amount">${totalIncome.toLocaleString('vi-VN')}đ</div></div>
-    <div class="stat-box expense"><div class="title">Tổng chi tiêu</div><div class="amount">${totalExpense.toLocaleString('vi-VN')}đ</div></div>
+    <div class="stat-box income"><div class="title">Thu nhập</div><div class="amount">${totalIncome.toLocaleString('vi-VN')}đ</div></div>
+    <div class="stat-box expense"><div class="title">Chi tiêu</div><div class="amount">${totalExpense.toLocaleString('vi-VN')}đ</div></div>
     <div class="stat-box balance"><div class="title">Số dư</div><div class="amount">${balance.toLocaleString('vi-VN')}đ</div></div>
   `;
 
@@ -774,11 +774,11 @@ function updateFinancialData(data) {
   if (!data || data.error) {
     container.innerHTML = `
       <div class="stat-box income">
-        <div class="title">Tổng thu nhập</div>
+        <div class="title">Thu nhập</div>
         <div class="amount no-data">Không có<br>dữ liệu</div>
       </div>
       <div class="stat-box expense">
-        <div class="title">Tổng chi tiêu</div>
+        <div class="title">Chi tiêu</div>
         <div class="amount no-data">Không có<br>dữ liệu</div>
       </div>
       <div class="stat-box balance">
@@ -794,11 +794,11 @@ function updateFinancialData(data) {
   if (totalIncome === 0 && totalExpense === 0) {
     container.innerHTML = `
       <div class="stat-box income">
-        <div class="title">Tổng thu nhập</div>
+        <div class="title">Thu nhập</div>
         <div class="amount no-data">Không có<br>dữ liệu</div>
       </div>
       <div class="stat-box expense">
-        <div class="title">Tổng chi tiêu</div>
+        <div class="title">Chi tiêu</div>
         <div class="amount no-data">Không có<br>dữ liệu</div>
       </div>
       <div class="stat-box balance">
@@ -812,11 +812,11 @@ function updateFinancialData(data) {
   const balance = totalIncome - totalExpense;
   container.innerHTML = `
     <div class="stat-box income">
-      <div class="title">Tổng thu nhập</div>
+      <div class="title">Thu nhập</div>
       <div class="amount">${totalIncome.toLocaleString('vi-VN')}đ</div>
     </div>
     <div class="stat-box expense">
-      <div class="title">Tổng chi tiêu</div>
+      <div class="title">Chi tiêu</div>
       <div class="amount">${totalExpense.toLocaleString('vi-VN')}đ</div>
     </div>
     <div class="stat-box balance">
@@ -1028,8 +1028,8 @@ window.fetchMonthlyData = async function() {
     // Hiển thị tổng thu/chi/số dư
     const statsContainer = document.getElementById('monthlyStatsContainer');
     statsContainer.innerHTML = `
-      <div class="stat-box income"><div class="title">Tổng thu nhập</div><div class="amount">${totalIncome.toLocaleString('vi-VN')}đ</div></div>
-      <div class="stat-box expense"><div class="title">Tổng chi tiêu</div><div class="amount">${totalExpense.toLocaleString('vi-VN')}đ</div></div>
+      <div class="stat-box income"><div class="title">Thu nhập</div><div class="amount">${totalIncome.toLocaleString('vi-VN')}đ</div></div>
+      <div class="stat-box expense"><div class="title">Chi tiêu</div><div class="amount">${totalExpense.toLocaleString('vi-VN')}đ</div></div>
       <div class="stat-box balance"><div class="title">Số dư</div><div class="amount">${totalBalance.toLocaleString('vi-VN')}đ</div></div>
     `;
 
@@ -1181,30 +1181,51 @@ function drawMonthlyPieChart(data) {
     }]
   });
 
-  // Tạo custom legend 2 cột
+  // Tạo custom legend với icon
   const customLegend = document.getElementById('monthlyCustomLegend');
   customLegend.innerHTML = '';
-  const leftColumn = document.createElement('div');
-  leftColumn.className = 'custom-legend-column';
-  const rightColumn = document.createElement('div');
-  rightColumn.className = 'custom-legend-column';
+  
+  // Map icon cho từng danh mục (20 danh mục)
+  const categoryIcons = {
+    'Đi lại': 'fa-car',
+    'Ăn uống': 'fa-utensils',
+    'Mua sắm': 'fa-shopping-cart',
+    'Dịch vụ giải trí': 'fa-gamepad',
+    'Hóa đơn': 'fa-file-invoice',
+    'Giải trí': 'fa-film',
+    'Y tế': 'fa-heart-pulse',
+    'Giáo dục': 'fa-graduation-cap',
+    'Gia đình': 'fa-house-user',
+    'Tiết kiệm': 'fa-piggy-bank',
+    'Công việc & Kinh doanh': 'fa-briefcase',
+    'Công nghệ & Thiết bị điện tử': 'fa-laptop',
+    'Tiệc tụng & Sự kiện': 'fa-champagne-glasses',
+    'Dịch vụ sửa chữa & Bảo trì': 'fa-screwdriver-wrench',
+    'Làm đẹp & Chăm sóc cá nhân': 'fa-spa',
+    'Mua sắm online & TMĐT': 'fa-cart-shopping',
+    'Quà tặng & Đồ lưu niệm': 'fa-gift',
+    'Bảo hiểm & Tài chính cá nhân': 'fa-shield-halved',
+    'Sức khỏe & Đời sống': 'fa-heart',
+    'Khác': 'fa-circle-question'
+  };
   
   data.forEach((item, index) => {
     const percentage = ((item.amount / totalExpense) * 100).toFixed(1);
+    const iconClass = categoryIcons[item.category] || 'fa-circle';
     const legendItem = document.createElement('div');
     legendItem.className = 'legend-item';
     legendItem.innerHTML = `
-      <span class="legend-color" style="background-color: ${backgroundColors[index]};"></span>
-      <span class="legend-text">
-        ${item.category}:
-        <span class="legend-value">${item.amount.toLocaleString('vi-VN')}đ (${percentage}%)</span>
-      </span>
+      <i class="fas ${iconClass} legend-icon" style="color: ${backgroundColors[index]};"></i>
+      <div class="legend-info">
+        <div class="legend-label">${item.category}</div>
+        <div class="legend-value">
+          <span class="legend-amount">${item.amount.toLocaleString('vi-VN')}đ</span>
+          <span class="legend-percentage">${percentage}%</span>
+        </div>
+      </div>
     `;
-    if (index % 2 === 0) leftColumn.appendChild(legendItem);
-    else rightColumn.appendChild(legendItem);
+    customLegend.appendChild(legendItem);
   });
-  customLegend.appendChild(leftColumn);
-  customLegend.appendChild(rightColumn);
 }
 
 // Hàm hỗ trợ lấy màu theo index (cho pie chart)
@@ -1226,7 +1247,7 @@ function getColorByIndex(index) {
  * Lấy danh sách giao dịch trong tháng từ API.
  */
 window.fetchMonthlyExpenses = async function() {
-  const month = document.getElementById('expenseMonth').value;
+  const month = document.getElementById('monthSelect').value;
   if (!month) return showToast("Vui lòng chọn tháng để xem giao dịch!", "warning");
   const year = new Date().getFullYear();
   const cacheKey = `${year}-${month}`;
@@ -1268,8 +1289,8 @@ function displayMonthlyExpenses(data) {
   if (!data || data.error || !Array.isArray(data) || data.length === 0) {
     container.innerHTML = '<div>Không có giao dịch trong tháng này</div>';
     summaryContainer.innerHTML = `
-      <div class="stat-box income"><div class="title">Tổng thu nhập</div><div class="amount no-data">Không có<br>dữ liệu</div></div>
-      <div class="stat-box expense"><div class="title">Tổng chi tiêu</div><div class="amount no-data">Không có<br>dữ liệu</div></div>
+      <div class="stat-box income"><div class="title">Thu nhập</div><div class="amount no-data">Không có<br>dữ liệu</div></div>
+      <div class="stat-box expense"><div class="title">Chi tiêu</div><div class="amount no-data">Không có<br>dữ liệu</div></div>
       <div class="stat-box balance"><div class="title">Số dư</div><div class="amount no-data">Không có<br>dữ liệu</div></div>
     `;
     pageInfo.textContent = '';
@@ -1286,8 +1307,8 @@ function displayMonthlyExpenses(data) {
   const balance = totalIncome - totalExpense;
 
   summaryContainer.innerHTML = `
-    <div class="stat-box income"><div class="title">Tổng thu nhập</div><div class="amount">${totalIncome.toLocaleString('vi-VN')}đ</div></div>
-    <div class="stat-box expense"><div class="title">Tổng chi tiêu</div><div class="amount">${totalExpense.toLocaleString('vi-VN')}đ</div></div>
+    <div class="stat-box income"><div class="title">Thu nhập</div><div class="amount">${totalIncome.toLocaleString('vi-VN')}đ</div></div>
+    <div class="stat-box expense"><div class="title">Chi tiêu</div><div class="amount">${totalExpense.toLocaleString('vi-VN')}đ</div></div>
     <div class="stat-box balance"><div class="title">Số dư</div><div class="amount">${balance.toLocaleString('vi-VN')}đ</div></div>
   `;
 
