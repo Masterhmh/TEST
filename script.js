@@ -1691,11 +1691,10 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Gán sự kiện cho các nút chức năng
-  document.getElementById('fetchDataBtn').addEventListener('click', window.fetchData);
   document.getElementById('fetchMonthlyDataBtn').addEventListener('click', window.fetchMonthlyData);
   document.getElementById('fetchTransactionsBtn').addEventListener('click', window.fetchTransactions);
   document.getElementById('addTransactionBtn').addEventListener('click', openAddForm);
-  document.getElementById('fetchMonthlyExpensesBtn').addEventListener('click', window.fetchMonthlyExpenses);
+  document.getElementById('fetchExpensesBtn').addEventListener('click', window.fetchMonthlyExpenses);
   document.getElementById('searchTransactionsBtn').addEventListener('click', window.searchTransactions);
   document.getElementById('fetchKeywordsBtn').addEventListener('click', window.fetchKeywords);
   document.getElementById('addKeywordBtn').addEventListener('click', window.addKeyword);
