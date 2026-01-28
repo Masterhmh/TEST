@@ -1629,14 +1629,14 @@ input[type="date"] {
 
 .legend-item {
   display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  padding: 0.75rem;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.65rem;
   background: var(--card-bg);
   border-radius: 12px;
   transition: transform 0.2s, box-shadow 0.2s;
   cursor: pointer;
-  min-height: 60px;
+  min-height: auto;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
@@ -1646,9 +1646,9 @@ input[type="date"] {
 }
 
 .legend-icon {
-  font-size: 1.5rem;
-  width: 36px;
-  height: 36px;
+  font-size: 1.3rem;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1656,7 +1656,6 @@ input[type="date"] {
   background: white;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  margin-top: 0.15rem;
 }
 
 .legend-color {
@@ -1676,7 +1675,7 @@ input[type="date"] {
 }
 
 .legend-label {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 600;
   color: var(--text-color);
   line-height: 1.2;
@@ -1689,7 +1688,7 @@ input[type="date"] {
   display: flex;
   align-items: baseline;
   gap: 0.35rem;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: var(--secondary-color);
   width: 100%;
   flex-wrap: wrap;
@@ -1721,20 +1720,20 @@ input[type="date"] {
   }
   
   .legend-item {
-    padding: 0.6rem;
+    padding: 0.45rem 0.6rem;
   }
   
   .legend-icon {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     width: 28px;
     height: 28px;
   }
   
   .legend-label {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
   }
   
   .legend-value {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
   }
 }
