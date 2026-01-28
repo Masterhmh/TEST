@@ -1218,10 +1218,10 @@ function drawMonthlyPieChart(data) {
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillStyle = textColor;
-        ctx.fillText('Tổng chi tiêu', centerX, centerY - 35);
+        ctx.fillText('Tổng chi tiêu', centerX, centerY - 20);
         ctx.font = '800 26px Nunito, sans-serif';
         ctx.fillStyle = expenseColor;
-        ctx.fillText(centerText, centerX, centerY + 10);
+        ctx.fillText(centerText, centerX, centerY + 15);
         ctx.restore();
       }
     }]
@@ -1237,6 +1237,7 @@ function drawMonthlyPieChart(data) {
     'Ăn uống': 'fa-utensils',
     'Mua sắm': 'fa-shopping-cart',
     'Dịch vụ giải trí': 'fa-glass-cheers',
+    'Dịch vụ giặt ủi': 'fa-shirt',
     'Hóa đơn': 'fa-file-invoice',
     'Giải trí': 'fa-film',
     'Y tế': 'fa-heart-pulse',
