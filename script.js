@@ -1246,7 +1246,7 @@ function drawMonthlyPieChart(data) {
     'Tiết kiệm': 'fa-piggy-bank',
     'Công việc & Kinh doanh': 'fa-briefcase',
     'Công nghệ & Thiết bị điện tử': 'fa-laptop',
-    'Tiệc tụng & Sự kiện': 'fa-cake-candles',
+    'Tiệc tụng & Sự kiện': 'fa-wine-glass',
     'Dịch vụ sửa chữa & Bảo trì': 'fa-screwdriver-wrench',
     'Làm đẹp & Chăm sóc cá nhân': 'fa-spa',
     'Mua sắm online & TMĐT': 'fa-cart-shopping',
