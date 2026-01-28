@@ -612,14 +612,24 @@ button:hover {
   width: 100%;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
+  text-overflow: clip;
+  line-height: 1.1;
 }
 
 /* Tự động giảm font size cho số tiền dài */
 @media (max-width: 1023px) {
   .stat-box .amount {
-    font-size: clamp(1rem, 3vw, 1.6rem);
+    font-size: clamp(0.85rem, 3vw, 1.6rem);
   }
+}
+
+/* Thêm class để JavaScript có thể điều chỉnh font-size động */
+.stat-box .amount[data-length="long"] {
+  font-size: 1.2rem;
+}
+
+.stat-box .amount[data-length="very-long"] {
+  font-size: 1rem;
 }
 .stat-box .amount.no-data { font-size: 1rem; white-space: pre-line; text-align: center; line-height: 1.2; }
 .income .amount { color: var(--income-color); }
@@ -1609,6 +1619,7 @@ input[type="date"] {
   border-radius: 8px;
   transition: transform 0.2s;
   cursor: pointer;
+  min-height: 60px;
 }
 
 .legend-item:hover {
@@ -1617,12 +1628,15 @@ input[type="date"] {
 
 .legend-icon {
   font-size: 1.5rem;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .legend-color {
