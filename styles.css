@@ -607,11 +607,18 @@ button:hover {
 .stat-box .amount { 
   font-weight: 700; 
   font-size: 1.2rem;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
   text-align: center;
   width: 100%;
-  hyphens: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Tự động giảm font size cho số tiền dài */
+@media (max-width: 1023px) {
+  .stat-box .amount {
+    font-size: clamp(0.75rem, 2vw, 1.2rem);
+  }
 }
 .stat-box .amount.no-data { font-size: 1rem; white-space: pre-line; text-align: center; line-height: 1.2; }
 .income .amount { color: var(--income-color); }
@@ -659,11 +666,8 @@ canvas#monthlyChart {
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1rem;
   font-size: 0.95rem;
-  padding: 1rem;
+  padding: 0;
   margin: 1.5rem auto 0;
-  background: var(--card-bg);
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .custom-legend-column {
@@ -678,13 +682,7 @@ canvas#monthlyChart {
   display: flex; 
   align-items: flex-start; 
   width: 100%;
-  padding: 0.5rem;
-  border-radius: 8px;
-  transition: background-color 0.2s;
-}
-
-.legend-item:hover {
-  background-color: rgba(0, 0, 0, 0.02);
+  padding: 0.25rem 0;
 }
 
 .legend-color { 
@@ -1580,8 +1578,4 @@ input[type="date"] {
   aspect-ratio: 1 / 1;
   display: block;
   margin: 0 auto;
-  background: var(--card-bg);
-  border-radius: 16px;
-  padding: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
