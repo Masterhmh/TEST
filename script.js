@@ -1064,7 +1064,7 @@ window.fetchMonthlyData = async function() {
           y: { beginAtZero: true, ticks: { callback: value => value.toLocaleString('vi-VN') + 'đ' } }
         },
         plugins: {
-          legend: { display: false },
+          legend: { display: false }, // Ẩn legend mặc định
           tooltip: { callbacks: { label: context => `${context.dataset.label}: ${context.raw.toLocaleString('vi-VN')}đ` } }
         }
       }
