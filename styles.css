@@ -596,8 +596,23 @@ button:hover {
 }
 
 .stat-box:hover { transform: translateY(-5px); }
-.stat-box .title { font-weight: 500; margin-bottom: 0.5rem; color: var(--text-color); font-size: 0.9rem; }
-.stat-box .amount { font-weight: 700; font-size: 1.2rem; }
+.stat-box .title { 
+  font-weight: 500; 
+  margin-bottom: 0.5rem; 
+  color: var(--text-color); 
+  font-size: 0.9rem;
+  text-align: center;
+  width: 100%;
+}
+.stat-box .amount { 
+  font-weight: 700; 
+  font-size: 1.2rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  text-align: center;
+  width: 100%;
+  hyphens: auto;
+}
 .stat-box .amount.no-data { font-size: 1rem; white-space: pre-line; text-align: center; line-height: 1.2; }
 .income .amount { color: var(--income-color); }
 .expense .amount { color: var(--expense-color); }
@@ -634,36 +649,66 @@ canvas#monthlyChart {
   min-height: 350px; 
   max-height: 450px;
   display: block;
-  margin: 0 auto;
-  background: var(--card-bg);
-  border-radius: 16px;
-  padding: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  margin: 1rem auto 2rem;
 }
 
 .custom-legend {
   width: 100%;
   max-width: 600px;
-  display: flex;
-  justify-content: space-between;
-  font-size: 1rem;
-  padding: 0;
-  margin: 2rem auto 0;
-  gap: 0.3rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  font-size: 0.95rem;
+  padding: 1rem;
+  margin: 1.5rem auto 0;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .custom-legend-column {
-  width: 48%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  min-width: 280px;
+  gap: 0.75rem;
 }
 
-.legend-item { display: flex; align-items: flex-start; margin-bottom: 0.8rem; }
-.legend-color { width: 16px; height: 16px; margin-right: 0.75rem; border-radius: 4px; margin-top: 2px; }
-.legend-text { font-size: 1rem; display: flex; flex-direction: column; }
-.legend-value { font-weight: 700; margin-top: 0.2rem; }
+.legend-item { 
+  display: flex; 
+  align-items: flex-start; 
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.legend-item:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.legend-color { 
+  width: 18px; 
+  height: 18px; 
+  margin-right: 0.75rem; 
+  border-radius: 4px; 
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.legend-text { 
+  font-size: 0.95rem; 
+  display: flex; 
+  flex-direction: column;
+  flex: 1;
+  line-height: 1.4;
+}
+
+.legend-value { 
+  font-weight: 700; 
+  margin-top: 0.25rem;
+  color: var(--primary-color);
+}
 
 .monthly-legend {
   width: 100%;
@@ -1396,9 +1441,11 @@ input[type="date"] {
   }
 
   .custom-legend {
-    flex-direction: column;
+    grid-template-columns: 1fr;
     max-width: 320px;
     font-size: 0.85rem;
+    padding: 0.75rem;
+    gap: 0.5rem;
   }
 
   .transaction-box {
@@ -1527,6 +1574,14 @@ input[type="date"] {
 }
 /* Điều chỉnh pie chart ở tab3 */
 #monthlyPieChart {
-  max-width: 100%;
-  height: auto;
+  width: 100% !important;
+  height: auto !important;
+  max-width: 450px !important;
+  aspect-ratio: 1 / 1;
+  display: block;
+  margin: 0 auto;
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
