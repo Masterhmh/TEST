@@ -9,7 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Mini App Tổng Quan Chi Tiêu</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
@@ -25,10 +25,10 @@
   <div class="top-nav">
     <div class="nav-item active" data-tab="tab1"><i class="fas fa-list"></i><span>Giao dịch</span></div>
     <div class="nav-item" data-tab="tab3"><i class="fas fa-chart-bar"></i><span>Báo Cáo</span></div>
-    <div class="nav-item" data-tab="tab4"><i class="fas fa-info-circle"></i><span>Giới thiệu</span></div>
     <div class="nav-item" data-tab="tab5"><i class="fas fa-money-bill-wave"></i><span>Liệt kê</span></div>
     <div class="nav-item" data-tab="tab6"><i class="fas fa-search"></i><span>Tìm kiếm</span></div>
     <div class="nav-item" data-tab="tab7"><i class="fas fa-key"></i><span>Từ khóa</span></div>
+    <div class="nav-item" data-tab="tab4"><i class="fas fa-info-circle"></i><span>Giới thiệu</span></div>
   </div>
 
   <!-- ==========================================================================
@@ -51,8 +51,8 @@
         <button id="addTransactionBtn">Thêm</button>
       </div>
       <div class="stats-container" id="dailySummary">
-        <div class="stat-box income"><div class="title">Tổng thu nhập</div><div class="amount">0đ</div></div>
-        <div class="stat-box expense"><div class="title">Tổng chi tiêu</div><div class="amount">0đ</div></div>
+        <div class="stat-box income"><div class="title">Thu nhập</div><div class="amount">0đ</div></div>
+        <div class="stat-box expense"><div class="title">Chi tiêu</div><div class="amount">0đ</div></div>
         <div class="stat-box balance"><div class="title">Số dư</div><div class="amount">0đ</div></div>
       </div>
       <div class="transactions-list" id="transactionsContainer"></div>
@@ -90,43 +90,21 @@
     <button id="fetchMonthlyDataBtn">Lọc</button>
   </div>
   <div class="stats-container" id="monthlyStatsContainer">
-    <div class="stat-box income"><div class="title">Tổng thu nhập</div><div class="amount">0đ</div></div>
-    <div class="stat-box expense"><div class="title">Tổng chi tiêu</div><div class="amount">0đ</div></div>
+    <div class="stat-box income"><div class="title">Thu nhập</div><div class="amount">0đ</div></div>
+    <div class="stat-box expense"><div class="title">Chi tiêu</div><div class="amount">0đ</div></div>
     <div class="stat-box balance"><div class="title">Số dư</div><div class="amount">0đ</div></div>
   </div>
   <h1 style="margin-top: 2rem;">BIỂU ĐỒ THU CHI THEO THÁNG</h1>
   <canvas id="monthlyChart"></canvas>
   <div class="chart-container">
-    <h1>BIỂU ĐỒ CHI TIÊU THEO PHÂN LOẠI (%)</h1>
-    <canvas id="monthlyPieChart"></canvas>
+    <h1>CHI TIÊU THEO PHÂN LOẠI</h1>
+    <div class="pie-chart-wrapper">
+      <canvas id="monthlyPieChart"></canvas>
+    </div>
     <div class="custom-legend" id="monthlyCustomLegend"></div>
   </div>
 </div>
     
-    <!-- Tab 4: Giới Thiệu -->
-    <div id="tab4" class="tab-content">
-      <h1>GIỚI THIỆU</h1>
-      <div class="info-section">
-        <div class="info-card">
-          <h1>Về MiniApp</h1>
-          <p class="custom-text">Miniapp tài chính trên Telegram giúp bạn theo dõi thu nhập và chi tiêu dễ dàng. Dựa vào dữ liệu trong Google Sheet, nó sẽ hiển thị danh sách giao dịch trong ngày, biểu đồ chi tiêu theo phân loại chi tiết và biểu đồ thu nhập – chi tiêu hàng tháng ngay trong Telegram.</p>
-        </div>
-        <div class="info-card">
-          <h1>Ủng Hộ</h1>
-          <p class="custom-text">Nếu bạn thấy nó hữu ích, hãy ủng hộ mình một ly cà phê để có thêm động lực duy trì và phát triển nhé!</p>
-          <p><i class="fas fa-university" style="color: var(--primary-color);"></i><strong>Ngân hàng:</strong> TMCP Sài Gòn – Hà Nội (SHB)</p>
-          <p><i class="fas fa-user" style="color: var(--primary-color);"></i><strong>Chủ tài khoản:</strong> Hoang Manh Hung</p>
-          <p><i class="fas fa-credit-card" style="color: var(--primary-color);"></i><strong>Số tài khoản:</strong> 6666.6789.9999</p>
-        </div>
-        <div class="qr-container">
-          <div class="qr-frame">
-            <img src="https://i.imgur.com/vd4v56k.png" alt="QR Code Ủng Hộ" class="qr-image">
-            <p class="qr-caption">Quét mã QR để ủng hộ</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- Tab 5: Liệt Kê Chi Tiêu Theo Tháng -->
     <div id="tab5" class="tab-content">
       <h1>LIỆT KÊ CHI TIÊU THEO THÁNG</h1>
@@ -146,7 +124,12 @@
         </select>
         <button id="fetchExpensesBtn">Lọc</button>
       </div>
-      <div class="transactions-list" id="expensesContainer"></div>
+      <div class="stats-container" id="monthlyExpenseSummary">
+        <div class="stat-box income"><div class="title">Thu nhập</div><div class="amount">0đ</div></div>
+        <div class="stat-box expense"><div class="title">Chi tiêu</div><div class="amount">0đ</div></div>
+        <div class="stat-box balance"><div class="title">Số dư</div><div class="amount">0đ</div></div>
+      </div>
+      <div class="transactions-list" id="monthlyExpensesContainer"></div>
       <div id="paginationMonthly" style="text-align: center; margin-top: 1rem;">
         <button id="prevPageMonthly" class="pagination-btn" disabled>Trang trước</button>
         <span id="pageInfoMonthly"></span>
@@ -225,6 +208,30 @@
         <button id="fetchKeywordsBtn">Tải dữ liệu</button>
       </div>
       <div class="keywords-list" id="keywordsContainer"></div>
+    </div>
+
+    <!-- Tab 4: Giới Thiệu -->
+    <div id="tab4" class="tab-content">
+      <h1>GIỚI THIỆU</h1>
+      <div class="info-section">
+        <div class="info-card">
+          <h1>Về MiniApp</h1>
+          <p class="custom-text">Miniapp tài chính trên Telegram giúp bạn theo dõi thu nhập và chi tiêu dễ dàng. Dựa vào dữ liệu trong Google Sheet, nó sẽ hiển thị danh sách giao dịch trong ngày, biểu đồ chi tiêu theo phân loại chi tiết và biểu đồ thu nhập – chi tiêu hàng tháng ngay trong Telegram.</p>
+        </div>
+        <div class="info-card">
+          <h1>Ủng Hộ</h1>
+          <p class="custom-text">Nếu bạn thấy nó hữu ích, hãy ủng hộ mình một ly cà phê để có thêm động lực duy trì và phát triển nhé!</p>
+          <p><i class="fas fa-university" style="color: var(--primary-color);"></i><strong>Ngân hàng:</strong> TMCP Sài Gòn – Hà Nội (SHB)</p>
+          <p><i class="fas fa-user" style="color: var(--primary-color);"></i><strong>Chủ tài khoản:</strong> Hoang Manh Hung</p>
+          <p><i class="fas fa-credit-card" style="color: var(--primary-color);"></i><strong>Số tài khoản:</strong> 6666.6789.9999</p>
+        </div>
+        <div class="qr-container">
+          <div class="qr-frame">
+            <img src="https://i.imgur.com/vd4v56k.png" alt="QR Code Ủng Hộ" class="qr-image">
+            <p class="qr-caption">Quét mã QR để ủng hộ</p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- ==========================================================================
