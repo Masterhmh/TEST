@@ -4,18 +4,18 @@
    ========================================================================== */
 /* Light Mode */
 :root {
-  --primary-color: #0F62FE;       
-  --secondary-color: #6C757D;      
-  --background-color: #F8F9FA;     
+  --primary-color: #6366F1;       
+  --secondary-color: #64748B;      
+  --background-color: #F8FAFC;     
   --card-bg: #FFFFFF;              
-  --text-color: #1B1F23;           
-  --gradient-start: #0F62FE;       
-  --gradient-end: #36D1DC;         
-  --income-color: #2ECC71;         
-  --expense-color: #E74C3C;        
-  --balance-color: #3498DB;        
-  --edit-btn-color: #0DCAF0;       
-  --delete-btn-color: #DC3545;     
+  --text-color: #1E293B;           
+  --gradient-start: #6366F1;       
+  --gradient-end: #8B5CF6;         
+  --income-color: #10B981;         
+  --expense-color: #F43F5E;        
+  --balance-color: #3B82F6;        
+  --edit-btn-color: #06B6D4;       
+  --delete-btn-color: #EF4444;     
 }
 
 /* Dark Mode */
@@ -281,7 +281,7 @@ html {
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Nunito', sans-serif;
   margin: 0;
   padding: 98px 20px 20px;
   background-color: var(--background-color);
@@ -597,16 +597,17 @@ button:hover {
 
 .stat-box:hover { transform: translateY(-5px); }
 .stat-box .title { 
-  font-weight: 500; 
+  font-weight: 600; 
   margin-bottom: 0.5rem; 
   color: var(--text-color); 
-  font-size: 0.9rem;
+  font-size: 1rem;
   text-align: center;
   width: 100%;
+  letter-spacing: 0.5px;
 }
 .stat-box .amount { 
-  font-weight: 700; 
-  font-size: 1.2rem;
+  font-weight: 800; 
+  font-size: 1.6rem;
   text-align: center;
   width: 100%;
   white-space: nowrap;
@@ -617,7 +618,7 @@ button:hover {
 /* Tự động giảm font size cho số tiền dài */
 @media (max-width: 1023px) {
   .stat-box .amount {
-    font-size: clamp(0.75rem, 2vw, 1.2rem);
+    font-size: clamp(1rem, 3vw, 1.6rem);
   }
 }
 .stat-box .amount.no-data { font-size: 1rem; white-space: pre-line; text-align: center; line-height: 1.2; }
@@ -1571,11 +1572,123 @@ input[type="date"] {
   }
 }
 /* Điều chỉnh pie chart ở tab3 */
+.pie-chart-wrapper {
+  width: 100%;
+  max-width: 350px;
+  margin: 1.5rem auto;
+  aspect-ratio: 1 / 1;
+  position: relative;
+}
+
 #monthlyPieChart {
   width: 100% !important;
-  height: auto !important;
-  max-width: 450px !important;
-  aspect-ratio: 1 / 1;
-  display: block;
-  margin: 0 auto;
+  height: 100% !important;
+}
+
+.chart-container {
+  margin-top: 2rem;
+}
+
+.custom-legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: var(--background-color);
+  border-radius: 8px;
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.legend-item:hover {
+  transform: translateY(-2px);
+}
+
+.legend-icon {
+  font-size: 1.5rem;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.legend-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.legend-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-color);
+  line-height: 1.2;
+}
+
+.legend-value {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--secondary-color);
+}
+
+.legend-amount {
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.legend-percentage {
+  font-weight: 500;
+}
+
+@media (max-width: 600px) {
+  .pie-chart-wrapper {
+    max-width: 300px;
+  }
+  
+  .custom-legend {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding: 0.75rem;
+  }
+  
+  .legend-item {
+    padding: 0.6rem;
+  }
+  
+  .legend-icon {
+    font-size: 1.3rem;
+    width: 28px;
+    height: 28px;
+  }
+  
+  .legend-label {
+    font-size: 0.85rem;
+  }
+  
+  .legend-value {
+    font-size: 0.8rem;
+  }
 }
