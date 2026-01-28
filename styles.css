@@ -269,6 +269,16 @@
     color: #E4E7EB !important;
     border: none;
   }
+
+  /* Legend-item trong custom-legend (phần chú thích biểu đồ tròn) */
+  .legend-item {
+    background: var(--card-bg) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  .legend-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+  }
 }
 
 /* ==========================================================================
@@ -1622,15 +1632,17 @@ input[type="date"] {
   align-items: flex-start;
   gap: 0.75rem;
   padding: 0.75rem;
-  background: var(--background-color);
-  border-radius: 8px;
-  transition: transform 0.2s;
+  background: var(--card-bg);
+  border-radius: 12px;
+  transition: transform 0.2s, box-shadow 0.2s;
   cursor: pointer;
   min-height: 60px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .legend-item:hover {
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 .legend-icon {
@@ -1658,7 +1670,7 @@ input[type="date"] {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.1rem;
   align-items: flex-start;
   justify-content: center;
 }
@@ -1667,21 +1679,22 @@ input[type="date"] {
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--text-color);
-  line-height: 1.3;
+  line-height: 1.2;
   width: 100%;
   text-align: left;
-  margin-bottom: 0.15rem;
+  margin-bottom: 0.05rem;
 }
 
 .legend-value {
   display: flex;
   align-items: baseline;
-  gap: 0.4rem;
+  gap: 0.35rem;
   font-size: 0.85rem;
   color: var(--secondary-color);
   width: 100%;
   flex-wrap: wrap;
   text-align: left;
+  margin-top: 0.05rem;
 }
 
 .legend-amount {
