@@ -91,36 +91,45 @@
     </div>
 
     <!-- Tab 3: Biểu Đồ Thu Chi Theo Tháng -->
-    <div id="tab3" class="tab-content">
-      <h1>BIỂU ĐỒ THU CHI THEO THÁNG</h1>
-      <p class="notification">Vui lòng chọn khoảng thời gian và ấn "Lọc" để xem dữ liệu.</p>
-      <div id="errorMessageTab3" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
-      <div id="successMessageTab3" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
-      <div id="loadingTab3" style="display: none; text-align: center; margin: 1rem 0;">
-        <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--primary-color);"></i>
-      </div>
-      <div class="input-group">
-        Từ:
-        <select id="startMonth">
-          <option value="1">Tháng 1</option><option value="2">Tháng 2</option><option value="3">Tháng 3</option>
-          <option value="4">Tháng 4</option><option value="5">Tháng 5</option><option value="6">Tháng 6</option>
-          <option value="7">Tháng 7</option><option value="8">Tháng 8</option><option value="9">Tháng 9</option>
-          <option value="10">Tháng 10</option><option value="11">Tháng 11</option><option value="12">Tháng 12</option>
-        </select>
-        Đến:
-        <select id="endMonth">
-          <option value="1">Tháng 1</option><option value="2">Tháng 2</option><option value="3">Tháng 3</option>
-          <option value="4">Tháng 4</option><option value="5">Tháng 5</option><option value="6">Tháng 6</option>
-          <option value="7">Tháng 7</option><option value="8">Tháng 8</option><option value="9">Tháng 9</option>
-          <option value="10">Tháng 10</option><option value="11">Tháng 11</option><option value="12">Tháng 12</option>
-        </select>
-        <button id="fetchMonthlyDataBtn">Lọc</button>
-      </div>
-      <div class="chart-container">
-        <canvas id="monthlyChart"></canvas>
-        <div class="monthly-legend" id="monthlyLegend"></div>
-      </div>
-    </div>
+<div id="tab3" class="tab-content">
+  <h1>BIỂU ĐỒ THU CHI THEO THÁNG</h1>
+  <p class="notification">Vui lòng chọn khoảng thời gian và ấn "Lọc" để xem dữ liệu.</p>
+  <div id="errorMessageTab3" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
+  <div id="successMessageTab3" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
+  <div id="loadingTab3" style="display: none; text-align: center; margin: 1rem 0;">
+    <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--primary-color);"></i>
+  </div>
+  <div class="input-group">
+    Từ:
+    <select id="startMonth">
+      <option value="1">Tháng 1</option><option value="2">Tháng 2</option><option value="3">Tháng 3</option>
+      <option value="4">Tháng 4</option><option value="5">Tháng 5</option><option value="6">Tháng 6</option>
+      <option value="7">Tháng 7</option><option value="8">Tháng 8</option><option value="9">Tháng 9</option>
+      <option value="10">Tháng 10</option><option value="11">Tháng 11</option><option value="12">Tháng 12</option>
+    </select>
+    Đến:
+    <select id="endMonth">
+      <option value="1">Tháng 1</option><option value="2">Tháng 2</option><option value="3">Tháng 3</option>
+      <option value="4">Tháng 4</option><option value="5">Tháng 5</option><option value="6">Tháng 6</option>
+      <option value="7">Tháng 7</option><option value="8">Tháng 8</option><option value="9">Tháng 9</option>
+      <option value="10">Tháng 10</option><option value="11">Tháng 11</option><option value="12">Tháng 12</option>
+    </select>
+    <button id="fetchMonthlyDataBtn">Lọc</button>
+  </div>
+  <div class="stats-container" id="monthlyStatsContainer">
+    <div class="stat-box income"><div class="title">Tổng thu nhập</div><div class="amount">0đ</div></div>
+    <div class="stat-box expense"><div class="title">Tổng chi tiêu</div><div class="amount">0đ</div></div>
+    <div class="stat-box balance"><div class="title">Số dư</div><div class="amount">0đ</div></div>
+  </div>
+  <div class="chart-container">
+    <canvas id="monthlyChart"></canvas>
+  </div>
+  <div class="chart-container">
+    <h1>BIỂU ĐỒ CHI TIÊU THEO PHÂN LOẠI (%)</h1>
+    <canvas id="monthlyPieChart"></canvas>
+    <div class="custom-legend" id="monthlyCustomLegend"></div>
+  </div>
+</div>
     
     <!-- Tab 4: Giới Thiệu -->
     <div id="tab4" class="tab-content">
