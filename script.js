@@ -1247,6 +1247,8 @@ function displaySearchResults(data) {
   const pageInfo = document.getElementById('pageInfoSearch');
   const prevPageBtn = document.getElementById('prevPageSearch');
   const nextPageBtn = document.getElementById('nextPageSearch');
+  const paginationDiv = document.getElementById('paginationSearch');
+  const placeholderTab4 = document.getElementById('placeholderTab4');
   container.innerHTML = '';
 
   if (!data || data.error || !Array.isArray(data) || data.length === 0) {
@@ -1254,8 +1256,14 @@ function displaySearchResults(data) {
     pageInfo.textContent = '';
     prevPageBtn.disabled = true;
     nextPageBtn.disabled = true;
+    paginationDiv.style.display = 'none';
+    placeholderTab4.style.display = 'block';
     return;
   }
+
+  // Ẩn placeholder và hiển thị pagination
+  placeholderTab4.style.display = 'none';
+  paginationDiv.style.display = 'block';
 
   const totalTransactions = cachedSearchResults?.totalTransactions || data.length;
   container.innerHTML = `<div class="notification">Tìm thấy ${totalTransactions} giao dịch phù hợp</div>`;
