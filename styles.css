@@ -535,6 +535,7 @@ h1 {
     font-size: 0.72rem;
     min-width: 85px;
     max-width: 110px;
+    text-align: center !important;
   }
   
   .input-group:not(.vertical) input[type="date"] {
@@ -567,6 +568,7 @@ h1 {
     font-size: 0.68rem;
     min-width: 80px;
     max-width: 100px;
+    text-align: center !important;
   }
   
   .input-group:not(.vertical) input[type="date"] {
@@ -1232,14 +1234,15 @@ canvas#monthlyChart {
 
 .button-group {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   gap: 0.75rem;
-  width: 100%;
-  margin: 0;
+  width: auto;
+  max-width: 400px;
+  margin: 0 auto;
 }
 
 #addKeywordBtn {
-  flex: 1;
+  flex: 0 1 auto;
   padding: 0.4rem 0.7rem;
   font-size: 0.7rem;
   font-weight: 500;
@@ -1258,7 +1261,7 @@ canvas#monthlyChart {
 }
 
 #deleteKeywordBtn {
-  flex: 1;
+  flex: 0 1 auto;
   padding: 0.4rem 0.7rem;
   font-size: 0.7rem;
   font-weight: 500;
@@ -1632,7 +1635,7 @@ input[type="date"] {
   gap: 0.5rem;
   width: 100%;
   max-width: 450px;
-  margin: 0 auto;
+  margin: 1rem auto 0;
 }
 
 .qr-frame {
