@@ -306,7 +306,7 @@ function displayTransactions(data) {
     </div>
     <div class="layer-bottom" style="width: 100%;">
       <div class="date">${formatDate(item.date)}</div>
-      <div class="amount" style="color: ${amountColor}; font-size: 1.4rem;">${item.amount.toLocaleString('vi-VN')}đ</div>
+      <div class="amount" style="color: ${amountColor};">${item.amount.toLocaleString('vi-VN')}đ</div>
       <div class="content">Nội dung: ${item.content}${item.note ? ` (${item.note})` : ''}</div>
       <div class="type ${typeClass}">Phân loại: ${item.type}</div>
       <div class="category">Phân loại chi tiết: ${item.category}</div>
@@ -1108,7 +1108,7 @@ function displayMonthlyExpenses(data) {
     </div>
     <div class="layer-bottom" style="width: 100%;">
       <div class="date">${formatDate(item.date)}</div>
-      <div class="amount" style="color: ${amountColor}; font-size: 1.4rem;">${item.amount.toLocaleString('vi-VN')}đ</div>
+      <div class="amount" style="color: ${amountColor};">${item.amount.toLocaleString('vi-VN')}đ</div>
       <div class="content">Nội dung: ${item.content}${item.note ? ` (${item.note})` : ''}</div>
       <div class="type ${typeClass}">Phân loại: ${item.type}</div>
       <div class="category">Phân loại chi tiết: ${item.category}</div>
@@ -1255,7 +1255,7 @@ function displaySearchResults(data) {
     </div>
     <div class="layer-bottom" style="width: 100%;">
       <div class="date">${formatDate(item.date)}</div>
-      <div class="amount" style="color: ${amountColor}; font-size: 1.4rem;">${item.amount.toLocaleString('vi-VN')}đ</div>
+      <div class="amount" style="color: ${amountColor};">${item.amount.toLocaleString('vi-VN')}đ</div>
       <div class="content">Nội dung: ${item.content}${item.note ? ` (${item.note})` : ''}</div>
       <div class="type ${typeClass}">Phân loại: ${item.type}</div>
       <div class="category">Phân loại chi tiết: ${item.category}</div>
