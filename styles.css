@@ -191,15 +191,29 @@
   }
 
   /* Trường nhập liệu tất cả các tab */
-  select,
-  input[type="month"],
-  input[type="date"],
-  input[type="text"],
-  input[type="number"] {
-    background-color: var_credit_card(--input-bg) !important;
+  .input-group:not(.vertical) select,
+  .input-group:not(.vertical) input[type="month"],
+  .input-group:not(.vertical) input[type="date"],
+  .input-group:not(.vertical) input[type="text"],
+  .input-group:not(.vertical) input[type="number"] {
+    background-color: var(--input-bg) !important;
     color: var(--text-color) !important;
     border: 1px solid var(--input-border) !important;
     border-radius: 4px;
+  }
+
+  /* Input trong modal và vertical form */
+  .modal-content input[type="text"],
+  .modal-content input[type="number"],
+  .modal-content input[type="date"],
+  .modal-content select,
+  .modal-content textarea,
+  .input-group.vertical input[type="text"],
+  .input-group.vertical input[type="number"],
+  .input-group.vertical select {
+    background-color: var(--input-bg) !important;
+    color: var(--text-color) !important;
+    border: 1px solid var(--input-border) !important;
   }
 
   input::placeholder,
@@ -462,7 +476,11 @@ h1 {
   flex-shrink: 0;
 }
 
-select, input[type="date"], input[type="text"], input[type="number"] {
+/* Input trong input-group ngang (tab thường) */
+.input-group:not(.vertical) select, 
+.input-group:not(.vertical) input[type="date"], 
+.input-group:not(.vertical) input[type="text"], 
+.input-group:not(.vertical) input[type="number"] {
   padding: 0.5rem 0.4rem;
   font-size: 0.8rem;
   width: auto;
@@ -478,7 +496,7 @@ select, input[type="date"], input[type="text"], input[type="number"] {
 }
 
 /* Fix cho input date bị icon che và xuống dòng */
-input[type="date"] {
+.input-group:not(.vertical) input[type="date"] {
   padding-right: 0.25rem;
   padding-left: 0.4rem;
   text-align: left;
@@ -498,14 +516,17 @@ input[type="date"] {
     font-size: 0.8rem;
   }
   
-  select, input[type="date"], input[type="text"], input[type="number"] {
+  .input-group:not(.vertical) select, 
+  .input-group:not(.vertical) input[type="date"], 
+  .input-group:not(.vertical) input[type="text"], 
+  .input-group:not(.vertical) input[type="number"] {
     padding: 0.45rem 0.3rem;
     font-size: 0.75rem;
     min-width: 85px;
     max-width: 110px;
   }
   
-  input[type="date"] {
+  .input-group:not(.vertical) input[type="date"] {
     padding-right: 0.2rem;
     padding-left: 0.3rem;
     font-size: 0.7rem;
@@ -517,14 +538,18 @@ input[type="date"] {
     gap: 0.45rem;
   }
   
-  select, input[type="date"] {
+  .input-group:not(.vertical) select, 
+  .input-group:not(.vertical) input[type="date"] {
     font-size: 0.78rem;
   }
 }
 
-select:focus, input[type="date"]:focus, input[type="text"]:focus, input[type="number"]:focus {
+.input-group:not(.vertical) select:focus, 
+.input-group:not(.vertical) input[type="date"]:focus, 
+.input-group:not(.vertical) input[type="text"]:focus, 
+.input-group:not(.vertical) input[type="number"]:focus {
   outline: none;
-  Likecredit_card border-color: var(--primary-color);
+  border-color: var(--primary-color);
 }
 
 .input-group.vertical {
