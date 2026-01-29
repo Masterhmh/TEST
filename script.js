@@ -1246,7 +1246,8 @@ function drawMonthlyPieChart(data) {
     'Tiết kiệm': 'fa-piggy-bank',
     'Công việc & Kinh doanh': 'fa-briefcase',
     'Công nghệ & Thiết bị điện tử': 'fa-laptop',
-    'Tiệc tùng & Sự kiện': 'fa-champagne-glasses',
+    'Tiệc tụng & Sự kiện': 'fa-birthday-cake',
+    'Tiệc tùng & Sự kiện': 'fa-birthday-cake',
     'Dịch vụ sửa chữa & Bảo trì': 'fa-screwdriver-wrench',
     'Làm đẹp & Chăm sóc cá nhân': 'fa-spa',
     'Mua sắm online & TMĐT': 'fa-cart-shopping',
@@ -1889,32 +1890,14 @@ document.getElementById('nextPageSearch').addEventListener('click', () => {
 function adjustStatBoxFontSize() {
   const amountElements = document.querySelectorAll('.stat-box .amount:not(.no-data)');
   amountElements.forEach(el => {
-    const text = el.textContent;
-    const length = text.length;
-    
     // Xóa attribute và style cũ
     el.removeAttribute('data-length');
     el.style.fontSize = '';
     
-    // Desktop: điều chỉnh dựa trên độ dài text
-    if (window.innerWidth > 1023) {
-      if (length > 15) {
-        el.style.fontSize = '1rem';
-      } else if (length > 12) {
-        el.style.fontSize = '1.2rem';
-      } else {
-        el.style.fontSize = '1.6rem';
-      }
-    } else {
-      // Mobile: sử dụng clamp từ CSS
-      if (length > 15) {
-        el.style.fontSize = 'clamp(0.75rem, 2.5vw, 1rem)';
-      } else if (length > 12) {
-        el.style.fontSize = 'clamp(0.85rem, 2.8vw, 1.2rem)';
-      } else {
-        el.style.fontSize = 'clamp(1rem, 3vw, 1.6rem)';
-      }
-    }
+    // Sử dụng font-size cố định 1.1rem cho tất cả các trường hợp
+    // Đảm bảo text không xuống dòng với white-space: nowrap
+    el.style.fontSize = '1.1rem';
+    el.style.whiteSpace = 'nowrap';
   });
 }
 
