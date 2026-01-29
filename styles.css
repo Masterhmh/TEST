@@ -413,7 +413,7 @@ body {
    Kiểu dáng cho các thành phần như input, button, thống kê, biểu đồ, giao dịch, từ khóa.
    ========================================================================== */
 h1 { 
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   margin-top: 1rem;
   margin-bottom: 1.5rem; 
   text-align: center; 
@@ -422,14 +422,14 @@ h1 {
 
 @media (max-width: 480px) {
   h1 {
-    font-size: 1.3rem;
+    font-size: 1rem;
     margin-bottom: 1.2rem;
   }
 }
 
 @media (min-width: 768px) {
   h1 {
-    font-size: 1.6rem;
+    font-size: 1.15rem;
   }
 }
 
@@ -446,7 +446,7 @@ h1 {
 
 select, input[type="date"], input[type="text"], input[type="number"] {
   padding: 0.5rem;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   width: auto;
   min-width: 110px;
   max-width: 140px;
@@ -458,6 +458,12 @@ select, input[type="date"], input[type="text"], input[type="number"] {
   box-sizing: border-box;
 }
 
+/* Fix cho input date bị icon che */
+input[type="date"] {
+  padding-right: 0.3rem;
+  text-align: left;
+}
+
 /* Responsive cho input */
 @media (max-width: 480px) {
   .input-group {
@@ -466,10 +472,15 @@ select, input[type="date"], input[type="text"], input[type="number"] {
   }
   
   select, input[type="date"], input[type="text"], input[type="number"] {
-    padding: 0.45rem 0.4rem;
-    font-size: 0.85rem;
-    min-width: 95px;
-    max-width: 120px;
+    padding: 0.45rem 0.3rem;
+    font-size: 0.8rem;
+    min-width: 100px;
+    max-width: 125px;
+  }
+  
+  input[type="date"] {
+    padding-right: 0.2rem;
+    padding-left: 0.3rem;
   }
 }
 
@@ -479,7 +490,7 @@ select, input[type="date"], input[type="text"], input[type="number"] {
   }
   
   select, input[type="date"] {
-    font-size: 0.88rem;
+    font-size: 0.83rem;
   }
 }
 
@@ -545,7 +556,7 @@ button {
   color: white;
   border: none;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s;
@@ -560,7 +571,7 @@ button:hover {
 @media (max-width: 480px) {
   button {
     padding: 0.45rem 1rem;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
   }
 }
 
@@ -625,14 +636,14 @@ button:hover {
 .notification {
   text-align: center;
   margin-bottom: 1rem;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--secondary-color);
   line-height: 1.4;
 }
 
 @media (max-width: 480px) {
   .notification {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
 }
 
@@ -833,7 +844,7 @@ canvas#monthlyChart {
 }
 
 .legend-text { 
-  font-size: 0.9rem; 
+  font-size: 0.8rem; 
   display: flex; 
   flex-direction: column;
   flex: 1;
@@ -848,6 +859,7 @@ canvas#monthlyChart {
   margin-top: 0.25rem;
   color: var(--primary-color);
   word-wrap: break-word;
+  font-size: 0.85rem;
 }
 
 /* Responsive cho legend */
@@ -863,7 +875,11 @@ canvas#monthlyChart {
   }
   
   .legend-text {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
+  }
+  
+  .legend-value {
+    font-size: 0.8rem;
   }
 }
 
@@ -891,7 +907,7 @@ canvas#monthlyChart {
   max-width: 500px;
   display: flex;
   flex-direction: column;
-  font-size: 1rem;
+  font-size: 0.85rem;
   padding: 0 20px;
   margin: 2rem auto 0;
   gap: 1rem;
@@ -905,14 +921,14 @@ canvas#monthlyChart {
 }
 
 .month-item h3 {
-  font-size: 1.2rem;
+  font-size: 1rem;
   margin-bottom: 0.5rem;
   font-weight: 500;
 }
 
 .month-item p {
   margin: 0.5rem 0;
-  font-size: 1rem;
+  font-size: 0.85rem;
   display: flex;
   align-items: center;
 }
@@ -929,7 +945,7 @@ canvas#monthlyChart {
 }
 
 .month-item .difference-icon {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   line-height: 16px;
 }
 
@@ -937,6 +953,7 @@ canvas#monthlyChart {
 .month-item .difference {
   font-weight: 700;
   margin-left: 0.1rem;
+  font-size: 0.9rem;
 }
 
 .month-item span:not(.amount):not(.difference)::after {
@@ -990,13 +1007,13 @@ canvas#monthlyChart {
 }
 
 .transaction-box:hover { transform: translateY(-5px); }
-.transaction-box .date { font-weight: 500; font-size: 1rem; color: var(--text-color); margin-bottom: 0.3rem; line-height: 1.4; }
-.transaction-box .amount { font-weight: 700; font-size: 1.1rem; margin-bottom: 0.3rem; line-height: 1.4; }
-.transaction-box .type { font-size: 0.95rem; margin-bottom: 0.3rem; font-weight: 700; line-height: 1.4; }
+.transaction-box .date { font-weight: 500; font-size: 0.85rem; color: var(--text-color); margin-bottom: 0.3rem; line-height: 1.4; }
+.transaction-box .amount { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.3rem; line-height: 1.4; }
+.transaction-box .type { font-size: 0.85rem; margin-bottom: 0.3rem; font-weight: 700; line-height: 1.4; }
 .transaction-box .type.expense { color: var(--expense-color); }
 .transaction-box .type.income { color: var(--income-color); }
-.transaction-box .id { font-size: 0.85rem; color: var(--secondary-color); margin-bottom: 0.25rem; line-height: 1.3; }
-.transaction-box .number { font-size: 0.85rem; color: var(--secondary-color); margin-bottom: 0.25rem; line-height: 1.3; }
+.transaction-box .id { font-size: 0.75rem; color: var(--secondary-color); margin-bottom: 0.25rem; line-height: 1.3; }
+.transaction-box .number { font-size: 0.75rem; color: var(--secondary-color); margin-bottom: 0.25rem; line-height: 1.3; }
 
 /* Responsive cho transaction-box */
 @media (max-width: 480px) {
@@ -1004,11 +1021,11 @@ canvas#monthlyChart {
     padding: 0.85rem;
   }
   
-  .transaction-box .date { font-size: 0.95rem; margin-bottom: 0.25rem; }
-  .transaction-box .amount { font-size: 1.05rem; margin-bottom: 0.25rem; }
-  .transaction-box .type { font-size: 0.9rem; margin-bottom: 0.25rem; }
+  .transaction-box .date { font-size: 0.8rem; margin-bottom: 0.25rem; }
+  .transaction-box .amount { font-size: 0.9rem; margin-bottom: 0.25rem; }
+  .transaction-box .type { font-size: 0.8rem; margin-bottom: 0.25rem; }
   .transaction-box .id,
-  .transaction-box .number { font-size: 0.8rem; margin-bottom: 0.2rem; }
+  .transaction-box .number { font-size: 0.7rem; margin-bottom: 0.2rem; }
 }
 
 .layer-container {
@@ -1032,7 +1049,7 @@ canvas#monthlyChart {
 }
 
 .transaction-box .content {
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   margin-bottom: 0.3rem;
   white-space: normal;
   overflow-wrap: break-word;
@@ -1040,7 +1057,7 @@ canvas#monthlyChart {
 }
 
 .transaction-box .category {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-style: italic;
   color: var(--secondary-color);
   white-space: normal;
@@ -1052,12 +1069,12 @@ canvas#monthlyChart {
 /* Responsive */
 @media (max-width: 480px) {
   .transaction-box .content {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     margin-bottom: 0.25rem;
   }
   
   .transaction-box .category {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
   }
 }
 
@@ -1076,7 +1093,7 @@ canvas#monthlyChart {
   width: 100%;
   max-width: 600px;
   border-radius: 16px;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -1088,8 +1105,8 @@ canvas#monthlyChart {
 }
 
 .keyword-box:hover { transform: translateY(-5px); }
-.keyword-box .category { font-weight: 500; font-size: 1rem; color: var(--text-color); margin-bottom: 0.5rem; }
-.keyword-box .keywords { font-size: 0.9rem; color: var(--secondary-color); white-space: normal; word-wrap: break-word; }
+.keyword-box .category { font-weight: 500; font-size: 0.85rem; color: var(--text-color); margin-bottom: 0.5rem; }
+.keyword-box .keywords { font-size: 0.8rem; color: var(--secondary-color); white-space: normal; word-wrap: break-word; }
 
 /* Responsive */
 @media (max-width: 480px) {
@@ -1097,8 +1114,8 @@ canvas#monthlyChart {
     padding: 0.85rem;
   }
   
-  .keyword-box .category { font-size: 0.95rem; }
-  .keyword-box .keywords { font-size: 0.85rem; }
+  .keyword-box .category { font-size: 0.8rem; }
+  .keyword-box .keywords { font-size: 0.75rem; }
 }
 
 .button-group {
@@ -1213,14 +1230,14 @@ canvas#monthlyChart {
 }
 
 .modal-content h2 {
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   margin-bottom: 1rem;
   color: var(--text-color);
 }
 
 .modal-content label {
   display: block;
-  font-size: 1rem;
+  font-size: 0.85rem;
   margin-bottom: 0.5rem;
   color: var(--text-color);
   font-weight: 500;
@@ -1230,11 +1247,11 @@ canvas#monthlyChart {
 .modal-content select,
 .modal-content textarea {
   width: 100%;
-  padding: 0.7rem;
+  padding: 0.6rem;
   margin-bottom: 1rem;
   border-radius: 8px;
   border: 1px solid #E5E7EB;
-  font-size: 1rem;
+  font-size: 0.85rem;
   box-sizing: border-box;
   background-color: #FFFFFF;
   transition: border-color 0.3s, box-shadow 0.3s;
@@ -1256,12 +1273,12 @@ input[type="date"] {
 
 .modal-content input[type="date"] {
   width: 100%;
-  padding: 0.7rem;
-  padding-left: 0.7rem !important;
+  padding: 0.6rem;
+  padding-left: 0.6rem !important;
   margin-bottom: 1rem;
   border-radius: 8px;
   border: 1px solid #E5E7EB;
-  font-size: 1rem;
+  font-size: 0.85rem;
   box-sizing: border-box;
   background-color: #FFFFFF;
   text-align: left !important;
@@ -1270,7 +1287,7 @@ input[type="date"] {
   appearance: none;
   background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
   background-repeat: no-repeat;
-  background-position: right 0.7rem center;
+  background-position: right 0.6rem center;
   background-size: 1rem;
 }
 
