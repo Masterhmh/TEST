@@ -590,14 +590,14 @@ button:hover {
 }
 
 .stat-box {
-  padding: 0.5rem 0.6rem;
+  padding: 0.4rem 0.6rem;
   width: 120px;
   border-radius: 16px;
   font-size: 0.9rem;
   flex-grow: 0;
   flex-shrink: 0;
   max-width: 140px;
-  min-height: 65px;
+  min-height: 55px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -610,27 +610,27 @@ button:hover {
 .stat-box:hover { transform: translateY(-5px); }
 .stat-box .title { 
   font-weight: 600; 
-  margin-bottom: 0.2rem; 
+  margin-bottom: 0.15rem; 
   color: var(--text-color); 
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   text-align: center;
   width: 100%;
   letter-spacing: 0.3px;
 }
 .stat-box .amount { 
   font-weight: 800; 
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   text-align: center;
   width: 100%;
   white-space: nowrap;
   overflow: visible;
-  line-height: 1.1;
+  line-height: 1;
 }
 
 /* Keep consistent font size across all screen sizes */
 @media (max-width: 1023px) {
   .stat-box .amount {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 }
 
