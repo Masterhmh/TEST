@@ -497,6 +497,7 @@ h1 {
   transition: border-color 0.3s;
   box-sizing: border-box;
   flex-shrink: 0;
+  text-align: center !important;
 }
 
 /* Fix cho input date bị icon che và xuống dòng */
@@ -730,8 +731,15 @@ button:hover {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
+/* Button Tìm kiếm và Tải dữ liệu - nhỏ hơn, giống pagination */
+.input-group.vertical button#searchTransactionsBtn,
 .input-group.vertical button#fetchKeywordsBtn {
-  margin: 0.5rem auto 0;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.7rem;
+  width: auto;
+  max-width: fit-content;
+  margin: 0.3rem auto 0;
+  align-self: center;
 }
 
 .notification {
@@ -1428,15 +1436,15 @@ input[type="date"] {
 
 .modal-content .btn-group {
   display: flex;
-  justify-content: space-between;
-  gap: 1rem;
+  justify-content: flex-end;
+  gap: 0.4rem;
 }
 
 .modal-content .btn-group button {
-  flex: 1;
-  padding: 0.5rem;
+  flex: 0 0 auto;
+  padding: 0.3rem 0.65rem;
   border-radius: 8px;
-  font-size: 0.85rem;
+  font-size: 0.72rem;
   font-weight: 500;
   cursor: pointer;
 }
