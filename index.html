@@ -55,8 +55,9 @@
         <div class="stat-box expense"><div class="title">Chi tiêu</div><div class="amount">0đ</div></div>
         <div class="stat-box balance"><div class="title">Số dư</div><div class="amount">0đ</div></div>
       </div>
+      <p id="placeholderTab1" class="notification" style="margin-top: 1rem;">Dữ liệu giao dịch hiển thị ở đây</p>
       <div class="transactions-list" id="transactionsContainer"></div>
-      <div id="pagination" style="text-align: center; margin-top: 1rem;">
+      <div id="pagination" style="text-align: center; margin-top: 1rem; display: none;">
         <button id="prevPage" class="pagination-btn" disabled>Trang trước</button>
         <span id="pageInfo"></span>
         <button id="nextPage" class="pagination-btn">Trang sau</button>
@@ -94,10 +95,11 @@
     <div class="stat-box expense"><div class="title">Chi tiêu</div><div class="amount">0đ</div></div>
     <div class="stat-box balance"><div class="title">Số dư</div><div class="amount">0đ</div></div>
   </div>
-  <h1 style="margin-top: 2rem;">BIỂU ĐỒ THU CHI THEO THÁNG</h1>
+  <p id="placeholderTab2" class="notification" style="margin-top: 1rem;">Dữ liệu báo cáo sẽ hiển thị ở đây</p>
+  <h1 id="chartTitleTab2" style="margin-top: 2rem; display: none;">BIỂU ĐỒ THU CHI THEO THÁNG</h1>
   <canvas id="monthlyChart"></canvas>
   <div class="chart-container">
-    <h1>CHI TIÊU THEO PHÂN LOẠI</h1>
+    <h1 id="pieChartTitleTab2" style="display: none;">CHI TIÊU THEO PHÂN LOẠI</h1>
     <div class="pie-chart-wrapper">
       <canvas id="monthlyPieChart"></canvas>
     </div>
@@ -128,8 +130,9 @@
         <div class="stat-box expense"><div class="title">Chi tiêu</div><div class="amount">0đ</div></div>
         <div class="stat-box balance"><div class="title">Số dư</div><div class="amount">0đ</div></div>
       </div>
+      <p id="placeholderTab3" class="notification" style="margin-top: 1rem;">Các giao dịch trong tháng sẽ hiển thị ở đây</p>
       <div class="transactions-list" id="monthlyExpensesContainer"></div>
-      <div id="paginationMonthly" style="text-align: center; margin-top: 1rem;">
+      <div id="paginationMonthly" style="text-align: center; margin-top: 1rem; display: none;">
         <button id="prevPageMonthly" class="pagination-btn" disabled>Trang trước</button>
         <span id="pageInfoMonthly"></span>
         <button id="nextPageMonthly" class="pagination-btn">Trang sau</button>
@@ -225,7 +228,6 @@
           <p><i class="fas fa-credit-card" style="color: var(--primary-color);"></i><strong>Số tài khoản:</strong> 6666.6789.9999</p>
         </div>
         <div class="qr-container">
-          <a href="https://momo.vn/" target="_blank" class="cta-button">Ủng hộ ngay</a>
           <div class="qr-frame">
             <img id="qrImage" src="https://i.pinimg.com/736x/7c/13/53/7c135389e26cbc6460626deb9e2aa5c6.jpg" alt="QR Code" class="qr-image">
           </div>
