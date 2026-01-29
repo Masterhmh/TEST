@@ -923,7 +923,7 @@ function drawMonthlyPieChart(data) {
             return percentage >= 1 ? `${percentage}%` : '';
           },
           color: '#fff',
-          font: { weight: 'bold', size: 12 },
+          font: { weight: 'bold', size: 10 },
           anchor: 'end',
           align: 'end',
           clamp: true
@@ -939,14 +939,14 @@ function drawMonthlyPieChart(data) {
         const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color').trim() || '#1E293B';
         const centerX = chart.width / 2;
         const centerY = chart.height / 2;
-        ctx.font = '600 18px Nunito, sans-serif';
+        ctx.font = '600 14px Nunito, sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillStyle = textColor;
-        ctx.fillText('Tổng chi tiêu', centerX, centerY - 20);
-        ctx.font = '800 26px Nunito, sans-serif';
+        ctx.fillText('Tổng chi tiêu', centerX, centerY - 15);
+        ctx.font = '800 18px Nunito, sans-serif';
         ctx.fillStyle = expenseColor;
-        ctx.fillText(centerText, centerX, centerY + 15);
+        ctx.fillText(centerText, centerX, centerY + 12);
         ctx.restore();
       }
     }]
