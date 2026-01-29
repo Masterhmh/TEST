@@ -1730,17 +1730,18 @@ input[type="date"] {
     font-size: 0.7rem;
   }
 
-  select,
-  input[type="date"] {
-    width: 110px;
-    font-size: 0.85rem;
-    padding: 0.6rem;
-    text-align: center;
-  }
-
   /* Đảm bảo select trong input-group không vertical được căn giữa */
   .input-group:not(.vertical) select {
     text-align: center !important;
+    width: 110px;
+    font-size: 0.85rem;
+    padding: 0.6rem;
+  }
+
+  .input-group:not(.vertical) input[type="date"] {
+    width: 110px;
+    font-size: 0.85rem;
+    padding: 0.6rem;
   }
 
   /* Đảm bảo select trong input-group vertical không bị căn giữa */
