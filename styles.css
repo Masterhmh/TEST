@@ -462,6 +462,9 @@ h1 {
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
+  font-size: 0.85rem;
+  color: var(--text-color);
+  white-space: nowrap;
 }
 
 .input-group::-webkit-scrollbar {
@@ -502,34 +505,92 @@ h1 {
   text-align: left;
   font-size: 0.75rem;
   flex-shrink: 0;
+  letter-spacing: -0.5px; /* Thu hẹp khoảng cách giữa các ký tự */
+}
+
+/* Thu nhỏ text "ngày" trong date picker */
+.input-group:not(.vertical) input[type="date"]::-webkit-datetime-edit-day-field {
+  font-size: 0.1px; /* Thu nhỏ gần như ẩn */
+  width: 1px;
+  opacity: 0;
+}
+
+/* Thu nhỏ dấu phân cách */
+.input-group:not(.vertical) input[type="date"]::-webkit-datetime-edit-text {
+  font-size: 0.1px;
+  width: 1px;
+  padding: 0;
+  margin: 0;
+}
+
+/* Tối ưu hiển thị tháng và năm */
+.input-group:not(.vertical) input[type="date"]::-webkit-datetime-edit-month-field,
+.input-group:not(.vertical) input[type="date"]::-webkit-datetime-edit-year-field {
+  color: var(--text-color);
+  padding: 0;
 }
 
 /* Responsive cho input */
 @media (max-width: 480px) {
   .input-group {
-    gap: 0.25rem;
-    padding: 0 4px;
+    gap: 0.2rem;
+    padding: 0 2px;
+    font-size: 0.75rem;
   }
   
   .input-group button {
-    padding: 0.45rem 0.7rem;
-    font-size: 0.8rem;
+    padding: 0.4rem 0.55rem;
+    font-size: 0.72rem;
   }
   
   .input-group:not(.vertical) select, 
   .input-group:not(.vertical) input[type="date"], 
   .input-group:not(.vertical) input[type="text"], 
   .input-group:not(.vertical) input[type="number"] {
-    padding: 0.45rem 0.3rem;
-    font-size: 0.75rem;
-    min-width: 85px;
-    max-width: 110px;
+    padding: 0.4rem 0.25rem;
+    font-size: 0.7rem;
+    min-width: 80px;
+    max-width: 105px;
   }
   
   .input-group:not(.vertical) input[type="date"] {
     padding-right: 0.2rem;
     padding-left: 0.3rem;
     font-size: 0.7rem;
+    min-width: 110px;
+    max-width: 120px;
+  }
+}
+
+/* Màn hình rất nhỏ - điều chỉnh thêm */
+@media (max-width: 360px) {
+  .input-group:not(.vertical) {
+    gap: 0.15rem;
+    padding: 0 1px;
+    font-size: 0.7rem;
+  }
+  
+  .input-group:not(.vertical) button {
+    padding: 0.35rem 0.45rem;
+    font-size: 0.68rem;
+  }
+  
+  .input-group:not(.vertical) select, 
+  .input-group:not(.vertical) input[type="date"], 
+  .input-group:not(.vertical) input[type="text"], 
+  .input-group:not(.vertical) input[type="number"] {
+    padding: 0.35rem 0.2rem;
+    font-size: 0.65rem;
+    min-width: 75px;
+    max-width: 95px;
+  }
+  
+  .input-group:not(.vertical) input[type="date"] {
+    padding-right: 0.15rem;
+    padding-left: 0.25rem;
+    font-size: 0.65rem;
+    min-width: 105px;
+    max-width: 110px;
   }
 }
 
@@ -1670,9 +1731,10 @@ input[type="date"] {
     text-overflow: ellipsis;
   }
 
-  .input-group {
-    gap: 0.5rem;
-    padding: 0 5px;
+  .input-group:not(.vertical) {
+    gap: 0.15rem;
+    padding: 0 2px;
+    font-size: 0.7rem;
   }
 
   select,
