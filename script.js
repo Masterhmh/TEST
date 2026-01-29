@@ -1603,6 +1603,7 @@ document.getElementById('nextPageSearch').addEventListener('click', () => {
 
 /**
  * Tự động điều chỉnh font size của .stat-box .amount dựa trên độ dài
+ * Sử dụng logic nhất quán cho tất cả kích thước màn hình
  */
 function adjustStatBoxFontSize() {
   const amountElements = document.querySelectorAll('.stat-box .amount:not(.no-data)');
@@ -1610,28 +1611,18 @@ function adjustStatBoxFontSize() {
     const text = el.textContent;
     const length = text.length;
     
-    // Xóa attribute và style cũ
-    el.removeAttribute('data-length');
+    // Xóa style cũ
     el.style.fontSize = '';
     
-    // Desktop: điều chỉnh dựa trên độ dài text
-    if (window.innerWidth > 1023) {
-      if (length > 15) {
-        el.style.fontSize = '1rem';
-      } else if (length > 12) {
-        el.style.fontSize = '1.2rem';
-      } else {
-        el.style.fontSize = '1.6rem';
-      }
+    // Sử dụng clamp để tự động điều chỉnh cho mọi màn hình
+    if (length > 15) {
+      el.style.fontSize = 'clamp(0.7rem, 2vw, 0.85rem)';
+    } else if (length > 12) {
+      el.style.fontSize = 'clamp(0.75rem, 2.2vw, 0.9rem)';
+    } else if (length > 9) {
+      el.style.fontSize = 'clamp(0.8rem, 2.5vw, 0.95rem)';
     } else {
-      // Mobile: sử dụng clamp từ CSS
-      if (length > 15) {
-        el.style.fontSize = 'clamp(0.75rem, 2.5vw, 1rem)';
-      } else if (length > 12) {
-        el.style.fontSize = 'clamp(0.85rem, 2.8vw, 1.2rem)';
-      } else {
-        el.style.fontSize = 'clamp(1rem, 3vw, 1.6rem)';
-      }
+      el.style.fontSize = 'clamp(0.85rem, 2.8vw, 0.95rem)';
     }
   });
 }
