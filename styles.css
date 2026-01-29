@@ -400,7 +400,7 @@ body {
 .tab-content { 
   display: none; 
   width: 100%;
-  padding: 0 0.5rem;
+  padding: 0 0.3rem;
   box-sizing: border-box;
 }
 
@@ -445,6 +445,21 @@ h1 {
   box-sizing: border-box;
   overflow-x: auto;
   overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.input-group::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Button trong input-group nên nhỏ gọn hơn */
+.input-group button {
+  padding: 0.5rem 0.9rem;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 select, input[type="date"], input[type="text"], input[type="number"] {
@@ -459,6 +474,7 @@ select, input[type="date"], input[type="text"], input[type="number"] {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   transition: border-color 0.3s;
   box-sizing: border-box;
+  flex-shrink: 0;
 }
 
 /* Fix cho input date bị icon che và xuống dòng */
@@ -467,20 +483,26 @@ input[type="date"] {
   padding-left: 0.4rem;
   text-align: left;
   font-size: 0.75rem;
+  flex-shrink: 0;
 }
 
 /* Responsive cho input */
 @media (max-width: 480px) {
   .input-group {
-    gap: 0.3rem;
-    padding: 0 6px;
+    gap: 0.25rem;
+    padding: 0 4px;
+  }
+  
+  .input-group button {
+    padding: 0.45rem 0.7rem;
+    font-size: 0.8rem;
   }
   
   select, input[type="date"], input[type="text"], input[type="number"] {
     padding: 0.45rem 0.3rem;
     font-size: 0.75rem;
-    min-width: 90px;
-    max-width: 115px;
+    min-width: 85px;
+    max-width: 110px;
   }
   
   input[type="date"] {
@@ -509,7 +531,7 @@ select:focus, input[type="date"]:focus, input[type="text"]:focus, input[type="nu
   flex-direction: column;
   align-items: stretch;
   gap: 1rem;
-  padding: 0 1rem;
+  padding: 0 0.3rem;
   width: 100%;
   box-sizing: border-box;
 }
@@ -1231,7 +1253,7 @@ canvas#monthlyChart {
 
 .modal-content {
   background-color: var(--card-bg);
-  padding: 1.5rem;
+  padding: 1.2rem;
   border-radius: 16px;
   width: 90%;
   max-width: 500px;
@@ -1641,7 +1663,7 @@ input[type="date"] {
   }
 
   .input-group.vertical .input-field {
-    max-width: 300px;
+    /* Để trống để các trường tràn toàn bộ chiều rộng */
   }
 
   .input-group.vertical .input-field .uniform-input {
@@ -1650,13 +1672,11 @@ input[type="date"] {
   }
 
   .input-group.vertical button {
-    max-width: 300px;
     font-size: 0.9rem;
     padding: 0.6rem 1rem;
   }
 
   .input-group.vertical button#fetchKeywordsBtn {
-    max-width: 300px;
     font-size: 0.9rem;
     padding: 0.6rem 1rem;
   }
