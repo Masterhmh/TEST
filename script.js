@@ -721,7 +721,7 @@ function closeConfirmDeleteModal() {
 
 
 /* ==========================================================================
-   7. Tab 3: Biểu đồ (Charts Tab)
+   7. Tab 2: Biểu đồ (Charts Tab)
    Các hàm lấy và hiển thị biểu đồ thu chi theo tháng.
    ========================================================================== */
 /**
@@ -732,7 +732,7 @@ window.fetchMonthlyData = async function() {
   const endMonth = parseInt(document.getElementById('endMonth').value);
   if (startMonth > endMonth) return showToast("Tháng bắt đầu phải nhỏ hơn hoặc bằng tháng kết thúc!", "warning");
 
-  showLoading(true, 'tab3');
+  showLoading(true, 'tab2');
   try {
     // Gọi API cho bar chart (thu/chi theo tháng)
     const targetUrl = `${apiUrl}?action=getMonthlyData&startMonth=${startMonth}&endMonth=${endMonth}&sheetId=${sheetId}`;
@@ -846,7 +846,7 @@ window.fetchMonthlyData = async function() {
   } catch (error) {
     showToast("Lỗi khi lấy dữ liệu: " + error.message, "error");
   } finally {
-    showLoading(false, 'tab3');
+    showLoading(false, 'tab2');
   }
 };
 /**
@@ -1014,7 +1014,7 @@ function getColorByIndex(index) {
   return colors[index % colors.length];
 }
 /* ==========================================================================
-   8. Tab 5: Chi tiêu trong tháng (Monthly Expenses Tab)
+   8. Tab 3: Chi tiêu trong tháng (Monthly Expenses Tab)
    Các hàm lấy và hiển thị giao dịch trong tháng.
    ========================================================================== */
 /**
@@ -1031,7 +1031,7 @@ window.fetchMonthlyExpenses = async function() {
     return;
   }
 
-  showLoading(true, 'tab5');
+  showLoading(true, 'tab3');
   try {
     const targetUrl = `${apiUrl}?action=getTransactionsByMonth&month=${month}&year=${year}&sheetId=${sheetId}`;
     const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
@@ -1044,7 +1044,7 @@ window.fetchMonthlyExpenses = async function() {
     showToast("Lỗi khi lấy dữ liệu giao dịch: " + error.message, "error");
     displayMonthlyExpenses({ error: true });
   } finally {
-    showLoading(false, 'tab5');
+    showLoading(false, 'tab3');
   }
 };
 
@@ -1139,7 +1139,7 @@ function displayMonthlyExpenses(data) {
 }
 
 /* ==========================================================================
-   9. Tab 6: Tìm kiếm giao dịch (Search Transactions Tab)
+   9. Tab 4: Tìm kiếm giao dịch (Search Transactions Tab)
    Các hàm tìm kiếm và hiển thị kết quả giao dịch.
    ========================================================================== */
 /**
@@ -1181,7 +1181,7 @@ window.searchTransactions = async function() {
     return;
   }
 
-  showLoading(true, 'tab6');
+  showLoading(true, 'tab4');
   try {
     let targetUrl = `${apiUrl}?action=searchTransactions&sheetId=${sheetId}&page=${currentPageSearch}&limit=${searchPerPage}`;
     if (month) targetUrl += `&month=${month}&year=${year}`;
@@ -1210,7 +1210,7 @@ window.searchTransactions = async function() {
     showToast("Lỗi khi tìm kiếm giao dịch: " + error.message, "error");
     displaySearchResults({ error: true });
   } finally {
-    showLoading(false, 'tab6');
+    showLoading(false, 'tab4');
   }
 };
 
@@ -1286,14 +1286,14 @@ function displaySearchResults(data) {
 }
 
 /* ==========================================================================
-   10. Tab 7: Quản lý từ khóa (Keywords Tab)
+   10. Tab 5: Quản lý từ khóa (Keywords Tab)
    Các hàm lấy, hiển thị, thêm và xóa từ khóa.
    ========================================================================== */
 /**
  * Lấy danh sách từ khóa từ API.
  */
 window.fetchKeywords = async function() {
-  showLoading(true, 'tab7');
+  showLoading(true, 'tab5');
   try {
     const targetUrl = `${apiUrl}?action=getKeywords&sheetId=${sheetId}`;
     const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
@@ -1306,7 +1306,7 @@ window.fetchKeywords = async function() {
     showToast("Lỗi khi lấy dữ liệu từ khóa: " + error.message, "error");
     displayKeywords({ error: true });
   } finally {
-    showLoading(false, 'tab7');
+    showLoading(false, 'tab5');
   }
 };
 
@@ -1367,7 +1367,7 @@ window.addKeyword = async function() {
   const keywordsArray = keywordsInput.split(',').map(keyword => keyword.trim()).filter(keyword => keyword);
   const formattedKeywords = keywordsArray.join(', ');
 
-  showLoading(true, 'tab7');
+  showLoading(true, 'tab5');
   try {
     const finalUrl = proxyUrl + encodeURIComponent(apiUrl);
     const response = await fetch(finalUrl, {
@@ -1388,7 +1388,7 @@ window.addKeyword = async function() {
   } catch (error) {
     showToast("Lỗi khi thêm từ khóa: " + error.message, "error");
   } finally {
-    showLoading(false, 'tab7');
+    showLoading(false, 'tab5');
   }
 };
 
@@ -1415,7 +1415,7 @@ window.deleteKeyword = async function() {
   }
 
   try {
-    showLoading(true, 'tab7');
+    showLoading(true, 'tab5');
     const targetUrl = `${apiUrl}?action=getKeywords&sheetId=${sheetId}`;
     const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
     const response = await fetch(finalUrl);
@@ -1470,7 +1470,7 @@ window.deleteKeyword = async function() {
     console.error("Lỗi trong deleteKeyword:", error);
     showToast("Lỗi khi xóa từ khóa: " + error.message, "error");
   } finally {
-    showLoading(false, 'tab7');
+    showLoading(false, 'tab5');
   }
 };
 
