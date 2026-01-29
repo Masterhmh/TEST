@@ -1614,15 +1614,54 @@ function adjustStatBoxFontSize() {
     // Xóa style cũ
     el.style.fontSize = '';
     
-    // Sử dụng clamp để tự động điều chỉnh cho mọi màn hình
-    if (length > 15) {
-      el.style.fontSize = 'clamp(0.7rem, 2vw, 0.85rem)';
-    } else if (length > 12) {
-      el.style.fontSize = 'clamp(0.75rem, 2.2vw, 0.9rem)';
-    } else if (length > 9) {
-      el.style.fontSize = 'clamp(0.8rem, 2.5vw, 0.95rem)';
+    // Tính toán kích thước màn hình
+    const screenWidth = window.innerWidth;
+    
+    // Điều chỉnh font size dựa trên độ dài text và kích thước màn hình
+    if (screenWidth <= 480) {
+      // Màn hình rất nhỏ
+      if (length > 15) {
+        el.style.fontSize = '0.65rem';
+      } else if (length > 12) {
+        el.style.fontSize = '0.7rem';
+      } else if (length > 9) {
+        el.style.fontSize = '0.75rem';
+      } else {
+        el.style.fontSize = '0.8rem';
+      }
+    } else if (screenWidth <= 768) {
+      // Màn hình nhỏ
+      if (length > 15) {
+        el.style.fontSize = '0.7rem';
+      } else if (length > 12) {
+        el.style.fontSize = '0.75rem';
+      } else if (length > 9) {
+        el.style.fontSize = '0.8rem';
+      } else {
+        el.style.fontSize = '0.85rem';
+      }
+    } else if (screenWidth <= 1023) {
+      // Màn hình trung bình
+      if (length > 15) {
+        el.style.fontSize = '0.75rem';
+      } else if (length > 12) {
+        el.style.fontSize = '0.8rem';
+      } else if (length > 9) {
+        el.style.fontSize = '0.85rem';
+      } else {
+        el.style.fontSize = '0.9rem';
+      }
     } else {
-      el.style.fontSize = 'clamp(0.85rem, 2.8vw, 0.95rem)';
+      // Màn hình lớn
+      if (length > 15) {
+        el.style.fontSize = '0.8rem';
+      } else if (length > 12) {
+        el.style.fontSize = '0.85rem';
+      } else if (length > 9) {
+        el.style.fontSize = '0.9rem';
+      } else {
+        el.style.fontSize = '0.95rem';
+      }
     }
   });
 }
