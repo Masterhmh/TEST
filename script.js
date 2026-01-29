@@ -1893,11 +1893,11 @@ function adjustStatBoxFontSize() {
     // Xóa attribute và style cũ
     el.removeAttribute('data-length');
     el.style.fontSize = '';
+    el.style.whiteSpace = '';
     
-    // Sử dụng font-size cố định 1.1rem cho tất cả các trường hợp
-    // Đảm bảo text không xuống dòng với white-space: nowrap
-    el.style.fontSize = '1.1rem';
-    el.style.whiteSpace = 'nowrap';
+    // Sử dụng font-size cố định 0.95rem cho tất cả các trường hợp
+    // Cho phép text wrap nếu quá dài
+    el.style.fontSize = '0.95rem';
   });
 }
 
