@@ -257,6 +257,8 @@ function displayTransactions(data) {
   const pageInfo = document.getElementById('pageInfo');
   const prevPageBtn = document.getElementById('prevPage');
   const nextPageBtn = document.getElementById('nextPage');
+  const paginationDiv = document.getElementById('pagination');
+  const placeholderTab1 = document.getElementById('placeholderTab1');
   container.innerHTML = '';
 
   if (!data || data.error || !Array.isArray(data) || data.length === 0) {
@@ -269,8 +271,14 @@ function displayTransactions(data) {
     pageInfo.textContent = '';
     prevPageBtn.disabled = true;
     nextPageBtn.disabled = true;
+    paginationDiv.style.display = 'none';
+    placeholderTab1.style.display = 'block';
     return;
   }
+
+  // Ẩn placeholder và hiển thị pagination
+  placeholderTab1.style.display = 'none';
+  paginationDiv.style.display = 'block';
 
   container.innerHTML = `<div class="notification">Bạn có ${data.length} giao dịch trong ngày</div>`;
 
@@ -741,6 +749,14 @@ window.fetchMonthlyData = async function() {
     const monthlyData = await response.json();
     if (monthlyData.error) throw new Error(monthlyData.error);
 
+    // Ẩn placeholder và hiển thị tiêu đề
+    const placeholderTab2 = document.getElementById('placeholderTab2');
+    const chartTitleTab2 = document.getElementById('chartTitleTab2');
+    const pieChartTitleTab2 = document.getElementById('pieChartTitleTab2');
+    if (placeholderTab2) placeholderTab2.style.display = 'none';
+    if (chartTitleTab2) chartTitleTab2.style.display = 'block';
+    if (pieChartTitleTab2) pieChartTitleTab2.style.display = 'block';
+
     // Tính tổng thu, tổng chi, số dư từ dữ liệu monthly
     let totalIncome = 0;
     let totalExpense = 0;
@@ -1058,6 +1074,8 @@ function displayMonthlyExpenses(data) {
   const pageInfo = document.getElementById('pageInfoMonthly');
   const prevPageBtn = document.getElementById('prevPageMonthly');
   const nextPageBtn = document.getElementById('nextPageMonthly');
+  const paginationDiv = document.getElementById('paginationMonthly');
+  const placeholderTab3 = document.getElementById('placeholderTab3');
   container.innerHTML = '';
 
   if (!data || data.error || !Array.isArray(data) || data.length === 0) {
@@ -1070,8 +1088,14 @@ function displayMonthlyExpenses(data) {
     pageInfo.textContent = '';
     prevPageBtn.disabled = true;
     nextPageBtn.disabled = true;
+    paginationDiv.style.display = 'none';
+    placeholderTab3.style.display = 'block';
     return;
   }
+
+  // Ẩn placeholder và hiển thị pagination
+  placeholderTab3.style.display = 'none';
+  paginationDiv.style.display = 'block';
 
   let totalIncome = 0, totalExpense = 0;
   data.forEach(item => {
