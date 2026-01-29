@@ -24,11 +24,11 @@
   </div>
   <div class="top-nav">
     <div class="nav-item active" data-tab="tab1"><i class="fas fa-exchange-alt"></i><span>Giao dịch</span></div>
-    <div class="nav-item" data-tab="tab3"><i class="fas fa-chart-pie"></i><span>Báo Cáo</span></div>
-    <div class="nav-item" data-tab="tab5"><i class="fas fa-receipt"></i><span>Liệt kê</span></div>
-    <div class="nav-item" data-tab="tab6"><i class="fas fa-search"></i><span>Tìm kiếm</span></div>
-    <div class="nav-item" data-tab="tab7"><i class="fas fa-tags"></i><span>Từ khóa</span></div>
-    <div class="nav-item" data-tab="tab4"><i class="fas fa-info-circle"></i><span>Giới thiệu</span></div>
+    <div class="nav-item" data-tab="tab2"><i class="fas fa-chart-pie"></i><span>Báo Cáo</span></div>
+    <div class="nav-item" data-tab="tab3"><i class="fas fa-receipt"></i><span>Liệt kê</span></div>
+    <div class="nav-item" data-tab="tab4"><i class="fas fa-search"></i><span>Tìm kiếm</span></div>
+    <div class="nav-item" data-tab="tab5"><i class="fas fa-tags"></i><span>Từ khóa</span></div>
+    <div class="nav-item" data-tab="tab6"><i class="fas fa-info-circle"></i><span>Giới thiệu</span></div>
   </div>
 
   <!-- ==========================================================================
@@ -63,13 +63,13 @@
       </div>
     </div>
 
-    <!-- Tab 3: Báo Cáo Thu Chi Theo Tháng -->
-<div id="tab3" class="tab-content">
+    <!-- Tab 2: Báo Cáo Thu Chi Theo Tháng -->
+<div id="tab2" class="tab-content">
   <h1>BÁO CÁO THU CHI THEO THÁNG</h1>
   <p class="notification">Vui lòng chọn khoảng thời gian và ấn "Lọc" để xem dữ liệu.</p>
-  <div id="errorMessageTab3" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
-  <div id="successMessageTab3" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
-  <div id="loadingTab3" style="display: none; text-align: center; margin: 1rem 0;">
+  <div id="errorMessageTab2" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
+  <div id="successMessageTab2" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
+  <div id="loadingTab2" style="display: none; text-align: center; margin: 1rem 0;">
     <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--primary-color);"></i>
   </div>
   <div class="input-group">
@@ -105,13 +105,13 @@
   </div>
 </div>
     
-    <!-- Tab 5: Liệt Kê Chi Tiêu Theo Tháng -->
-    <div id="tab5" class="tab-content">
+    <!-- Tab 3: Liệt Kê Chi Tiêu Theo Tháng -->
+    <div id="tab3" class="tab-content">
       <h1>LIỆT KÊ CHI TIÊU THEO THÁNG</h1>
       <p class="notification">Chọn tháng và ấn "Lọc" để xem danh sách chi tiêu theo phân loại chi tiết.</p>
-      <div id="errorMessageTab5" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
-      <div id="successMessageTab5" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
-      <div id="loadingTab5" style="display: none; text-align: center; margin: 1rem 0;">
+      <div id="errorMessageTab3" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
+      <div id="successMessageTab3" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
+      <div id="loadingTab3" style="display: none; text-align: center; margin: 1rem 0;">
         <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--primary-color);"></i>
       </div>
       <div class="input-group">
@@ -137,13 +137,13 @@
       </div>
     </div>
 
-    <!-- Tab 6: Tìm Kiếm Giao Dịch -->
-    <div id="tab6" class="tab-content">
+    <!-- Tab 4: Tìm Kiếm Giao Dịch -->
+    <div id="tab4" class="tab-content">
       <h1>TÌM KIẾM GIAO DỊCH</h1>
       <p class="notification">Nhập các tiêu chí tìm kiếm và ấn "Tìm kiếm" để xem kết quả.</p>
-      <div id="errorMessageTab6" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
-      <div id="successMessageTab6" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
-      <div id="loadingTab6" style="display: none; text-align: center; margin: 1rem 0;">
+      <div id="errorMessageTab4" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
+      <div id="successMessageTab4" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
+      <div id="loadingTab4" style="display: none; text-align: center; margin: 1rem 0;">
         <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--primary-color);"></i>
       </div>
       <div class="input-group vertical">
@@ -181,13 +181,13 @@
       </div>
     </div>
 
-    <!-- Tab 7: Quản Lý Từ Khóa -->
-    <div id="tab7" class="tab-content">
+    <!-- Tab 5: Quản Lý Từ Khóa -->
+    <div id="tab5" class="tab-content">
       <h1>QUẢN LÝ TỪ KHÓA</h1>
       <p class="notification">Chọn phân loại chi tiết và nhập từ khóa để thêm hoặc xóa khỏi sheet Từ khóa.</p>
-      <div id="errorMessageTab7" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
-      <div id="successMessageTab7" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
-      <div id="loadingTab7" style="display: none; text-align: center; margin: 1rem 0;">
+      <div id="errorMessageTab5" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
+      <div id="successMessageTab5" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
+      <div id="loadingTab5" style="display: none; text-align: center; margin: 1rem 0;">
         <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--primary-color);"></i>
       </div>
       <div class="input-group vertical">
@@ -210,8 +210,8 @@
       <div class="keywords-list" id="keywordsContainer"></div>
     </div>
 
-    <!-- Tab 4: Giới Thiệu -->
-    <div id="tab4" class="tab-content">
+    <!-- Tab 6: Giới Thiệu -->
+    <div id="tab6" class="tab-content">
       <h1>GIỚI THIỆU</h1>
       <div class="info-section">
         <div class="info-card">
