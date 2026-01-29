@@ -1890,14 +1890,24 @@ document.getElementById('nextPageSearch').addEventListener('click', () => {
 function adjustStatBoxFontSize() {
   const amountElements = document.querySelectorAll('.stat-box .amount:not(.no-data)');
   amountElements.forEach(el => {
-    // Xóa attribute và style cũ
+    // Reset styles
     el.removeAttribute('data-length');
     el.style.fontSize = '';
-    el.style.whiteSpace = '';
+    el.style.transform = '';
+    el.style.whiteSpace = 'nowrap';
     
-    // Sử dụng font-size cố định 0.95rem cho tất cả các trường hợp
-    // Cho phép text wrap nếu quá dài
+    // Sử dụng font-size cố định
     el.style.fontSize = '0.95rem';
+    
+    // Kiểm tra xem text có bị tràn không
+    const parent = el.parentElement;
+    if (parent && el.scrollWidth > parent.clientWidth) {
+      // Tính toán scale ratio để text vừa khít với container
+      const scale = (parent.clientWidth * 0.95) / el.scrollWidth;
+      if (scale < 1) {
+        el.style.transform = `scale(${scale})`;
+      }
+    }
   });
 }
 
