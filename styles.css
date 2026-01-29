@@ -507,7 +507,7 @@ select:focus, input[type="date"]:focus, input[type="text"]:focus, input[type="nu
 
 .input-group.vertical {
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   gap: 1rem;
   padding: 0 1rem;
   width: 100%;
@@ -517,10 +517,9 @@ select:focus, input[type="date"]:focus, input[type="text"]:focus, input[type="nu
 .input-group.vertical .input-field {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: stretch;
   width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
+  margin: 0;
 }
 
 .input-group.vertical .input-field label {
@@ -621,8 +620,7 @@ button:hover {
 
 .input-group.vertical button {
   width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
+  margin: 0;
   padding: 0.6rem 1.2rem;
   font-size: 0.85rem;
   font-weight: 500;
@@ -1135,15 +1133,14 @@ canvas#monthlyChart {
 
 .button-group {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   gap: 0.75rem;
   width: 100%;
-  max-width: 400px;
-  margin: 0 auto;
+  margin: 0;
 }
 
 #addKeywordBtn {
-  width: 160px;
+  flex: 1;
   padding: 0.6rem 1rem;
   font-size: 0.85rem;
   font-weight: 500;
@@ -1162,7 +1159,7 @@ canvas#monthlyChart {
 }
 
 #deleteKeywordBtn {
-  width: 160px;
+  flex: 1;
   padding: 0.6rem 1rem;
   font-size: 0.85rem;
   font-weight: 500;
@@ -1237,7 +1234,7 @@ canvas#monthlyChart {
   padding: 1.5rem;
   border-radius: 16px;
   width: 90%;
-  max-width: 400px;
+  max-width: 500px;
   max-height: 80vh; 
   overflow-y: auto; 
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
@@ -1751,12 +1748,10 @@ input[type="date"] {
 
   .button-group {
     gap: 0.5rem;
-    max-width: 300px;
   }
 
   #addKeywordBtn,
   #deleteKeywordBtn {
-    width: 130px;
     font-size: 0.9rem;
     padding: 0.6rem 0.8rem;
   }
