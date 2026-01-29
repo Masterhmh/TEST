@@ -450,9 +450,9 @@ h1 {
 .input-group {
   margin-bottom: 1.5rem;
   display: flex;
-  justify-content: center;
+  justify-content: center; /* Căn giữa các phần tử */
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.5rem;
   width: 100%;
   padding: 0 8px;
   flex-wrap: nowrap;
@@ -473,8 +473,8 @@ h1 {
 
 /* Button trong input-group nên nhỏ gọn hơn */
 .input-group button {
-  padding: 0.5rem 0.9rem;
-  font-size: 0.85rem;
+  padding: 0.45rem 0.8rem;
+  font-size: 0.75rem;
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -500,47 +500,57 @@ h1 {
 
 /* Fix cho input date bị icon che và xuống dòng */
 .input-group:not(.vertical) input[type="date"] {
-  padding-right: 0.25rem;
-  padding-left: 0.4rem;
+  padding-right: 0.3rem;
+  padding-left: 0.5rem;
   text-align: left;
   font-size: 0.75rem;
   flex-shrink: 0;
-  letter-spacing: -0.5px; /* Thu hẹp khoảng cách giữa các ký tự */
-}
-
-/* Thu nhỏ text "ngày" trong date picker */
-.input-group:not(.vertical) input[type="date"]::-webkit-datetime-edit-day-field {
-  font-size: 0.1px; /* Thu nhỏ gần như ẩn */
-  width: 1px;
-  opacity: 0;
-}
-
-/* Thu nhỏ dấu phân cách */
-.input-group:not(.vertical) input[type="date"]::-webkit-datetime-edit-text {
-  font-size: 0.1px;
-  width: 1px;
-  padding: 0;
-  margin: 0;
-}
-
-/* Tối ưu hiển thị tháng và năm */
-.input-group:not(.vertical) input[type="date"]::-webkit-datetime-edit-month-field,
-.input-group:not(.vertical) input[type="date"]::-webkit-datetime-edit-year-field {
-  color: var(--text-color);
-  padding: 0;
+  min-width: 140px; /* Đủ rộng để hiển thị đầy đủ */
 }
 
 /* Responsive cho input */
 @media (max-width: 480px) {
   .input-group {
-    gap: 0.2rem;
-    padding: 0 2px;
+    gap: 0.3rem;
+    padding: 0 4px;
     font-size: 0.75rem;
   }
   
   .input-group button {
-    padding: 0.4rem 0.55rem;
+    padding: 0.45rem 0.65rem;
+    font-size: 0.75rem;
+  }
+  
+  .input-group:not(.vertical) select, 
+  .input-group:not(.vertical) input[type="date"], 
+  .input-group:not(.vertical) input[type="text"], 
+  .input-group:not(.vertical) input[type="number"] {
+    padding: 0.45rem 0.3rem;
     font-size: 0.72rem;
+    min-width: 85px;
+    max-width: 110px;
+  }
+  
+  .input-group:not(.vertical) input[type="date"] {
+    padding-right: 0.25rem;
+    padding-left: 0.35rem;
+    font-size: 0.7rem;
+    min-width: 130px;
+    max-width: 145px;
+  }
+}
+
+/* Màn hình rất nhỏ - điều chỉnh thêm */
+@media (max-width: 360px) {
+  .input-group:not(.vertical) {
+    gap: 0.25rem;
+    padding: 0 2px;
+    font-size: 0.7rem;
+  }
+  
+  .input-group:not(.vertical) button {
+    padding: 0.4rem 0.55rem;
+    font-size: 0.7rem;
   }
   
   .input-group:not(.vertical) select, 
@@ -548,49 +558,17 @@ h1 {
   .input-group:not(.vertical) input[type="text"], 
   .input-group:not(.vertical) input[type="number"] {
     padding: 0.4rem 0.25rem;
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     min-width: 80px;
-    max-width: 105px;
+    max-width: 100px;
   }
   
   .input-group:not(.vertical) input[type="date"] {
     padding-right: 0.2rem;
     padding-left: 0.3rem;
-    font-size: 0.7rem;
-    min-width: 110px;
-    max-width: 120px;
-  }
-}
-
-/* Màn hình rất nhỏ - điều chỉnh thêm */
-@media (max-width: 360px) {
-  .input-group:not(.vertical) {
-    gap: 0.15rem;
-    padding: 0 1px;
-    font-size: 0.7rem;
-  }
-  
-  .input-group:not(.vertical) button {
-    padding: 0.35rem 0.45rem;
-    font-size: 0.68rem;
-  }
-  
-  .input-group:not(.vertical) select, 
-  .input-group:not(.vertical) input[type="date"], 
-  .input-group:not(.vertical) input[type="text"], 
-  .input-group:not(.vertical) input[type="number"] {
-    padding: 0.35rem 0.2rem;
     font-size: 0.65rem;
-    min-width: 75px;
-    max-width: 95px;
-  }
-  
-  .input-group:not(.vertical) input[type="date"] {
-    padding-right: 0.15rem;
-    padding-left: 0.25rem;
-    font-size: 0.65rem;
-    min-width: 105px;
-    max-width: 110px;
+    min-width: 120px;
+    max-width: 130px;
   }
 }
 
@@ -1249,8 +1227,8 @@ canvas#monthlyChart {
 
 #addKeywordBtn {
   flex: 1;
-  padding: 0.6rem 1rem;
-  font-size: 0.85rem;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.75rem;
   font-weight: 500;
   border-radius: 10px;
   background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
@@ -1268,8 +1246,8 @@ canvas#monthlyChart {
 
 #deleteKeywordBtn {
   flex: 1;
-  padding: 0.6rem 1rem;
-  font-size: 0.85rem;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.75rem;
   font-weight: 500;
   border-radius: 10px;
   background: linear-gradient(135deg, var(--delete-btn-color), #F87171);
@@ -1295,13 +1273,13 @@ canvas#monthlyChart {
 }
 
 .pagination-btn {
-  min-width: 110px;
-  padding: 0.6rem 1rem;
+  min-width: 90px;
+  padding: 0.45rem 0.7rem;
   background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
   color: white;
   border: none;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.75rem;
   font-weight: 500;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -1453,9 +1431,10 @@ input[type="date"] {
 
 .modal-content .btn-group button {
   flex: 1;
-  padding: 0.6rem;
+  padding: 0.5rem;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
   cursor: pointer;
 }
 
@@ -1848,9 +1827,9 @@ input[type="date"] {
   }
 
   .pagination-btn {
-    min-width: 90px;
-    padding: 0.5rem 0.8rem;
-    font-size: 0.85rem;
+    min-width: 80px;
+    padding: 0.45rem 0.65rem;
+    font-size: 0.72rem;
   }
 
   .button-group {
@@ -1859,8 +1838,8 @@ input[type="date"] {
 
   #addKeywordBtn,
   #deleteKeywordBtn {
-    font-size: 0.9rem;
-    padding: 0.6rem 0.8rem;
+    font-size: 0.75rem;
+    padding: 0.5rem 0.7rem;
   }
 }
 
