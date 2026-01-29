@@ -1735,6 +1735,17 @@ input[type="date"] {
     width: 110px;
     font-size: 0.85rem;
     padding: 0.6rem;
+    text-align: center;
+  }
+
+  /* Đảm bảo select trong input-group không vertical được căn giữa */
+  .input-group:not(.vertical) select {
+    text-align: center !important;
+  }
+
+  /* Đảm bảo select trong input-group vertical không bị căn giữa */
+  .input-group.vertical select {
+    text-align: left !important;
   }
 
   button {
@@ -1757,8 +1768,8 @@ input[type="date"] {
   }
 
   .input-group.vertical button#fetchKeywordsBtn {
-    font-size: 0.9rem;
-    padding: 0.6rem 1rem;
+    font-size: 0.7rem;
+    padding: 0.35rem 0.6rem;
   }
 
   .stats-container {
