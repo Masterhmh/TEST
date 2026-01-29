@@ -48,12 +48,12 @@
   .stat-box .title {
     color: var(--stat-title-color) !important;
     font-weight: 700;
-    font-size: 1.1rem;
+    font-size: 0.85rem;
   }
 
   .stat-box .amount {
     font-weight: 600;
-    font-size: 1.25rem;
+    font-size: 0.95rem;
   }
 
   .income .amount { color: var(--income-color) !important; }
@@ -627,9 +627,10 @@ button:hover {
   text-align: center;
   width: 100%;
   line-height: 1.2;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  hyphens: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+  transform-origin: center center;
 }
 
 /* Keep consistent font size across all screen sizes */
@@ -1446,16 +1447,16 @@ input[type="date"] {
   .stat-box {
     width: 100px;
     max-width: 100px;
-    padding: 0.8rem;
-    min-height: 70px;
+    padding: 0.5rem;
+    min-height: auto;
   }
   
   .stat-box .title {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
   }
   
   .stat-box .amount {
-    font-size: 1.1rem;
+    font-size: 0.9rem;
   }
 
   canvas#myChart {
@@ -1693,7 +1694,7 @@ input[type="date"] {
   display: flex;
   align-items: baseline;
   gap: 0.35rem;
-  font-size: 0.82rem;
+  font-size: 0.75rem;
   color: var(--secondary-color);
   width: 100%;
   flex-wrap: wrap;
@@ -1739,6 +1740,6 @@ input[type="date"] {
   }
   
   .legend-value {
-    font-size: 0.78rem;
+    font-size: 0.72rem;
   }
 }
