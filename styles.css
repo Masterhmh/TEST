@@ -474,8 +474,8 @@ h1 {
 
 /* Button trong input-group nên nhỏ gọn hơn */
 .input-group button {
-  padding: 0.45rem 0.8rem;
-  font-size: 0.75rem;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.7rem;
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -503,14 +503,14 @@ h1 {
 .input-group:not(.vertical) input[type="date"] {
   padding-right: 0.3rem;
   padding-left: 0.5rem;
-  text-align: center;
+  text-align: center !important;
   font-size: 0.75rem;
   flex-shrink: 0;
   min-width: 140px; /* Đủ rộng để hiển thị đầy đủ */
 }
 
 .input-group:not(.vertical) input[type="date"]::-webkit-date-and-time-value {
-  text-align: center;
+  text-align: center !important;
 }
 
 /* Responsive cho input */
@@ -522,8 +522,8 @@ h1 {
   }
   
   .input-group button {
-    padding: 0.45rem 0.65rem;
-    font-size: 0.75rem;
+    padding: 0.35rem 0.55rem;
+    font-size: 0.68rem;
   }
   
   .input-group:not(.vertical) select, 
@@ -651,13 +651,13 @@ h1 {
 }
 
 button {
-  padding: 0.55rem 1.3rem;
+  padding: 0.4rem 0.8rem;
   background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
   color: white;
   border: none;
   cursor: pointer;
-  font-size: 0.88rem;
-  border-radius: 10px;
+  font-size: 0.75rem;
+  border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s;
   font-weight: 500;
@@ -670,8 +670,8 @@ button:hover {
 /* Responsive cho button */
 @media (max-width: 480px) {
   button {
-    padding: 0.5rem 1.1rem;
-    font-size: 0.83rem;
+    padding: 0.35rem 0.7rem;
+    font-size: 0.72rem;
   }
 }
 
@@ -680,9 +680,9 @@ button:hover {
   color: #FFFFFF !important;
   border: none;
   border-radius: 8px;
-  padding: 0.35rem 0.9rem;
-  margin-right: 0.5rem;
-  font-size: 0.85rem;
+  padding: 0.3rem 0.65rem;
+  margin-right: 0.4rem;
+  font-size: 0.72rem;
 }
 
 .transaction-box button.delete {
@@ -690,8 +690,8 @@ button:hover {
   color: #FFFFFF !important;
   border: none;
   border-radius: 8px;
-  padding: 0.35rem 0.9rem;
-  font-size: 0.85rem;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.72rem;
 }
 
 .transaction-item button.edit {
@@ -713,10 +713,10 @@ button:hover {
 .input-group.vertical button {
   width: 100%;
   margin: 0;
-  padding: 0.6rem 1.2rem;
-  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
   font-weight: 500;
-  border-radius: 10px;
+  border-radius: 8px;
   background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
   color: white;
   border: none;
@@ -1232,10 +1232,10 @@ canvas#monthlyChart {
 
 #addKeywordBtn {
   flex: 1;
-  padding: 0.5rem 0.8rem;
-  font-size: 0.75rem;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.7rem;
   font-weight: 500;
-  border-radius: 10px;
+  border-radius: 8px;
   background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
   color: white;
   border: none;
@@ -1251,10 +1251,10 @@ canvas#monthlyChart {
 
 #deleteKeywordBtn {
   flex: 1;
-  padding: 0.5rem 0.8rem;
-  font-size: 0.75rem;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.7rem;
   font-weight: 500;
-  border-radius: 10px;
+  border-radius: 8px;
   background: linear-gradient(135deg, var(--delete-btn-color), #F87171);
   color: white;
   border: none;
@@ -1278,15 +1278,15 @@ canvas#monthlyChart {
 }
 
 .pagination-btn {
-  min-width: 90px;
-  padding: 0.45rem 0.7rem;
+  min-width: 80px;
+  padding: 0.35rem 0.6rem;
   background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
   color: white;
   border: none;
   cursor: pointer;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 500;
-  border-radius: 10px;
+  border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s, box-shadow 0.3s;
 }
@@ -1367,8 +1367,6 @@ canvas#monthlyChart {
 }
 
 input[type="date"] {
-  text-align: left !important;
-  padding-left: 0.7rem !important;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -1832,9 +1830,9 @@ input[type="date"] {
   }
 
   .pagination-btn {
-    min-width: 80px;
-    padding: 0.45rem 0.65rem;
-    font-size: 0.72rem;
+    min-width: 75px;
+    padding: 0.35rem 0.55rem;
+    font-size: 0.68rem;
   }
 
   .button-group {
@@ -1843,8 +1841,8 @@ input[type="date"] {
 
   #addKeywordBtn,
   #deleteKeywordBtn {
-    font-size: 0.75rem;
-    padding: 0.5rem 0.7rem;
+    font-size: 0.68rem;
+    padding: 0.4rem 0.6rem;
   }
 }
 
