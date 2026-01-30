@@ -1,87 +1,54 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <!-- ================================================================
-       💰 MINIAPP TÀI CHÍNH - TELEGRAM BOT
-       Kết hợp: Bố cục cũ + Animation mới + Icons hiện đại
-       ================================================================ -->
+  <!-- ==========================================================================
+       1. Thiết lập Meta và Liên kết
+       Cấu hình meta, favicon, font và các thư viện bên ngoài.
+       ========================================================================== -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="description" content="Quản lý tài chính cá nhân thông minh">
-  <meta name="theme-color" content="#6366F1">
-  <title>💰 Mini App Tổng Quan Chi Tiêu</title>
-  
-  <!-- Fonts & Icons -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>Mini App Tổng Quan Chi Tiêu</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <!-- Styles -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  
-  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 </head>
 <body>
-  
-  <!-- ================================================================
-       HEADER & NAVIGATION
-       ================================================================ -->
+  <!-- ==========================================================================
+       2. Thanh Điều Hướng (Header và Navigation)
+       Cấu trúc header và thanh điều hướng cố định trên cùng.
+       ========================================================================== -->
   <div class="app-header">
     <h3>©masterhmh</h3>
   </div>
-  
-  <nav class="top-nav" role="navigation" aria-label="Main navigation">
-    <div class="nav-item active" data-tab="tab1" role="tab" aria-selected="true">
-      <i class="fas fa-exchange-alt" aria-hidden="true"></i>
-      <span>Giao dịch</span>
-    </div>
-    <div class="nav-item" data-tab="tab2" role="tab">
-      <i class="fas fa-chart-pie" aria-hidden="true"></i>
-      <span>Báo Cáo</span>
-    </div>
-    <div class="nav-item" data-tab="tab3" role="tab">
-      <i class="fas fa-receipt" aria-hidden="true"></i>
-      <span>Liệt kê</span>
-    </div>
-    <div class="nav-item" data-tab="tab4" role="tab">
-      <i class="fas fa-search" aria-hidden="true"></i>
-      <span>Tìm kiếm</span>
-    </div>
-    <div class="nav-item" data-tab="tab5" role="tab">
-      <i class="fas fa-tags" aria-hidden="true"></i>
-      <span>Từ khóa</span>
-    </div>
-    <div class="nav-item" data-tab="tab6" role="tab">
-      <i class="fas fa-info-circle" aria-hidden="true"></i>
-      <span>Giới thiệu</span>
-    </div>
-  </nav>
+  <div class="top-nav">
+    <div class="nav-item active" data-tab="tab1"><i class="fas fa-exchange-alt"></i><span>Giao dịch</span></div>
+    <div class="nav-item" data-tab="tab2"><i class="fas fa-chart-pie"></i><span>Báo Cáo</span></div>
+    <div class="nav-item" data-tab="tab3"><i class="fas fa-receipt"></i><span>Liệt kê</span></div>
+    <div class="nav-item" data-tab="tab4"><i class="fas fa-search"></i><span>Tìm kiếm</span></div>
+    <div class="nav-item" data-tab="tab5"><i class="fas fa-tags"></i><span>Từ khóa</span></div>
+    <div class="nav-item" data-tab="tab6"><i class="fas fa-info-circle"></i><span>Giới thiệu</span></div>
+  </div>
 
-  <!-- ================================================================
-       MAIN CONTENT
-       ================================================================ -->
+  <!-- ==========================================================================
+       3. Nội Dung Chính (Content Wrapper)
+       Container chính chứa các tab nội dung.
+       ========================================================================== -->
   <div class="content-wrapper">
-    
-    <!-- TAB 1: GIAO DỊCH TRONG NGÀY -->
-    <div id="tab1" class="tab-content active" role="tabpanel">
+    <!-- Tab 1: Giao Dịch Trong Ngày -->
+    <div id="tab1" class="tab-content active">
       <h1>GIAO DỊCH TRONG NGÀY</h1>
       <p class="notification">Vui lòng chọn ngày và ấn "Lọc" để xem các giao dịch có trong ngày.</p>
       <div id="errorMessageTab1" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
       <div id="successMessageTab1" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
       <div id="loadingTab1" style="display: none; text-align: center; margin: 1rem 0;">
-        <div class="spinner"></div>
+        <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--primary-color);"></i>
       </div>
       <div class="input-group">
-        <input type="date" id="transactionDate" aria-label="Chọn ngày">
-        <button id="fetchTransactionsBtn">
-          <i class="fas fa-filter"></i> Lọc
-        </button>
-        <button id="addTransactionBtn" class="btn-success">
-          <i class="fas fa-plus"></i> Thêm
-        </button>
+        <input type="date" id="transactionDate">
+        <button id="fetchTransactionsBtn"><i class="fas fa-filter"></i> Lọc</button>
+        <button id="addTransactionBtn"><i class="fas fa-plus"></i> Thêm</button>
       </div>
       <div class="stats-container" id="dailySummary">
         <div class="stat-box income"><div class="title">Thu nhập</div><div class="amount">0đ</div></div>
@@ -91,80 +58,72 @@
       <p id="placeholderTab1" class="notification" style="margin-top: 1rem;">Dữ liệu giao dịch hiển thị ở đây</p>
       <div class="transactions-list" id="transactionsContainer"></div>
       <div id="pagination" style="text-align: center; margin-top: 1rem; display: none;">
-        <button id="prevPage" class="pagination-btn" disabled>
-          <i class="fas fa-chevron-left"></i> Trang trước
-        </button>
+        <button id="prevPage" class="pagination-btn" disabled><i class="fas fa-chevron-left"></i> Trang trước</button>
         <span id="pageInfo"></span>
-        <button id="nextPage" class="pagination-btn">
-          Trang sau <i class="fas fa-chevron-right"></i>
-        </button>
+        <button id="nextPage" class="pagination-btn">Trang sau <i class="fas fa-chevron-right"></i></button>
       </div>
     </div>
 
-    <!-- TAB 2: BÁO CÁO THU CHI THEO THÁNG -->
-    <div id="tab2" class="tab-content" role="tabpanel">
-      <h1>BÁO CÁO THU CHI THEO THÁNG</h1>
-      <p class="notification">Vui lòng chọn khoảng thời gian và ấn "Lọc" để xem báo cáo.</p>
-      <div id="errorMessageTab2" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
-      <div id="successMessageTab2" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
-      <div id="loadingTab2" style="display: none; text-align: center; margin: 1rem 0;">
-        <div class="spinner"></div>
-      </div>
-      <div class="input-group">
-        Từ:
-        <select id="startMonth" aria-label="Tháng bắt đầu">
-          <option value="1">Tháng 1</option><option value="2">Tháng 2</option><option value="3">Tháng 3</option>
-          <option value="4">Tháng 4</option><option value="5">Tháng 5</option><option value="6">Tháng 6</option>
-          <option value="7">Tháng 7</option><option value="8">Tháng 8</option><option value="9">Tháng 9</option>
-          <option value="10">Tháng 10</option><option value="11">Tháng 11</option><option value="12">Tháng 12</option>
-        </select>
-        Đến:
-        <select id="endMonth" aria-label="Tháng kết thúc">
-          <option value="1">Tháng 1</option><option value="2">Tháng 2</option><option value="3">Tháng 3</option>
-          <option value="4">Tháng 4</option><option value="5">Tháng 5</option><option value="6">Tháng 6</option>
-          <option value="7">Tháng 7</option><option value="8">Tháng 8</option><option value="9">Tháng 9</option>
-          <option value="10">Tháng 10</option><option value="11">Tháng 11</option><option value="12">Tháng 12</option>
-        </select>
-        <button id="fetchMonthlyDataBtn">
-          <i class="fas fa-filter"></i> Lọc
-        </button>
-      </div>
-      <div class="stats-container" id="monthlyStatsContainer">
-        <div class="stat-box income"><div class="title">Thu nhập</div><div class="amount">0đ</div></div>
-        <div class="stat-box expense"><div class="title">Chi tiêu</div><div class="amount">0đ</div></div>
-        <div class="stat-box balance"><div class="title">Số dư</div><div class="amount">0đ</div></div>
-      </div>
-      <p id="placeholderTab2" class="notification" style="margin-top: 1rem;">Dữ liệu báo cáo sẽ hiển thị ở đây</p>
-      <h1 id="chartTitleTab2" style="margin-top: 2rem; display: none;">BIỂU ĐỒ THU CHI THEO THÁNG</h1>
-      <canvas id="monthlyChart"></canvas>
-      <div class="chart-container">
-        <h1 id="pieChartTitleTab2" style="display: none;">CHI TIÊU THEO PHÂN LOẠI</h1>
-        <div class="pie-chart-wrapper">
-          <canvas id="monthlyPieChart"></canvas>
-        </div>
-        <div class="custom-legend" id="monthlyCustomLegend"></div>
-      </div>
+    <!-- Tab 2: Báo Cáo Thu Chi Theo Tháng -->
+<div id="tab2" class="tab-content">
+  <h1>BÁO CÁO THU CHI THEO THÁNG</h1>
+  <p class="notification">Vui lòng chọn khoảng thời gian và ấn "Lọc" để xem báo cáo.</p>
+  <div id="errorMessageTab2" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
+  <div id="successMessageTab2" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
+  <div id="loadingTab2" style="display: none; text-align: center; margin: 1rem 0;">
+    <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--primary-color);"></i>
+  </div>
+  <div class="input-group">
+    Từ:
+    <select id="startMonth">
+      <option value="1">Tháng 1</option><option value="2">Tháng 2</option><option value="3">Tháng 3</option>
+      <option value="4">Tháng 4</option><option value="5">Tháng 5</option><option value="6">Tháng 6</option>
+      <option value="7">Tháng 7</option><option value="8">Tháng 8</option><option value="9">Tháng 9</option>
+      <option value="10">Tháng 10</option><option value="11">Tháng 11</option><option value="12">Tháng 12</option>
+    </select>
+    Đến:
+    <select id="endMonth">
+      <option value="1">Tháng 1</option><option value="2">Tháng 2</option><option value="3">Tháng 3</option>
+      <option value="4">Tháng 4</option><option value="5">Tháng 5</option><option value="6">Tháng 6</option>
+      <option value="7">Tháng 7</option><option value="8">Tháng 8</option><option value="9">Tháng 9</option>
+      <option value="10">Tháng 10</option><option value="11">Tháng 11</option><option value="12">Tháng 12</option>
+    </select>
+    <button id="fetchMonthlyDataBtn"><i class="fas fa-filter"></i> Lọc</button>
+  </div>
+  <div class="stats-container" id="monthlyStatsContainer">
+    <div class="stat-box income"><div class="title">Thu nhập</div><div class="amount">0đ</div></div>
+    <div class="stat-box expense"><div class="title">Chi tiêu</div><div class="amount">0đ</div></div>
+    <div class="stat-box balance"><div class="title">Số dư</div><div class="amount">0đ</div></div>
+  </div>
+  <p id="placeholderTab2" class="notification" style="margin-top: 1rem;">Dữ liệu báo cáo sẽ hiển thị ở đây</p>
+  <h1 id="chartTitleTab2" style="margin-top: 2rem; display: none;">BIỂU ĐỒ THU CHI THEO THÁNG</h1>
+  <canvas id="monthlyChart"></canvas>
+  <div class="chart-container">
+    <h1 id="pieChartTitleTab2" style="display: none;">CHI TIÊU THEO PHÂN LOẠI</h1>
+    <div class="pie-chart-wrapper">
+      <canvas id="monthlyPieChart"></canvas>
     </div>
+    <div class="custom-legend" id="monthlyCustomLegend"></div>
+  </div>
+</div>
     
-    <!-- TAB 3: LIỆT KÊ CHI TIÊU THEO THÁNG -->
-    <div id="tab3" class="tab-content" role="tabpanel">
+    <!-- Tab 3: Liệt Kê Chi Tiêu Theo Tháng -->
+    <div id="tab3" class="tab-content">
       <h1>LIỆT KÊ CHI TIÊU THEO THÁNG</h1>
       <p class="notification">Chọn tháng và ấn "Lọc" để xem danh sách chi tiêu trong tháng.</p>
       <div id="errorMessageTab3" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
       <div id="successMessageTab3" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
       <div id="loadingTab3" style="display: none; text-align: center; margin: 1rem 0;">
-        <div class="spinner"></div>
+        <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--primary-color);"></i>
       </div>
       <div class="input-group">
-        <select id="monthSelect" aria-label="Chọn tháng">
+        <select id="monthSelect">
           <option value="1">Tháng 1</option><option value="2">Tháng 2</option><option value="3">Tháng 3</option>
           <option value="4">Tháng 4</option><option value="5">Tháng 5</option><option value="6">Tháng 6</option>
           <option value="7">Tháng 7</option><option value="8">Tháng 8</option><option value="9">Tháng 9</option>
           <option value="10">Tháng 10</option><option value="11">Tháng 11</option><option value="12">Tháng 12</option>
         </select>
-        <button id="fetchExpensesBtn">
-          <i class="fas fa-filter"></i> Lọc
-        </button>
+        <button id="fetchExpensesBtn"><i class="fas fa-filter"></i> Lọc</button>
       </div>
       <div class="stats-container" id="monthlyExpenseSummary">
         <div class="stat-box income"><div class="title">Thu nhập</div><div class="amount">0đ</div></div>
@@ -174,66 +133,65 @@
       <p id="placeholderTab3" class="notification" style="margin-top: 1rem;">Các giao dịch trong tháng sẽ hiển thị ở đây</p>
       <div class="transactions-list" id="monthlyExpensesContainer"></div>
       <div id="paginationMonthly" style="text-align: center; margin-top: 1rem; display: none;">
-        <button id="prevPageMonthly" class="pagination-btn" disabled>
-          <i class="fas fa-chevron-left"></i> Trang trước
-        </button>
+        <button id="prevPageMonthly" class="pagination-btn" disabled><i class="fas fa-chevron-left"></i> Trang trước</button>
         <span id="pageInfoMonthly"></span>
-        <button id="nextPageMonthly" class="pagination-btn">
-          Trang sau <i class="fas fa-chevron-right"></i>
-        </button>
+        <button id="nextPageMonthly" class="pagination-btn">Trang sau <i class="fas fa-chevron-right"></i></button>
       </div>
     </div>
 
-    <!-- TAB 4: TÌM KIẾM GIAO DỊCH -->
-    <div id="tab4" class="tab-content" role="tabpanel">
+    <!-- Tab 4: Tìm Kiếm Giao Dịch -->
+    <div id="tab4" class="tab-content">
       <h1>TÌM KIẾM GIAO DỊCH</h1>
-      <p class="notification">Nhập từ khóa, chọn khoảng thời gian và ấn "Tìm kiếm" để tìm kiếm giao dịch.</p>
+      <p class="notification">Nhập các tiêu chí tìm kiếm và ấn "Tìm kiếm" để xem kết quả.</p>
       <div id="errorMessageTab4" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
       <div id="successMessageTab4" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
       <div id="loadingTab4" style="display: none; text-align: center; margin: 1rem 0;">
-        <div class="spinner"></div>
+        <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--primary-color);"></i>
       </div>
-      <div class="search-transaction">
-        <div class="search-field">
-          <label for="searchKeyword">Từ khóa:</label>
-          <input type="text" id="searchKeyword" placeholder="Nhập từ khóa tìm kiếm (VD: cafe, trà sữa)">
+      <div class="input-group vertical">
+        <div class="input-field">
+          <label>Tháng: </label>
+          <select id="searchMonth" class="uniform-input">
+            <option value="">Tất cả</option>
+            <option value="1">Tháng 1</option><option value="2">Tháng 2</option><option value="3">Tháng 3</option>
+            <option value="4">Tháng 4</option><option value="5">Tháng 5</option><option value="6">Tháng 6</option>
+            <option value="7">Tháng 7</option><option value="8">Tháng 8</option><option value="9">Tháng 9</option>
+            <option value="10">Tháng 10</option><option value="11">Tháng 11</option><option value="12">Tháng 12</option>
+          </select>
         </div>
-        <div class="search-field">
-          <label for="searchStartDate">Từ ngày:</label>
-          <input type="date" id="searchStartDate">
+        <div class="input-field">
+          <label>Nội dung: </label>
+          <input type="text" id="searchContent" class="uniform-input" placeholder="Nhập nội dung">
         </div>
-        <div class="search-field">
-          <label for="searchEndDate">Đến ngày:</label>
-          <input type="date" id="searchEndDate">
+        <div class="input-field">
+          <label>Số tiền: </label>
+          <input type="text" id="searchAmount" class="uniform-input" placeholder="Nhập số tiền (VD: 50.000)">
         </div>
-        <button type="submit" id="searchBtn">
-          <i class="fas fa-search"></i> Tìm kiếm
-        </button>
-        <button type="button" id="clearSearchBtn">
-          <i class="fas fa-eraser"></i> Xóa
-        </button>
+        <div class="input-field">
+          <label>Phân loại chi tiết: </label>
+          <select id="searchCategory" class="uniform-input">
+            <option value="">Tất cả</option>
+          </select>
+        </div>
+        <button id="searchTransactionsBtn"><i class="fas fa-search"></i> Tìm kiếm</button>
       </div>
-      <p id="placeholderTab4" class="notification" style="margin-top: 1rem;">Kết quả tìm kiếm sẽ hiển thị ở đây</p>
+      <p id="placeholderTab4" class="notification" style="margin-top: 1rem;">Dữ liệu giao dịch hiển thị ở đây</p>
       <div class="transactions-list" id="searchResultsContainer"></div>
-      <div id="paginationSearch" style="text-align: center; margin-top: 1rem; display: none;">
-        <button id="prevPageSearch" class="pagination-btn" disabled>
-          <i class="fas fa-chevron-left"></i> Trang trước
-        </button>
+      <div id="paginationSearch" style="display: none;">
+        <button id="prevPageSearch" class="pagination-btn" disabled><i class="fas fa-chevron-left"></i> Trang trước</button>
         <span id="pageInfoSearch"></span>
-        <button id="nextPageSearch" class="pagination-btn">
-          Trang sau <i class="fas fa-chevron-right"></i>
-        </button>
+        <button id="nextPageSearch" class="pagination-btn">Trang sau <i class="fas fa-chevron-right"></i></button>
       </div>
     </div>
 
-    <!-- TAB 5: QUẢN LÝ TỪ KHÓA -->
-    <div id="tab5" class="tab-content" role="tabpanel">
+    <!-- Tab 5: Quản Lý Từ Khóa -->
+    <div id="tab5" class="tab-content">
       <h1>QUẢN LÝ TỪ KHÓA</h1>
       <p class="notification">Chọn phân loại chi tiết và nhập từ khóa để thêm hoặc xóa khỏi sheet "Từ khóa".</p>
       <div id="errorMessageTab5" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
       <div id="successMessageTab5" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
       <div id="loadingTab5" style="display: none; text-align: center; margin: 1rem 0;">
-        <div class="spinner"></div>
+        <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--primary-color);"></i>
       </div>
       <div class="input-group vertical">
         <div class="input-field">
@@ -247,23 +205,17 @@
           <input type="text" id="keywordInput" class="uniform-input" placeholder="Nhập từ khóa (VD: đổ dầu, đổ xăng)">
         </div>
         <div class="button-group">
-          <button id="addKeywordBtn" class="btn-success">
-            <i class="fas fa-plus"></i> Thêm từ khóa
-          </button>
-          <button id="deleteKeywordBtn" class="btn-danger">
-            <i class="fas fa-trash"></i> Xóa từ khóa
-          </button>
+          <button id="addKeywordBtn"><i class="fas fa-plus"></i> Thêm từ khóa</button>
+          <button id="deleteKeywordBtn"><i class="fas fa-trash"></i> Xóa từ khóa</button>
         </div>
-        <button id="fetchKeywordsBtn">
-          <i class="fas fa-sync"></i> Tải dữ liệu
-        </button>
+        <button id="fetchKeywordsBtn"><i class="fas fa-sync"></i> Tải dữ liệu</button>
       </div>
       <p id="placeholderTab5" class="notification" style="margin-top: 1rem;">Dữ liệu từ khóa sẽ hiển thị ở đây</p>
       <div class="keywords-list" id="keywordsContainer"></div>
     </div>
 
-    <!-- TAB 6: GIỚI THIỆU -->
-    <div id="tab6" class="tab-content" role="tabpanel">
+    <!-- Tab 6: Giới Thiệu -->
+    <div id="tab6" class="tab-content">
       <h1>GIỚI THIỆU</h1>
       <div class="info-section">
         <div class="info-card">
@@ -279,113 +231,98 @@
         </div>
         <div class="qr-container">
           <div class="qr-frame">
-            <img id="qrImage" src="https://i.pinimg.com/736x/7c/13/53/7c135389e26cbc6460626deb9e2aa5c6.jpg" alt="QR Code" class="qr-image" loading="lazy">
+            <img id="qrImage" src="https://i.pinimg.com/736x/7c/13/53/7c135389e26cbc6460626deb9e2aa5c6.jpg" alt="QR Code" class="qr-image">
           </div>
           <p class="qr-caption">Quét mã QR để ủng hộ qua Momo</p>
         </div>
         <div class="info-card">
           <h1>Liên Hệ</h1>
           <div class="contact-columns">
-            <p><i class="fab fa-telegram-plane" style="color: var(--primary-color);"></i><strong>Telegram:</strong> <a href="https://t.me/masterhmh" target="_blank" rel="noopener">@masterhmh</a></p>
-            <p><i class="fab fa-facebook" style="color: var(--primary-color);"></i><strong>Facebook:</strong> <a href="https://facebook.com/masterhmh" target="_blank" rel="noopener">facebook.com/masterhmh</a></p>
+            <p><i class="fab fa-telegram-plane" style="color: var(--primary-color);"></i><strong>Telegram:</strong> <a href="https://t.me/masterhmh" target="_blank">@masterhmh</a></p>
+            <p><i class="fab fa-facebook" style="color: var(--primary-color);"></i><strong>Facebook:</strong> <a href="https://facebook.com/masterhmh" target="_blank">facebook.com/masterhmh</a></p>
           </div>
         </div>
       </div>
     </div>
 
-  </div>
-
-  <!-- ================================================================
-       MODALS
-       ================================================================ -->
-  
-  <!-- Edit Transaction Modal -->
-  <div id="editModal" class="modal" role="dialog" aria-labelledby="editModalTitle">
-    <div class="modal-content">
-      <h2 id="editModalTitle">Chỉnh sửa giao dịch</h2>
-      <div id="editError" class="error-message"></div>
-      <form id="editForm">
-        <label for="editTransactionId">Mã giao dịch:</label>
-        <input type="text" id="editTransactionId" readonly>
-        <label for="editDate">Ngày:</label>
-        <input type="date" id="editDate" required>
-        <label for="editContent">Nội dung:</label>
-        <input type="text" id="editContent" placeholder="Nhập nội dung giao dịch" required>
-        <label for="editAmount">Số tiền:</label>
-        <input type="text" id="editAmount" placeholder="Nhập số tiền (VD: 5.000)" required>
-        <label for="editType">Phân loại:</label>
-        <select id="editType" required>
-          <option value="Thu nhập">Thu nhập</option>
-          <option value="Chi tiêu">Chi tiêu</option>
-        </select>
-        <label for="editCategory">Phân loại chi tiết:</label>
-        <select id="editCategory" required></select>
-        <label for="editNote">Ghi chú (nếu có):</label>
-        <textarea id="editNote" placeholder="Nhập ghi chú (tùy chọn)"></textarea>
-        <div class="btn-group">
-          <button type="button" class="cancel-btn" onclick="closeEditForm()">
-            <i class="fas fa-times"></i> Hủy
-          </button>
-          <button type="submit" class="save-btn">
-            <i class="fas fa-save"></i> Lưu
-          </button>
-        </div>
-      </form>
+    <!-- ==========================================================================
+         4. Modal và Popup
+         Các modal để chỉnh sửa, thêm, xóa giao dịch.
+         ========================================================================== -->
+    <div id="editModal" class="modal">
+      <div class="modal-content">
+        <h2>Chỉnh sửa giao dịch</h2>
+        <div id="editError" class="error-message"></div>
+        <form id="editForm">
+          <label for="editTransactionId">Mã giao dịch:</label>
+          <input type="text" id="editTransactionId" readonly>
+          <label for="editDate">Ngày:</label>
+          <input type="date" id="editDate" required>
+          <label for="editContent">Nội dung:</label>
+          <input type="text" id="editContent" placeholder="Nhập nội dung giao dịch" required>
+          <label for="editAmount">Số tiền:</label>
+          <input type="text" id="editAmount" placeholder="Nhập số tiền (VD: 5.000)" required>
+          <label for="editType">Phân loại:</label>
+          <select id="editType" required>
+            <option value="Thu nhập">Thu nhập</option>
+            <option value="Chi tiêu">Chi tiêu</option>
+          </select>
+          <label for="editCategory">Phân loại chi tiết:</label>
+          <select id="editCategory" required></select>
+          <label for="editNote">Ghi chú (nếu có):</label>
+          <textarea id="editNote" placeholder="Nhập ghi chú (tùy chọn)"></textarea>
+          <div class="btn-group">
+            <button type="button" class="cancel-btn" onclick="closeEditForm()"><i class="fas fa-times"></i> Hủy</button>
+            <button type="submit" class="save-btn"><i class="fas fa-save"></i> Lưu</button>
+          </div>
+        </form>
+      </div>
     </div>
-  </div>
 
-  <!-- Add Transaction Modal -->
-  <div id="addModal" class="modal" role="dialog" aria-labelledby="addModalTitle">
-    <div class="modal-content">
-      <h2 id="addModalTitle">Thêm giao dịch mới</h2>
-      <div id="addError" class="error-message"></div>
-      <form id="addForm">
-        <label for="addDate">Ngày:</label>
-        <input type="date" id="addDate" required>
-        <label for="addContent">Nội dung:</label>
-        <input type="text" id="addContent" placeholder="Nhập nội dung giao dịch" required>
-        <label for="addAmount">Số tiền:</label>
-        <input type="text" id="addAmount" placeholder="Nhập số tiền (VD: 5.000)" required>
-        <label for="addType">Phân loại:</label>
-        <select id="addType" required>
-          <option value="Thu nhập">Thu nhập</option>
-          <option value="Chi tiêu">Chi tiêu</option>
-        </select>
-        <label for="addCategory">Phân loại chi tiết:</label>
-        <select id="addCategory" required></select>
-        <label for="addNote">Ghi chú (nếu có):</label>
-        <textarea id="addNote" placeholder="Nhập ghi chú (tùy chọn)"></textarea>
-        <div class="btn-group">
-          <button type="button" class="cancel-btn" onclick="closeAddForm()">
-            <i class="fas fa-times"></i> Hủy
-          </button>
-          <button type="submit" class="save-btn">
-            <i class="fas fa-save"></i> Lưu
-          </button>
-        </div>
-      </form>
+    <div id="addModal" class="modal">
+      <div class="modal-content">
+        <h2>Thêm giao dịch mới</h2>
+        <div id="addError" class="error-message"></div>
+        <form id="addForm">
+          <label for="addDate">Ngày:</label>
+          <input type="date" id="addDate" required>
+          <label for="addContent">Nội dung:</label>
+          <input type="text" id="addContent" placeholder="Nhập nội dung giao dịch" required>
+          <label for="addAmount">Số tiền:</label>
+          <input type="text" id="addAmount" placeholder="Nhập số tiền (VD: 5.000)" required>
+          <label for="addType">Phân loại:</label>
+          <select id="addType" required>
+            <option value="Thu nhập">Thu nhập</option>
+            <option value="Chi tiêu">Chi tiêu</option>
+          </select>
+          <label for="addCategory">Phân loại chi tiết:</label>
+          <select id="addCategory" required></select>
+          <label for="addNote">Ghi chú (nếu có):</label>
+          <textarea id="addNote" placeholder="Nhập ghi chú (tùy chọn)"></textarea>
+          <div class="btn-group">
+            <button type="button" class="cancel-btn" onclick="closeAddForm()"><i class="fas fa-times"></i> Hủy</button>
+            <button type="submit" class="save-btn"><i class="fas fa-save"></i> Lưu</button>
+          </div>
+        </form>
+      </div>
     </div>
-  </div>
 
-  <!-- Delete Confirmation Modal -->
-  <div id="confirmDeleteModal" class="modal" role="dialog">
-    <div class="modal-content">
-      <h2>Xác nhận xóa</h2>
-      <p>Bạn có chắc chắn muốn xóa giao dịch này? Hành động này không thể hoàn tác.</p>
-      <div class="btn-group">
-        <button type="button" class="cancel-btn" onclick="closeConfirmDeleteModal()">
-          <i class="fas fa-times"></i> Hủy
-        </button>
-        <button type="button" class="save-btn btn-danger" id="confirmDeleteBtn">
-          <i class="fas fa-trash"></i> Xóa
-        </button>
+    <div id="confirmDeleteModal" class="modal">
+      <div class="modal-content">
+        <h2>Xác nhận xóa</h2>
+        <p>Bạn có chắc chắn muốn xóa giao dịch này? Hành động này không thể hoàn tác.</p>
+        <div class="btn-group">
+          <button type="button" class="cancel-btn" onclick="closeConfirmDeleteModal()"><i class="fas fa-times"></i> Hủy</button>
+          <button type="button" class="save-btn" id="confirmDeleteBtn"><i class="fas fa-trash"></i> Xóa</button>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- ================================================================
-       SCRIPTS
-       ================================================================ -->
-  <script src="script.js"></script>
+  <!-- ==========================================================================
+       5. Script Liên Kết
+       Liên kết tới các file JavaScript.
+       ========================================================================== -->
+    <script src="script.js"></script>
 </body>
 </html>
