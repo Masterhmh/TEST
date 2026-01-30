@@ -1022,6 +1022,9 @@ function drawMonthlyPieChart(data) {
           <span class="legend-percentage">${percentage}%</span>
         </div>
       </div>
+      <div style="margin-left: auto; color: var(--text-secondary);">
+        <i class="fas fa-chevron-right"></i>
+      </div>
     `;
     
     // Thêm event listener để click vào legend
@@ -1774,31 +1777,55 @@ let currentCategoryData = null;
 /**
  * Hiển thị trang chi tiết của một category
  */
-function showCategoryDetail(categoryName, categoryAmount, categoryColor) {
+async function showCategoryDetail(categoryName, categoryAmount, categoryColor) {
   currentCategory = categoryName;
   
-  // Ẩn chart container và hiển thị detail view
-  document.querySelector('.chart-container').style.display = 'none';
-  document.getElementById('categoryDetailView').style.display = 'block';
+  // Hiển thị loading
+  showLoading(true, 'tab2');
   
-  // Cập nhật tiêu đề
-  document.getElementById('categoryDetailTitle').textContent = categoryName;
-  document.getElementById('categoryDetailTitle').style.color = categoryColor;
-  
-  // Lấy dữ liệu và vẽ biểu đồ
-  fetchCategoryMonthlyData(categoryName, categoryColor);
-  fetchCategoryTransactions(categoryName);
+  try {
+    // Ẩn chart container và hiển thị detail view
+    document.querySelector('.chart-container').style.display = 'none';
+    document.getElementById('categoryDetailView').style.display = 'block';
+    
+    // Cập nhật tiêu đề
+    document.getElementById('categoryDetailTitle').textContent = categoryName;
+    document.getElementById('categoryDetailTitle').style.color = categoryColor;
+    
+    // Lấy dữ liệu và vẽ biểu đồ
+    await fetchCategoryMonthlyData(categoryName, categoryColor);
+    await fetchCategoryTransactions(categoryName);
+  } catch (error) {
+    console.error('Lỗi khi hiển thị chi tiết category:', error);
+    showToast('Lỗi khi tải dữ liệu: ' + error.message, 'error');
+    backToCategoryList();
+  } finally {
+    showLoading(false, 'tab2');
+  }
 }
 
 /**
- * Quay lại view chính
+ * Quay lại view chính và xóa cache
  */
 function backToCategoryList() {
   document.getElementById('categoryDetailView').style.display = 'none';
   document.querySelector('.chart-container').style.display = 'flex';
+  
+  // Xóa cache và reset
   currentCategoryDetailPage = 1;
   cachedCategoryTransactions = null;
   currentCategory = null;
+  currentCategoryData = null;
+  
+  // Xóa chart instance
+  if (window.categoryMonthlyChartInstance) {
+    window.categoryMonthlyChartInstance.destroy();
+    window.categoryMonthlyChartInstance = null;
+  }
+  
+  // Xóa container
+  document.getElementById('categoryTransactionsContainer').innerHTML = '';
+  document.getElementById('paginationCategoryDetail').style.display = 'none';
 }
 
 /**
@@ -1806,17 +1833,14 @@ function backToCategoryList() {
  */
 async function fetchCategoryMonthlyData(categoryName, categoryColor) {
   try {
-    // Lấy khoảng thời gian từ form
+    // Sử dụng dữ liệu đã cache từ cachedChartData
+    if (!cachedChartData || !cachedChartData.monthlyData) {
+      throw new Error('Không có dữ liệu biểu đồ. Vui lòng lọc dữ liệu trước.');
+    }
+    
+    const monthlyData = cachedChartData.monthlyData;
     const startMonth = parseInt(document.getElementById('startMonth').value);
     const endMonth = parseInt(document.getElementById('endMonth').value);
-    const year = new Date().getFullYear();
-    
-    const targetUrl = `${apiUrl}?action=getMonthlyData&startMonth=${startMonth}&endMonth=${endMonth}&year=${year}&sheetId=${sheetId}`;
-    const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
-    const response = await fetch(finalUrl);
-    const monthlyData = await response.json();
-    
-    if (monthlyData.error) throw new Error(monthlyData.error);
     
     // Lọc dữ liệu theo category
     const categoryMonthlyData = [];
@@ -1837,12 +1861,15 @@ async function fetchCategoryMonthlyData(categoryName, categoryColor) {
       });
     }
     
+    // Lưu vào cache
+    currentCategoryData = categoryMonthlyData;
+    
     // Vẽ biểu đồ
     drawCategoryMonthlyChart(categoryMonthlyData, categoryName, categoryColor);
     
   } catch (error) {
     console.error('Lỗi khi lấy dữ liệu category monthly:', error);
-    showToast('Lỗi khi lấy dữ liệu biểu đồ: ' + error.message, 'error');
+    throw error;
   }
 }
 
@@ -1852,6 +1879,9 @@ async function fetchCategoryMonthlyData(categoryName, categoryColor) {
 function drawCategoryMonthlyChart(data, categoryName, categoryColor) {
   const ctx = document.getElementById('categoryMonthlyChart').getContext('2d');
   
+  console.log('Drawing category chart for:', categoryName);
+  console.log('Data:', data);
+  
   // Xóa chart cũ nếu có
   if (window.categoryMonthlyChartInstance) {
     window.categoryMonthlyChartInstance.destroy();
@@ -1859,6 +1889,9 @@ function drawCategoryMonthlyChart(data, categoryName, categoryColor) {
   
   const labels = data.map(item => `T${item.month}`);
   const amounts = data.map(item => item.amount);
+  
+  console.log('Labels:', labels);
+  console.log('Amounts:', amounts);
   
   window.categoryMonthlyChartInstance = new Chart(ctx, {
     type: 'bar',
@@ -1875,7 +1908,7 @@ function drawCategoryMonthlyChart(data, categoryName, categoryColor) {
     },
     options: {
       responsive: true,
-      maintainAspectRatio: true,
+      maintainAspectRatio: false,
       plugins: {
         legend: {
           display: false
@@ -1886,10 +1919,15 @@ function drawCategoryMonthlyChart(data, categoryName, categoryColor) {
           color: categoryColor,
           font: {
             weight: 'bold',
-            size: 10
+            size: 11
           },
           formatter: (value) => {
             if (value === 0) return '';
+            if (value >= 1000000) {
+              return (value / 1000000).toFixed(1) + 'tr';
+            } else if (value >= 1000) {
+              return (value / 1000).toFixed(0) + 'k';
+            }
             return value.toLocaleString('vi-VN') + 'đ';
           }
         }
@@ -1906,6 +1944,11 @@ function drawCategoryMonthlyChart(data, categoryName, categoryColor) {
               }
               return value;
             }
+          }
+        },
+        x: {
+          grid: {
+            display: false
           }
         }
       }
