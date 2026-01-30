@@ -1273,20 +1273,31 @@ label {
   button {
     padding: 8px 16px;
     font-size: 0.8rem;
-    height: auto; /* Reset height để tự động tính theo padding */
+    height: auto;
     line-height: 1.2;
+    border: none;
+    vertical-align: middle;
   }
 
-  /* Đồng nhất chiều cao input với button ở mobile - dùng !important để override */
+  /* Đồng nhất chiều cao input với button ở mobile */
   input[type="date"],
   input[type="text"],
   input[type="number"],
   select {
-    padding: 8px 10px !important;
+    padding: 6px 10px !important; /* 6px padding + 2px border = 8px như button */
     font-size: 0.8rem !important;
-    height: 34px !important; /* Chiều cao cố định bằng button */
+    height: auto !important;
     line-height: 1.2 !important;
     box-sizing: border-box !important;
+    border-width: 2px !important;
+    vertical-align: middle !important;
+  }
+  
+  /* Đảm bảo input date không có margin/padding thừa */
+  input[type="date"]::-webkit-date-and-time-value {
+    text-align: left;
+    padding: 0;
+    margin: 0;
   }
   
   /* Điều chỉnh icon dropdown cho select ở mobile */
@@ -1300,6 +1311,29 @@ label {
   input[type="date"]::-webkit-calendar-picker-indicator {
     width: 16px !important;
     height: 16px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  /* Reset các thuộc tính webkit của input date */
+  input[type="date"]::-webkit-datetime-edit {
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 1.2 !important;
+  }
+  
+  input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+    padding: 0 !important;
+  }
+  
+  input[type="date"]::-webkit-datetime-edit-text {
+    padding: 0 2px !important;
+  }
+  
+  input[type="date"]::-webkit-datetime-edit-month-field,
+  input[type="date"]::-webkit-datetime-edit-day-field,
+  input[type="date"]::-webkit-datetime-edit-year-field {
+    padding: 0 !important;
   }
 
   .transaction-box,
