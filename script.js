@@ -776,6 +776,7 @@ window.fetchMonthlyData = async function() {
 
     // Vẽ bar chart theo range tháng người dùng chọn
     const ctx = document.getElementById('monthlyChart').getContext('2d');
+    const monthlyChartElement = document.getElementById('monthlyChart');
     if (window.monthlyChartInstance) window.monthlyChartInstance.destroy();
     
     // Tạo mảng tháng từ startMonth đến endMonth
@@ -855,6 +856,9 @@ window.fetchMonthlyData = async function() {
         }
       }
     });
+    
+    // Hiển thị canvas sau khi vẽ xong
+    monthlyChartElement.classList.add('show');
 
     // Gọi API cho pie chart (% chi tiêu theo category cho range months)
     const expenseCategoryData = await fetchExpensesByCategoryForMonths(startMonth, endMonth);
@@ -1005,17 +1009,23 @@ function drawMonthlyPieChart(data) {
     const legendItem = document.createElement('div');
     legendItem.className = 'legend-item';
     legendItem.innerHTML = `
-      <i class="fas ${iconClass} legend-icon" style="color: ${backgroundColors[index]};"></i>
+      <div class="legend-color" style="background-color: ${backgroundColors[index]};">
+        <i class="fas ${iconClass}" style="color: white;"></i>
+      </div>
       <div class="legend-info">
-        <div class="legend-label">${item.category}</div>
+        <div class="legend-text">${item.category}</div>
         <div class="legend-value">
-          <span class="legend-amount">${item.amount.toLocaleString('vi-VN')}đ</span>
+          <span class="legend-amount" style="color: ${backgroundColors[index]};">${item.amount.toLocaleString('vi-VN')}đ</span>
           <span class="legend-percentage">${percentage}%</span>
         </div>
       </div>
     `;
     customLegend.appendChild(legendItem);
   });
+  
+  // Hiển thị canvas pie chart sau khi vẽ xong
+  const monthlyPieChartElement = document.getElementById('monthlyPieChart');
+  monthlyPieChartElement.classList.add('show');
 }
 
 // Hàm hỗ trợ lấy màu theo index (cho pie chart)
