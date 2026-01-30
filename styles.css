@@ -478,6 +478,10 @@ h1 {
   font-size: 0.7rem;
   white-space: nowrap;
   flex-shrink: 0;
+  line-height: 1.2;
+  height: auto;
+  box-sizing: border-box;
+  border: 1px solid transparent; /* Match border của input/select */
 }
 
 /* Input trong input-group ngang (tab thường) */
@@ -498,6 +502,8 @@ h1 {
   box-sizing: border-box;
   flex-shrink: 0;
   text-align: center !important;
+  line-height: 1.2;
+  height: auto;
 }
 
 /* Fix cho input date bị icon che và xuống dòng */
@@ -507,6 +513,7 @@ h1 {
   font-size: 0.75rem;
   flex-shrink: 0;
   min-width: 140px; /* Đủ rộng để hiển thị đầy đủ */
+  line-height: 1.2;
 }
 
 .input-group:not(.vertical) input[type="date"]::-webkit-date-and-time-value {
@@ -524,6 +531,7 @@ h1 {
   .input-group button {
     padding: 0.35rem 0.55rem;
     font-size: 0.68rem;
+    line-height: 1.2;
   }
   
   .input-group:not(.vertical) select, 
@@ -535,6 +543,7 @@ h1 {
     min-width: 85px;
     max-width: 110px;
     text-align: center !important;
+    line-height: 1.2;
   }
   
   /* Force căn giữa cho select trong tab 2 và 3 */
@@ -548,6 +557,7 @@ h1 {
     font-size: 0.7rem;
     min-width: 150px;
     max-width: 165px;
+    line-height: 1.2;
   }
 }
 
@@ -562,6 +572,7 @@ h1 {
   .input-group:not(.vertical) button {
     padding: 0.4rem 0.55rem;
     font-size: 0.7rem;
+    line-height: 1.2;
   }
   
   .input-group:not(.vertical) select, 
@@ -573,6 +584,7 @@ h1 {
     min-width: 80px;
     max-width: 100px;
     text-align: center !important;
+    line-height: 1.2;
   }
   
   /* Force căn giữa cho select trong tab 2 và 3 */
@@ -586,6 +598,7 @@ h1 {
     font-size: 0.65rem;
     min-width: 140px;
     max-width: 155px;
+    line-height: 1.2;
   }
 }
 
@@ -1752,12 +1765,14 @@ input[type="date"] {
     width: 110px;
     font-size: 0.85rem;
     padding: 0.35rem 0.6rem;
+    line-height: 1.2;
   }
 
   .input-group:not(.vertical) input[type="date"] {
     width: 145px;
     font-size: 0.85rem;
     padding: 0.35rem 0.5rem 0.35rem 0.6rem;
+    line-height: 1.2;
   }
 
   /* Đảm bảo select trong input-group vertical không bị căn giữa */
