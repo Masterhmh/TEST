@@ -96,15 +96,6 @@
     --text-secondary: #94A3B8;
   }
 
-  /* Stat-box trong dark mode */
-  .stat-box {
-    background: linear-gradient(135deg, var(--stat-box-bg-start), var(--stat-box-bg-end)) !important;
-  }
-
-  .stat-box .title {
-    color: var(--stat-title-color) !important;
-  }
-
   /* Transaction & Keyword boxes */
   .transaction-box,
   .keyword-box {
@@ -232,7 +223,7 @@ body {
   justify-content: center;
   gap: 2px;
   padding: 6px 8px;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.5);
   font-size: 0.7rem;
   font-weight: 600;
   cursor: pointer;
@@ -241,42 +232,33 @@ body {
   white-space: nowrap;
   min-width: 60px;
   position: relative;
-  overflow: visible;
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .nav-item i {
   font-size: 1.2rem;
   transition: all var(--transition-base);
-  filter: brightness(0.85);
+}
+
+.nav-item:hover {
+  background: rgba(0, 0, 0, 0.3);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.nav-item:hover i {
+  transform: scale(1.05);
+}
+
+.nav-item.active {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--primary-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .nav-item span {
   font-size: 0.68rem;
   letter-spacing: 0.3px;
-  transition: all var(--transition-base);
-  opacity: 0.85;
-}
-
-/* Hover and active effects - làm sáng biểu tượng và chữ */
-.nav-item:hover i,
-.nav-item.active i {
-  filter: brightness(1.5) drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
-  transform: scale(1.15);
-}
-
-.nav-item:hover span,
-.nav-item.active span {
-  opacity: 1;
-  filter: brightness(1.3);
-  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
-}
-
-.nav-item.active {
-  color: #FFFFFF;
-}
-
-.nav-item:hover {
-  color: rgba(255, 255, 255, 0.95);
 }
 
 /* ============================================================================
@@ -525,48 +507,17 @@ label {
   flex: 1;
   min-width: 110px;
   max-width: 150px;
-  background: var(--card-bg);
-  padding: 0.875rem; /* Giảm padding để giảm chiều cao */
+  padding: 0.875rem;
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
   text-align: center;
   transition: all var(--transition-base);
   position: relative;
   overflow: hidden;
 }
 
-/* Top border animation */
-.stat-box::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: var(--gradient-primary);
-  transform: scaleX(0);
-  transition: transform var(--transition-base);
-}
-
-.stat-box:hover::before {
-  transform: scaleX(1);
-}
-
+/* Xóa top border animation */
 .stat-box:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-}
-
-.stat-box.income::before {
-  background: var(--gradient-success);
-}
-
-.stat-box.expense::before {
-  background: var(--gradient-danger);
-}
-
-.stat-box.balance::before {
-  background: var(--gradient-info);
+  transform: translateY(-2px);
 }
 
 .stat-box .title {
@@ -784,14 +735,14 @@ label {
   font-size: 1.3rem;
   font-weight: 800;
   color: var(--primary-color);
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   text-align: center;
 }
 
 .modal-content form {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem; /* Giảm từ 0.75rem xuống 0.4rem */
+  gap: 0.5rem;
 }
 
 .modal-content label {
@@ -799,11 +750,6 @@ label {
   font-weight: 600;
   color: var(--text-secondary);
   margin-bottom: 0.25rem;
-  margin-top: 0.4rem; /* Thêm margin-top nhỏ */
-}
-
-.modal-content label:first-of-type {
-  margin-top: 0;
 }
 
 .modal-content input,
@@ -821,7 +767,7 @@ label {
 
 .modal-content textarea {
   resize: vertical;
-  min-height: 60px; /* Giảm từ 80px xuống 60px */
+  min-height: 80px;
 }
 
 .btn-group {
@@ -861,17 +807,6 @@ label {
   margin-top: 1.5rem;
 }
 
-#pagination,
-#paginationMonthly,
-#paginationSearch {
-  text-align: center;
-  margin-top: 2rem; /* Tăng từ 1.5rem lên 2rem để cách xa hơn */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-}
-
 .pagination-btn {
   padding: 8px 16px;
   font-size: 0.8rem;
@@ -888,86 +823,6 @@ label {
 
 /* ============================================================================
    12. CHARTS & LEGENDS
-   ============================================================================ */
-/* Tab 2 Detail - Category Detail Page */
-.detail-header {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.back-btn {
-  align-self: flex-start;
-  padding: 8px 16px;
-  background: var(--secondary-color);
-  color: white;
-  border: none;
-  border-radius: var(--radius-md);
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all var(--transition-base);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.back-btn:hover {
-  background: var(--text-secondary);
-  transform: translateX(-4px);
-}
-
-#categoryDetailTitle {
-  margin: 0;
-}
-
-.chart-section,
-.transactions-section {
-  margin-bottom: 2rem;
-}
-
-.section-title {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--primary-color);
-  margin: 1.5rem 0 1rem 0;
-  text-align: center;
-  letter-spacing: -0.3px;
-  text-transform: uppercase;
-}
-
-#categoryComparisonChart {
-  width: 100% !important;
-  height: auto !important;
-  max-width: 600px !important;
-  min-height: 300px;
-  max-height: 400px;
-  display: block;
-  margin: 0.5rem auto;
-  background: var(--card-bg);
-  border-radius: 16px;
-  padding: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-}
-
-/* Legend items clickable */
-.legend-item {
-  cursor: pointer;
-  transition: all var(--transition-base);
-}
-
-.legend-item:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-hover);
-}
-
-.legend-item:active {
-  transform: scale(0.98);
-}
-
-/* ============================================================================
-   12. CHARTS & LEGENDS (CONTINUED)
    ============================================================================ */
 .chart-container {
   margin-top: 0;
@@ -1478,11 +1333,6 @@ label {
     max-width: 300px;
   }
 
-  /* Điều chỉnh kích thước stat-box chứa pie chart bằng với bar chart */
-  #tab2 .pie-chart-wrapper {
-    max-width: 100%; /* Chiếm toàn bộ chiều rộng như bar chart */
-  }
-
   .qr-image {
     width: 220px;
   }
@@ -1670,3 +1520,40 @@ label {
    Kết hợp hoàn hảo: Bố cục cũ + Animations mới + Màu sắc hiện đại
    Made with ❤️ by masterhmh
    ============================================================================ */
+
+/* Pagination cách xa và căn giữa cho tab Tìm kiếm */
+#paginationSearch {
+  text-align: center;
+  margin-top: 2rem !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Category Detail View Styles */
+#categoryDetailView {
+  width: 100%;
+  animation: fadeIn var(--transition-base);
+}
+
+#categoryMonthlyChart {
+  width: 100% !important;
+  height: auto !important;
+  max-height: 400px;
+}
+
+#paginationCategoryDetail {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Điều chỉnh pie chart wrapper để có chiều rộng bằng biểu đồ cột trên mobile */
+@media (max-width: 600px) {
+  .pie-chart-wrapper {
+    max-width: 500px !important;
+    width: 100% !important;
+  }
+}
