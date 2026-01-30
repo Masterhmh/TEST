@@ -241,47 +241,42 @@ body {
   white-space: nowrap;
   min-width: 60px;
   position: relative;
-  overflow: hidden;
-}
-
-/* Hover effect with scale animation */
-.nav-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.1);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform var(--transition-base);
-  border-radius: var(--radius-md);
-}
-
-.nav-item:hover::before,
-.nav-item.active::before {
-  transform: scaleX(1);
+  overflow: visible;
 }
 
 .nav-item i {
   font-size: 1.2rem;
-  transition: transform var(--transition-fast);
-}
-
-.nav-item:hover i {
-  transform: scale(1.1);
-}
-
-.nav-item.active {
-  color: #FFFFFF;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
+  transition: all var(--transition-base);
+  filter: brightness(0.85);
 }
 
 .nav-item span {
   font-size: 0.68rem;
   letter-spacing: 0.3px;
+  transition: all var(--transition-base);
+  opacity: 0.85;
+}
+
+/* Hover and active effects - làm sáng biểu tượng và chữ */
+.nav-item:hover i,
+.nav-item.active i {
+  filter: brightness(1.5) drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+  transform: scale(1.15);
+}
+
+.nav-item:hover span,
+.nav-item.active span {
+  opacity: 1;
+  filter: brightness(1.3);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+.nav-item.active {
+  color: #FFFFFF;
+}
+
+.nav-item:hover {
+  color: rgba(255, 255, 255, 0.95);
 }
 
 /* ============================================================================
@@ -796,7 +791,7 @@ label {
 .modal-content form {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.4rem; /* Giảm từ 0.75rem xuống 0.4rem */
 }
 
 .modal-content label {
@@ -804,6 +799,11 @@ label {
   font-weight: 600;
   color: var(--text-secondary);
   margin-bottom: 0.25rem;
+  margin-top: 0.4rem; /* Thêm margin-top nhỏ */
+}
+
+.modal-content label:first-of-type {
+  margin-top: 0;
 }
 
 .modal-content input,
@@ -821,7 +821,7 @@ label {
 
 .modal-content textarea {
   resize: vertical;
-  min-height: 80px;
+  min-height: 60px; /* Giảm từ 80px xuống 60px */
 }
 
 .btn-group {
@@ -861,6 +861,17 @@ label {
   margin-top: 1.5rem;
 }
 
+#pagination,
+#paginationMonthly,
+#paginationSearch {
+  text-align: center;
+  margin-top: 2rem; /* Tăng từ 1.5rem lên 2rem để cách xa hơn */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
 .pagination-btn {
   padding: 8px 16px;
   font-size: 0.8rem;
@@ -877,6 +888,86 @@ label {
 
 /* ============================================================================
    12. CHARTS & LEGENDS
+   ============================================================================ */
+/* Tab 2 Detail - Category Detail Page */
+.detail-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.back-btn {
+  align-self: flex-start;
+  padding: 8px 16px;
+  background: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.back-btn:hover {
+  background: var(--text-secondary);
+  transform: translateX(-4px);
+}
+
+#categoryDetailTitle {
+  margin: 0;
+}
+
+.chart-section,
+.transactions-section {
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: 1.5rem 0 1rem 0;
+  text-align: center;
+  letter-spacing: -0.3px;
+  text-transform: uppercase;
+}
+
+#categoryComparisonChart {
+  width: 100% !important;
+  height: auto !important;
+  max-width: 600px !important;
+  min-height: 300px;
+  max-height: 400px;
+  display: block;
+  margin: 0.5rem auto;
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Legend items clickable */
+.legend-item {
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.legend-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.legend-item:active {
+  transform: scale(0.98);
+}
+
+/* ============================================================================
+   12. CHARTS & LEGENDS (CONTINUED)
    ============================================================================ */
 .chart-container {
   margin-top: 0;
@@ -1385,6 +1476,11 @@ label {
 
   .pie-chart-wrapper {
     max-width: 300px;
+  }
+
+  /* Điều chỉnh kích thước stat-box chứa pie chart bằng với bar chart */
+  #tab2 .pie-chart-wrapper {
+    max-width: 100%; /* Chiếm toàn bộ chiều rộng như bar chart */
   }
 
   .qr-image {
