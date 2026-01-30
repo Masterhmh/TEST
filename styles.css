@@ -1,1344 +1,511 @@
-/* ==========================================================================
-   1. Biến CSS (Root Variables)
-   Định nghĩa các biến màu sắc và giá trị dùng chung để đảm bảo tính nhất quán.
-   ========================================================================== */
-/* Light Mode */
+/* ============================================================================
+   💎 MINIAPP TÀI CHÍNH - MODERN RESPONSIVE CSS
+   Tối ưu: Animations mượt mà, gradient đẹp, responsive hoàn hảo
+   ============================================================================ */
+
+/* ============================================================================
+   1. CSS VARIABLES - DESIGN SYSTEM
+   ============================================================================ */
 :root {
-  --primary-color: #6366F1;       
-  --secondary-color: #64748B;      
-  --background-color: #F8FAFC;     
-  --card-bg: #FFFFFF;              
-  --text-color: #1E293B;           
-  --gradient-start: #6366F1;       
-  --gradient-end: #8B5CF6;         
-  --income-color: #10B981;         
-  --expense-color: #F43F5E;        
-  --balance-color: #3B82F6;        
-  --edit-btn-color: #06B6D4;       
-  --delete-btn-color: #EF4444;     
+  /* 🎨 Colors - Modern Palette */
+  --primary: #6366F1;
+  --primary-dark: #4F46E5;
+  --primary-light: #818CF8;
+  --secondary: #64748B;
+  --success: #10B981;
+  --danger: #F43F5E;
+  --warning: #F59E0B;
+  --info: #3B82F6;
+  
+  /* 🌈 Gradients */
+  --gradient-primary: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+  --gradient-success: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  --gradient-danger: linear-gradient(135deg, #F43F5E 0%, #DC2626 100%);
+  
+  /* 🎭 Backgrounds */
+  --bg-primary: #F8FAFC;
+  --bg-secondary: #FFFFFF;
+  --bg-card: #FFFFFF;
+  
+  /* 📝 Text */
+  --text-primary: #1E293B;
+  --text-secondary: #64748B;
+  --text-light: #94A3B8;
+  
+  /* 🔲 Borders & Shadows */
+  --border-color: #E2E8F0;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.10);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.12);
+  --shadow-hover: 0 8px 20px rgba(99, 102, 241, 0.15);
+  
+  /* 📏 Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  
+  /* 🎯 Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+  
+  /* ⚡ Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Dark Mode */
+/* Dark Mode Support */
 @media (prefers-color-scheme: dark) {
   :root {
-    --primary-color: #4F9AFF;
-    --secondary-color: #8B9098;
-    --background-color: #181A1B;
-    --card-bg: #1C1E1F;
-    --text-color: #E4E7EB;
-    --gradient-start: #3B82F6;
-    --gradient-end: #7C3AED;
-    --income-color: #2ECC71;
-    --expense-color: #E74C3C;        
-    --balance-color: #3498DB;        
-    --edit-btn-color: #0E7490;
-    --delete-btn-color: #B91C1C;
-    --stat-box-bg-start: #181A1B;
-    --stat-box-bg-end: #252729;
-    --input-bg: #1E2022;
-    --input-border: #45484C;
-    --stat-title-color: #E4E7EB;
-  }
-
-  /* Stat-box tổng quan (Tổng thu nhập, Tổng chi tiêu, Số dư) */
-  .stat-box {
-    background: linear-gradient(135deg, var(--stat-box-bg-start), var(--stat-box-bg-end)) !important;
-  }
-
-  .stat-box .title {
-    color: var(--stat-title-color) !important;
-    font-weight: 700;
-    font-size: 0.85rem;
-  }
-
-  .stat-box .amount {
-    font-weight: 600;
-    font-size: 0.95rem;
-  }
-
-  .income .amount { color: var(--income-color) !important; }
-  .expense .amount { color: var(--expense-color) !important; }
-  .balance .amount { color: var(--balance-color) !important; }
-
-  /* Transaction-box (khối giao dịch trong tab 1, 5, 6) */
-  .transaction-box {
-    background: linear-gradient(135deg, var(--stat-box-bg-start), var(--stat-box-bg-end)) !important;
-    color: var(--text-color) !important;
-    border: 1px solid var(--input-border) !important;
-    border-radius: 16px;
-    padding: 1rem;
-    box-shadow: none !important;
-  }
-
-  .transaction-box .date {
-    color: var(--text-color) !important;
-    font-weight: 500;
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .transaction-box .amount {
-    font-weight: 700;
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .transaction-box .type,
-  .transaction-box .content,
-  .transaction-box .category {
-    color: var(--text-color) !important;
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .transaction-box .id,
-  .transaction-box .number {
-    color: var(--secondary-color) !important;
-    font-size: 0.9rem;
-    margin-bottom: 0.3rem;
-  }
-
-  .transaction-box .type.expense { color: var(--expense-color) !important; }
-  .transaction-box .type.income { color: var(--income-color) !important; }
-  .transaction-box .income .amount,
-  .transaction-box .type.income + .amount { color: var(--income-color) !important; }
-  .transaction-box .expense .amount,
-  .transaction-box .type.expense + .amount { color: var(--expense-color) !important; }
-
-  .transaction-box button.edit {
-    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)) !important;
-    color: #E4E7EB !important;
-    border: none;
-    border-radius: 8px;
-    padding: 0.3rem 0.8rem;
-    margin-right: 0.5rem;
-  }
-
-  .transaction-box button.delete {
-    background: linear-gradient(135deg, var(--delete-btn-color), #F87171) !important;
-    color: #E4E7EB !important;
-    border: none;
-    border-radius: 8px;
-    padding: 0.3rem 0.8rem;
-  }
-
-  /* Keyword-box (khối từ khóa trong tab 7) */
-  .keyword-box {
-    background: linear-gradient(135deg, var(--stat-box-bg-start), var(--stat-box-bg-end)) !important;
-    color: var(--text-color) !important;
-    border: 1px solid var(--input-border) !important;
-    border-radius: 16px;
-    padding: 1rem;
-    box-shadow: none !important;
-  }
-
-  .keyword-box .category {
-    color: var(--text-color) !important;
-    font-weight: 500;
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .keyword-box .keywords {
-    color: var(--secondary-color) !important;
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
-    white-space: normal;
-    overflow-wrap: break-word;
-  }
-
-  /* Transaction-item (dự phòng nếu HTML dùng lớp này) */
-  .transaction-item {
-    background: linear-gradient(135deg, var(--stat-box-bg-start), var(--stat-box-bg-end)) !important;
-    color: var(--text-color) !important;
-    border: 1px solid var(--input-border) !important;
-    border-radius: 4px;
-    padding: 12px;
-    margin-bottom: 10px;
-  }
-
-  .transaction-item .date,
-  .transaction-item .code,
-  .transaction-item .description {
-    color: var(--text-color) !important;
-    font-size: 0.95rem;
-  }
-
-  .transaction-item .amount {
-    font-weight: 600;
-    font-size: 1.1rem;
-  }
-
-  .transaction-item .income .amount,
-  .transaction-item .type.income + .amount { color: var(--income-color) !important; }
-  .transaction-item .expense .amount,
-  .transaction-item .type.expense + .amount { color: var(--expense-color) !important; }
-
-  .transaction-item button.edit {
-    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)) !important;
-    color: #E4E7EB !important;
-    border: none;
-    border-radius: 4px;
-    padding: 6px 12px;
-  }
-
-  .transaction-item button.delete {
-    background: linear-gradient(135deg, var(--delete-btn-color), #F87171) !important;
-    color: #E4E7EB !important;
-    border: none;
-    border-radius: 4px;
-    padding: 6px 12px;
-  }
-
-  /* Trường nhập liệu tất cả các tab */
-  .input-group:not(.vertical) select,
-  .input-group:not(.vertical) input[type="month"],
-  .input-group:not(.vertical) input[type="date"],
-  .input-group:not(.vertical) input[type="text"],
-  .input-group:not(.vertical) input[type="number"] {
-    background-color: var(--input-bg) !important;
-    color: var(--text-color) !important;
-    border: 1px solid var(--input-border) !important;
-    border-radius: 4px;
-  }
-
-  /* Input trong modal và vertical form */
-  .modal-content input[type="text"],
-  .modal-content input[type="number"],
-  .modal-content input[type="date"],
-  .modal-content select,
-  .modal-content textarea,
-  .input-group.vertical input[type="text"],
-  .input-group.vertical input[type="number"],
-  .input-group.vertical select {
-    background-color: var(--input-bg) !important;
-    color: var(--text-color) !important;
-    border: 1px solid var(--input-border) !important;
-  }
-
-  input::placeholder,
-  select::placeholder {
-    color: var(--secondary-color) !important;
-    opacity: 0.8;
-  }
-
-  /* Biểu tượng lịch */
-  input[type="date"]::-webkit-calendar-picker-indicator,
-  input[type="month"]::-webkit-calendar-picker-indicator {
-    filter: invert(90%) !important;
-    cursor: pointer;
-  }
-
-  /* Mũi tên select */
-  select {
-    background-image: url('data:image/svg+xml;utf8,<svg fill="%23E4E7EB" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') !important;
-    background-position: right 10px center;
-    background-repeat: no-repeat;
-  }
-
-  /* Tab 6 (Tìm kiếm giao dịch) */
-  .search-transaction label {
-    color: var(--text-color) !important;
-    font-weight: 500;
-    font-size: 1rem;
-  }
-
-  .search-transaction button[type="submit"] {
-    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)) !important;
-    color: #FFFFFF !important;
-    border: none;
-    border-radius: 4px;
-  }
-
-  .search-transaction button:not([type="submit"]) {
-    background-color: var(--input-bg) !important;
-    color: var(--text-color) !important;
-    border: 1px solid var(--input-border) !important;
-    border-radius: 4px;
-  }
-
-  /* Tab 7 (Quản lý từ khóa) */
-  .locker-management select,
-  .locker-management input[type="text"] {
-    background-color: var(--input-bg) !important;
-    color: var(--text-color) !important;
-    border: 1px solid var(--input-border) !important;
-  }
-
-  .locker-management label {
-    color: var(--text-color) !important;
-    font-weight: 500;
-    font-size: 1rem;
-  }
-
-  .locker-management button {
-    background-color: var(--input-bg) !important;
-    color: var(--text-color) !important;
-    border: 1px solid var(--input-border) !important;
-    border-radius: 4px;
-  }
-
-  .locker-management button.delete {
-    background-color: var(--delete-btn-color) !important;
-    color: #E4E7EB !important;
-    border: none;
-  }
-
-  /* Legend-item trong custom-legend (phần chú thích biểu đồ tròn) */
-  .legend-item {
-    background: var(--card-bg) !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
-  }
-
-  .legend-item:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+    --bg-primary: #0F172A;
+    --bg-secondary: #1E293B;
+    --bg-card: #1E293B;
+    --text-primary: #F1F5F9;
+    --text-secondary: #94A3B8;
+    --text-light: #64748B;
+    --border-color: #334155;
   }
 }
 
-/* ==========================================================================
-   2. Cài đặt chung (Global Styles)
-   Thiết lập kiểu dáng cơ bản cho toàn bộ trang web.
-   ========================================================================== */
-html { 
-  font-size: 16px; 
-  overflow-x: hidden;
+/* ============================================================================
+   2. GLOBAL STYLES & RESET
+   ============================================================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  font-family: 'Nunito', sans-serif;
-  margin: 0;
-  padding: 92px 20px 20px;
-  background-color: var(--background-color);
-  box-sizing: border-box;
-  width: 100%;
-  min-width: 320px;
+  font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
   overflow-x: hidden;
-  height: 100vh;
-  font-size: 1rem;
-  color: var(--text-color);
+  min-height: 100vh;
+  padding: 100px 16px 24px;
+  transition: background var(--transition-base);
 }
 
-/* ==========================================================================
-   3. Thanh điều hướng (Navigation)
-   Kiểu dáng cho header và thanh điều hướng trên cùng.
-   ========================================================================== */
+/* ============================================================================
+   3. HEADER & NAVIGATION
+   ============================================================================ */
 .app-header {
-  background: var(--background-color);
-  padding: 10px;
-  text-align: center;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
+  background: var(--bg-secondary);
+  padding: 12px;
+  text-align: center;
   z-index: 1001;
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(10px);
+  animation: slideDown var(--transition-base);
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .app-header h3 {
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   font-weight: 700;
-  margin: 0;
-  color: var(--secondary-color);
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
 }
 
 .top-nav {
   position: fixed;
-  top: 34px;
+  top: 45px;
   left: 0;
   right: 0;
   display: flex;
   justify-content: space-around;
-  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-  padding: 15px 0;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background: var(--gradient-primary);
+  padding: 8px 4px;
+  box-shadow: var(--shadow-md);
   z-index: 1002;
-  height: 60px;
-  width: 100%;
-  max-width: 100%;
-  margin: 0;
-  overflow-x: hidden;
-  border-radius: 25px 25px 0 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.top-nav::-webkit-scrollbar {
+  display: none;
 }
 
 .nav-item {
-  flex: 1;
-  text-align: center;
-  cursor: pointer;
-  padding: 5px;
-  color: #fff;
-  transition: opacity 0.3s, background-color 0.3s;
-  font-size: 1rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  min-width: 0;
+  gap: 4px;
+  padding: 8px 12px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+  white-space: nowrap;
+  min-width: 70px;
+  position: relative;
+  overflow: hidden;
 }
 
-.nav-item:hover { opacity: 0.8; }
-.nav-item i { font-size: 1.5rem; margin-bottom: 5px; }
-.nav-item span {
-  display: block;
-  font-size: 0.9rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.nav-item.active {
-  font-weight: 600;
-  color: #FFFFFF;
-  position: relative;
-  border-bottom: none;
-}
-.nav-item.active::after {
+.nav-item::before {
   content: '';
   position: absolute;
-  bottom: -2px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 70px;
-  height: 2px;
-  background-color: #FFFFFF;
-}
-
-/* ==========================================================================
-   4. Bố cục chính (Layout)
-   Container chính để bố trí nội dung.
-   ========================================================================== */
-.content-wrapper { 
-  max-width: 700px; 
-  width: 100%; 
-  margin: 0 auto; 
-  overflow-x: hidden;
-}
-
-.tab-content { 
-  display: none; 
-  width: 100%;
-  padding: 0 0.3rem;
-  box-sizing: border-box;
-}
-
-.tab-content.active { 
-  display: block; 
-}
-
-/* ==========================================================================
-   5. Thành phần giao diện (UI Components)
-   Kiểu dáng cho các thành phần như input, button, thống kê, biểu đồ, giao dịch, từ khóa.
-   ========================================================================== */
-h1 { 
-  font-size: 0.85rem;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem; 
-  text-align: center; 
-  font-weight: 700; 
-}
-
-@media (max-width: 480px) {
-  h1 {
-    font-size: 0.8rem;
-    margin-top: 0.4rem;
-    margin-bottom: 0.4rem;
-  }
-}
-
-@media (min-width: 768px) {
-  h1 {
-    font-size: 0.9rem;
-  }
-}
-
-.input-group {
-  margin-bottom: 0.7rem;
-  display: flex;
-  justify-content: center; /* Căn giữa các phần tử */
-  align-items: center;
-  gap: 0.5rem;
-  width: 100%;
-  padding: 0 8px;
-  flex-wrap: nowrap;
-  box-sizing: border-box;
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-  font-size: 0.85rem;
-  color: var(--text-color);
-  white-space: nowrap;
-}
-
-.input-group::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
-}
-
-/* Button trong input-group nên nhỏ gọn hơn */
-.input-group button {
-  padding: 0.35rem 0.65rem;
-  font-size: 0.7rem;
-  white-space: nowrap;
-  flex-shrink: 0;
-  line-height: 1.2;
-  height: auto;
-  box-sizing: border-box;
-  border: 1px solid transparent; /* Match border của input/select */
-}
-
-/* Input trong input-group ngang (tab thường) */
-.input-group:not(.vertical) select, 
-.input-group:not(.vertical) input[type="date"], 
-.input-group:not(.vertical) input[type="text"], 
-.input-group:not(.vertical) input[type="number"] {
-  padding: 0.35rem 0.5rem;
-  font-size: 0.8rem;
-  width: auto;
-  min-width: 100px;
-  max-width: 130px;
-  border-radius: 10px;
-  border: 1px solid #E5E7EB;
-  background-color: var(--card-bg);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  transition: border-color 0.3s;
-  box-sizing: border-box;
-  flex-shrink: 0;
-  text-align: center !important;
-  line-height: 1.2;
-  height: auto;
-}
-
-/* Fix cho input date bị icon che và xuống dòng */
-.input-group:not(.vertical) input[type="date"] {
-  padding: 0.35rem 0.4rem 0.35rem 0.5rem;
-  text-align: center !important;
-  font-size: 0.75rem;
-  flex-shrink: 0;
-  min-width: 140px; /* Đủ rộng để hiển thị đầy đủ */
-  line-height: 1.2;
-}
-
-.input-group:not(.vertical) input[type="date"]::-webkit-date-and-time-value {
-  text-align: center !important;
-}
-
-/* Responsive cho input */
-@media (max-width: 480px) {
-  .input-group {
-    gap: 0.3rem;
-    padding: 0 4px;
-    font-size: 0.75rem;
-  }
-  
-  .input-group button {
-    padding: 0.35rem 0.55rem;
-    font-size: 0.68rem;
-    line-height: 1.2;
-  }
-  
-  .input-group:not(.vertical) select, 
-  .input-group:not(.vertical) input[type="date"], 
-  .input-group:not(.vertical) input[type="text"], 
-  .input-group:not(.vertical) input[type="number"] {
-    padding: 0.35rem 0.4rem;
-    font-size: 0.72rem;
-    min-width: 85px;
-    max-width: 110px;
-    text-align: center !important;
-    line-height: 1.2;
-  }
-  
-  /* Force căn giữa cho select trong tab 2 và 3 */
-  .input-group:not(.vertical) select {
-    text-align: center !important;
-    text-align-last: center !important;
-  }
-  
-  .input-group:not(.vertical) input[type="date"] {
-    padding: 0.35rem 0.3rem 0.35rem 0.4rem;
-    font-size: 0.7rem;
-    min-width: 150px;
-    max-width: 165px;
-    line-height: 1.2;
-  }
-}
-
-/* Màn hình rất nhỏ - điều chỉnh thêm */
-@media (max-width: 360px) {
-  .input-group:not(.vertical) {
-    gap: 0.25rem;
-    padding: 0 2px;
-    font-size: 0.7rem;
-  }
-  
-  .input-group:not(.vertical) button {
-    padding: 0.4rem 0.55rem;
-    font-size: 0.7rem;
-    line-height: 1.2;
-  }
-  
-  .input-group:not(.vertical) select, 
-  .input-group:not(.vertical) input[type="date"], 
-  .input-group:not(.vertical) input[type="text"], 
-  .input-group:not(.vertical) input[type="number"] {
-    padding: 0.4rem 0.35rem;
-    font-size: 0.68rem;
-    min-width: 80px;
-    max-width: 100px;
-    text-align: center !important;
-    line-height: 1.2;
-  }
-  
-  /* Force căn giữa cho select trong tab 2 và 3 */
-  .input-group:not(.vertical) select {
-    text-align: center !important;
-    text-align-last: center !important;
-  }
-  
-  .input-group:not(.vertical) input[type="date"] {
-    padding: 0.4rem 0.25rem 0.4rem 0.35rem;
-    font-size: 0.65rem;
-    min-width: 140px;
-    max-width: 155px;
-    line-height: 1.2;
-  }
-}
-
-@media (min-width: 481px) and (max-width: 768px) {
-  .input-group {
-    gap: 0.45rem;
-  }
-  
-  .input-group:not(.vertical) select, 
-  .input-group:not(.vertical) input[type="date"] {
-    font-size: 0.78rem;
-  }
-}
-
-.input-group:not(.vertical) select:focus, 
-.input-group:not(.vertical) input[type="date"]:focus, 
-.input-group:not(.vertical) input[type="text"]:focus, 
-.input-group:not(.vertical) input[type="number"]:focus {
-  outline: none;
-  border-color: var(--primary-color);
-}
-
-.input-group.vertical {
-  flex-direction: column;
-  align-items: stretch;
-  gap: 0.7rem;
-  padding: 0 0.3rem;
-  width: 100%;
-  box-sizing: border-box;
-  margin-bottom: 0.7rem;
-}
-
-.input-group.vertical .input-field {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  width: 100%;
-  margin: 0;
-}
-
-.input-group.vertical .input-field label {
-  margin-bottom: 0.3rem;
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--text-color);
-}
-
-.input-group.vertical .input-field .uniform-input {
-  width: 100%;
-  padding: 0.6rem 0.8rem;
-  font-size: 0.85rem;
-  border-radius: 10px;
-  border: 1px solid #D1D5DB;
-  background-color: #FFFFFF;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  transition: border-color 0.3s, box-shadow 0.3s;
-  box-sizing: border-box;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
-
-.input-group.vertical .input-field select.uniform-input {
-  background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
-  background-repeat: no-repeat;
-  background-position: right 0.6rem center;
-  background-size: 0.9rem;
-  padding-right: 2rem;
-}
-
-.input-group.vertical .input-field .uniform-input:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
-}
-
-button {
-  padding: 0.4rem 0.8rem;
-  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 0.75rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
-  font-weight: 500;
-}
-
-button:hover { 
-  transform: translateY(-2px); 
-}
-
-/* Responsive cho button */
-@media (max-width: 480px) {
-  button {
-    padding: 0.35rem 0.7rem;
-    font-size: 0.72rem;
-  }
-}
-
-.transaction-box button.edit {
-  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)) !important;
-  color: #FFFFFF !important;
-  border: none;
-  border-radius: 8px;
-  padding: 0.3rem 0.65rem;
-  margin-right: 0.4rem;
-  font-size: 0.72rem;
-}
-
-.transaction-box button.delete {
-  background: linear-gradient(135deg, var(--delete-btn-color), #F87171) !important;
-  color: #FFFFFF !important;
-  border: none;
-  border-radius: 8px;
-  padding: 0.3rem 0.65rem;
-  font-size: 0.72rem;
-}
-
-.transaction-item button.edit {
-  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)) !important;
-  color: #FFFFFF !important;
-  border: none;
-  border-radius: 4px;
-  padding: 6px 12px;
-}
-
-.transaction-item button.delete {
-  background: linear-gradient(135deg, var(--delete-btn-color), #F87171) !important;
-  color: #FFFFFF !important;
-  border: none;
-  border-radius: 4px;
-  padding: 6px 12px;
-}
-
-.input-group.vertical button {
-  width: 100%;
-  margin: 0;
-  padding: 0.5rem 1rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  border-radius: 8px;
-  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-  color: white;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.3s;
-}
-
-.input-group.vertical button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-}
-
-/* Button Tìm kiếm và Tải dữ liệu - nhỏ hơn, giống pagination */
-.input-group.vertical button#searchTransactionsBtn,
-.input-group.vertical button#fetchKeywordsBtn {
-  padding: 0.35rem 0.6rem;
-  font-size: 0.7rem;
-  width: auto;
-  max-width: fit-content;
-  margin: 0.3rem auto 0;
-  align-self: center;
-}
-
-.notification {
-  text-align: center;
-  margin-bottom: 0.5rem;
-  font-size: 0.83rem;
-  color: var(--secondary-color);
-  line-height: 1.4;
-}
-
-@media (max-width: 480px) {
-  .notification {
-    font-size: 0.78rem;
-    margin-bottom: 0.4rem;
-  }
-}
-
-.stats-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: stretch;
-  gap: 0.7rem;
-  margin-bottom: 1rem;
-  width: 100%;
-  padding: 0 0.5rem;
-  box-sizing: border-box;
-}
-
-.stat-box {
-  padding: 0.5rem 0.6rem;
-  width: auto;
-  min-width: 85px;
-  border-radius: 16px;
-  font-size: 0.9rem;
-  flex: 0 1 auto;
-  min-height: 60px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #F8FAFC, #E5E7EB);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s;
-  overflow: visible;
-  box-sizing: border-box;
-}
-
-.stat-box:hover { transform: translateY(-5px); }
-.stat-box .title { 
-  font-weight: 600; 
-  margin-bottom: 0.3rem; 
-  color: var(--text-color); 
-  font-size: clamp(0.7rem, 2vw, 0.85rem);
-  text-align: center;
-  width: 100%;
-  letter-spacing: 0.3px;
-  line-height: 1.2;
-  word-break: keep-all;
-  white-space: nowrap;
-}
-.stat-box .amount { 
-  font-weight: 800; 
-  font-size: clamp(0.75rem, 2.5vw, 0.95rem);
-  text-align: center;
-  width: 100%;
-  line-height: 1.2;
-  white-space: nowrap;
-  transform-origin: center center;
-  padding: 0 0.2rem;
-  box-sizing: border-box;
-  max-width: 100%;
-}
-
-/* Responsive adjustments */
-@media (max-width: 480px) {
-  .stats-container {
-    gap: 0.3rem;
-    padding: 0 0.25rem;
-  }
-  
-  .stat-box {
-    min-width: 75px;
-    padding: 0.45rem 0.2rem;
-    min-height: 55px;
-  }
-  
-  .stat-box .title {
-    font-size: clamp(0.65rem, 1.8vw, 0.75rem);
-    margin-bottom: 0.25rem;
-  }
-  
-  .stat-box .amount {
-    font-size: clamp(0.7rem, 2.2vw, 0.85rem);
-  }
-}
-
-@media (min-width: 481px) and (max-width: 768px) {
-  .stats-container {
-    gap: 0.4rem;
-    padding: 0 0.3rem;
-  }
-  
-  .stat-box {
-    min-width: 90px;
-    padding: 0.7rem 0.35rem;
-  }
-}
-
-@media (min-width: 769px) and (max-width: 1023px) {
-  .stat-box {
-    min-width: 110px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .stats-container {
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-    gap: 0.75rem;
-  }
-  
-  .stat-box {
-    min-width: 140px;
-    max-width: 180px;
-    padding: 1rem 0.5rem;
-  }
-}
-
-.stat-box .amount.no-data { font-size: 1rem; white-space: pre-line; text-align: center; line-height: 1.2; }
-.income .amount { color: var(--income-color); }
-.expense .amount { color: var(--expense-color); }
-.balance .amount { color: var(--balance-color); }
-
-.chart-container {
-  margin-top: 0;
-  width: 100%;
-  max-width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  text-align: center;
-}
-
-.chart-container h1 {
-  margin-bottom: 0.3rem;
-  margin-top: 0.5rem;
-}
-
-canvas#myChart {
-  width: 100% !important;
-  height: auto !important;
-  max-width: 500px !important;
-  aspect-ratio: 1 / 1;
-  display: block;
-  margin: 0 auto;
-  background: var(--card-bg);
-  border-radius: 16px;
-  padding: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-}
-
-canvas#monthlyChart {
-  width: 100% !important;
-  height: auto !important;
-  max-width: 500px !important;
-  min-height: 350px; 
-  max-height: 450px;
-  display: block;
-  margin: 0.5rem auto 1rem;
-}
-
-.custom-legend {
-  width: 100%;
-  max-width: 650px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 0.75rem 1rem;
-  font-size: 0.95rem;
-  padding: 0 1rem;
-  margin: 0.8rem auto 0;
-  box-sizing: border-box;
-}
-
-.custom-legend-column {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.75rem;
-}
-
-.legend-item { 
-  display: flex; 
-  align-items: flex-start; 
-  width: 100%;
-  padding: 0.4rem 0;
-  box-sizing: border-box;
-}
-
-.legend-color { 
-  width: 18px; 
-  height: 18px; 
-  margin-right: 0.75rem; 
-  border-radius: 4px; 
-  margin-top: 2px;
-  flex-shrink: 0;
-}
-
-.legend-text { 
-  font-size: 0.83rem; 
-  display: flex; 
-  flex-direction: column;
-  flex: 1;
-  line-height: 1.5;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  min-width: 0;
-}
-
-.legend-value { 
-  font-weight: 700; 
-  margin-top: 0.25rem;
-  color: var(--primary-color);
-  word-wrap: break-word;
-  font-size: 0.88rem;
-}
-
-/* Responsive cho legend */
-@media (max-width: 480px) {
-  .custom-legend {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
-    padding: 0 0.5rem;
-  }
-  
-  .legend-item {
-    padding: 0.3rem 0;
-  }
-  
-  .legend-text {
-    font-size: 0.78rem;
-  }
-  
-  .legend-value {
-    font-size: 0.83rem;
-  }
-}
-
-@media (min-width: 481px) and (max-width: 768px) {
-  .custom-legend {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 0.6rem 0.75rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .custom-legend {
-    grid-template-columns: repeat(3, 1fr);
-    max-width: 700px;
-    gap: 1rem 1.5rem;
-  }
-  
-  .legend-item {
-    padding: 0.5rem 0;
-  }
-}
-
-.monthly-legend {
-  width: 100%;
-  max-width: 500px;
-  display: flex;
-  flex-direction: column;
-  font-size: 0.88rem;
-  padding: 0 20px;
-  margin: 2rem auto 0;
-  gap: 1rem;
-  align-items: center;
-}
-
-.monthly-column { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 1.5rem; text-align: left; }
-.month-item {
-  text-align: left;
-  white-space: nowrap;
-}
-
-.month-item h3 {
-  font-size: 1.03rem;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-}
-
-.month-item p {
-  margin: 0.5rem 0;
-  font-size: 0.88rem;
-  display: flex;
-  align-items: center;
-}
-
-.month-item .color-box,
-.month-item .difference-icon {
-  width: 16px;
-  height: 16px;
-  margin-right: 0.75rem;
-  border-radius: 4px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.month-item .difference-icon {
-  font-size: 0.78rem;
-  line-height: 16px;
-}
-
-.month-item .amount,
-.month-item .difference {
-  font-weight: 700;
-  margin-left: 0.1rem;
-  font-size: 0.93rem;
-}
-
-.month-item span:not(.amount):not(.difference)::after {
-  content: "\0020";
-}
-
-.month-item p strong {
-  margin-left: 0.1rem;
-}
-
-.difference.positive {
-  color: var(--income-color);
-}
-
-.difference.negative {
-  color: var(--expense-color);
-}
-
-.difference-icon.positive {
-  color: var(--income-color);
-}
-
-.difference-icon.negative {
-  color: var(--expense-color);
-}
-
-.transactions-list {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.7rem;
-  width: 100%;
-  margin-bottom: 1rem;
-}
-
-.transaction-box {
-  position: relative;
-  padding: 1rem;
-  width: 100%;
-  max-width: 600px;
-  border-radius: 16px;
-  font-size: 0.9rem;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  background: linear-gradient(135deg, #F8FAFC, #E5E7EB);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s;
-  margin-bottom: 0;
-  overflow: visible;
-}
-
-.transaction-box:hover { transform: translateY(-5px); }
-.transaction-box .date { font-weight: 500; font-size: 0.83rem; color: var(--text-color); margin-bottom: 0.25rem; line-height: 1.3; }
-.transaction-box .amount { font-weight: 800; font-size: clamp(0.75rem, 2.5vw, 0.95rem); margin-bottom: 0.25rem; line-height: 1.3; }
-.transaction-box .type { font-size: 0.83rem; margin-bottom: 0.25rem; font-weight: 700; line-height: 1.3; }
-.transaction-box .type.expense { color: var(--expense-color); }
-.transaction-box .type.income { color: var(--income-color); }
-.transaction-box .id { font-size: 0.73rem; color: var(--secondary-color); margin-bottom: 0.2rem; line-height: 1.2; }
-.transaction-box .number { font-size: 0.73rem; color: var(--secondary-color); margin-bottom: 0.2rem; line-height: 1.2; }
-.transaction-box .content { font-size: 0.83rem; margin-bottom: 0.25rem; line-height: 1.3; }
-.transaction-box .category { font-size: 0.83rem; margin-bottom: 0.25rem; line-height: 1.3; }
-
-/* Responsive cho transaction-box */
-@media (max-width: 480px) {
-  .transaction-box {
-    padding: 0.8rem;
-  }
-  
-  .transaction-box .date { font-size: 0.78rem; margin-bottom: 0.2rem; }
-  .transaction-box .amount { font-size: clamp(0.7rem, 2.2vw, 0.85rem); margin-bottom: 0.2rem; }
-  .transaction-box .type { font-size: 0.78rem; margin-bottom: 0.2rem; }
-  .transaction-box .content { font-size: 0.78rem; margin-bottom: 0.2rem; }
-  .transaction-box .category { font-size: 0.78rem; margin-bottom: 0.2rem; }
-  .transaction-box .id,
-  .transaction-box .number { font-size: 0.68rem; margin-bottom: 0.15rem; }
-}
-
-.layer-container {
-  position: relative;
-  margin-bottom: 0.3rem;
-  width: 100%;
-}
-
-.layer-top {
-  position: absolute;
   top: 0;
+  left: 0;
   right: 0;
-  text-align: right;
-  font-size: 0.85rem;
-  line-height: 1.2;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.1);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition-base);
+  border-radius: var(--radius-md);
 }
 
-.layer-bottom {
-  width: 100%;
-  padding-right: 100px;
+.nav-item:hover::before,
+.nav-item.active::before {
+  transform: scaleX(1);
 }
 
-.transaction-box .content {
-  font-size: 0.88rem;
-  margin-bottom: 0.3rem;
-  white-space: normal;
-  overflow-wrap: break-word;
-  line-height: 1.4;
+.nav-item i {
+  font-size: 1.25rem;
+  transition: transform var(--transition-fast);
 }
 
-.transaction-box .category {
-  font-size: 0.83rem;
-  font-style: italic;
-  color: var(--secondary-color);
-  white-space: normal;
-  overflow-wrap: break-word;
-  margin-bottom: 0;
-  line-height: 1.4;
+.nav-item:hover i {
+  transform: scale(1.1);
 }
 
-/* Responsive */
-@media (max-width: 480px) {
-  .transaction-box .content {
-    font-size: 0.83rem;
-    margin-bottom: 0.25rem;
-  }
-  
-  .transaction-box .category {
-    font-size: 0.78rem;
-  }
+.nav-item.active {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
 }
 
-.keywords-list {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.7rem;
-  width: 100%;
-  margin-bottom: 1rem;
+.nav-item span {
+  font-size: 0.7rem;
 }
 
-.keyword-box {
-  position: relative;
-  padding: 1rem;
-  width: 100%;
-  max-width: 600px;
-  border-radius: 16px;
-  font-size: 0.88rem;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  background: linear-gradient(135deg, #F8FAFC, #E5E7EB);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s;
-  margin-bottom: 0;
-  overflow: visible;
-}
-
-.keyword-box:hover { transform: translateY(-5px); }
-.keyword-box .category { font-weight: 500; font-size: 0.88rem; color: var(--text-color); margin-bottom: 0.5rem; }
-.keyword-box .keywords { font-size: 0.83rem; color: var(--secondary-color); white-space: normal; word-wrap: break-word; }
-
-/* Responsive */
-@media (max-width: 480px) {
-  .keyword-box {
-    padding: 0.85rem;
-  }
-  
-  .keyword-box .category { font-size: 0.83rem; }
-  .keyword-box .keywords { font-size: 0.78rem; }
-}
-
-.button-group {
-  display: flex;
-  justify-content: center;
-  gap: 0.75rem;
-  width: auto;
-  max-width: 400px;
+/* ============================================================================
+   4. CONTENT WRAPPER & TABS
+   ============================================================================ */
+.content-wrapper {
+  max-width: 1200px;
   margin: 0 auto;
+  animation: fadeIn var(--transition-slow);
 }
 
-#addKeywordBtn {
-  flex: 0 1 auto;
-  padding: 0.4rem 0.7rem;
-  font-size: 0.7rem;
-  font-weight: 500;
-  border-radius: 8px;
-  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-  color: white;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.3s;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-#addKeywordBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+.tab-content {
+  display: none;
+  animation: tabFadeIn var(--transition-base);
 }
 
-#deleteKeywordBtn {
-  flex: 0 1 auto;
-  padding: 0.4rem 0.7rem;
-  font-size: 0.7rem;
-  font-weight: 500;
-  border-radius: 8px;
-  background: linear-gradient(135deg, var(--delete-btn-color), #F87171);
-  color: white;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.3s;
+.tab-content.active {
+  display: block;
 }
 
-#deleteKeywordBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+@keyframes tabFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-#pagination, #paginationMonthly, #paginationSearch {
+h1 {
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  font-weight: 800;
+  color: var(--primary);
+  margin: var(--spacing-lg) 0;
   text-align: center;
-  margin-top: 0.7rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
+  letter-spacing: -0.5px;
 }
 
-.pagination-btn {
-  min-width: 80px;
-  padding: 0.35rem 0.6rem;
-  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+/* ============================================================================
+   5. BUTTONS - MODERN STYLE
+   ============================================================================ */
+button {
+  padding: 12px 24px;
+  background: var(--gradient-primary);
   color: white;
   border: none;
+  border-radius: var(--radius-md);
+  font-size: 0.9375rem;
+  font-weight: 600;
   cursor: pointer;
-  font-size: 0.7rem;
-  font-weight: 500;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.3s;
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
 }
 
-.pagination-btn:hover {
+button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-hover);
 }
 
-.pagination-btn:disabled {
-  opacity: 0.6;
+button:active {
+  transform: translateY(0);
+}
+
+button:disabled {
+  opacity: 0.5;
   cursor: not-allowed;
   transform: none;
 }
 
-/* ==========================================================================
-   6. Modal và Popup
-   Kiểu dáng cho modal, toast popup và loading popup.
-   ========================================================================== */
+/* ============================================================================
+   6. STATS CONTAINER - DASHBOARD CARDS
+   ============================================================================ */
+.stats-container {
+  display: flex;
+  gap: var(--spacing-md);
+  margin: var(--spacing-lg) 0;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.stat-box {
+  flex: 1;
+  min-width: 120px;
+  max-width: 180px;
+  background: var(--bg-card);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-primary);
+  transform: scaleX(0);
+  transition: transform var(--transition-base);
+}
+
+.stat-box:hover::before {
+  transform: scaleX(1);
+}
+
+.stat-box:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.stat-box.income::before {
+  background: var(--gradient-success);
+}
+
+.stat-box.expense::before {
+  background: var(--gradient-danger);
+}
+
+.stat-box .title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-box .amount {
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  animation: countUp var(--transition-slow);
+}
+
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.income .amount {
+  color: var(--success);
+}
+
+.expense .amount {
+  color: var(--danger);
+}
+
+.balance .amount {
+  color: var(--info);
+}
+
+/* ============================================================================
+   7. TRANSACTION CARDS - BEAUTIFUL DESIGN
+   ============================================================================ */
+.transactions-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+}
+
+.transaction-box {
+  background: var(--bg-card);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border-left: 4px solid var(--primary);
+  transition: all var(--transition-base);
+  animation: slideIn var(--transition-base);
+  animation-fill-mode: both;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.transaction-box:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateX(4px);
+}
+
+.transaction-box .date {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.transaction-box .amount {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: var(--spacing-sm) 0;
+}
+
+.transaction-box .type.income .amount,
+.transaction-box.income .amount {
+  color: var(--success);
+}
+
+.transaction-box .type.expense .amount,
+.transaction-box.expense .amount {
+  color: var(--danger);
+}
+
+.transaction-box .content {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.transaction-box .category {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: 4px 12px;
+  background: var(--bg-primary);
+  border-radius: var(--radius-full);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin: var(--spacing-xs) 0;
+}
+
+.transaction-box .actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+}
+
+.transaction-box button {
+  flex: 1;
+  padding: 8px 16px;
+  font-size: 0.875rem;
+}
+
+.transaction-box button.edit {
+  background: var(--gradient-primary);
+}
+
+.transaction-box button.delete {
+  background: var(--gradient-danger);
+}
+
+/* ============================================================================
+   8. MODAL - SMOOTH & ELEGANT
+   ============================================================================ */
 .modal {
   display: none;
   position: fixed;
@@ -1346,112 +513,90 @@ canvas#monthlyChart {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(8px);
   z-index: 2000;
-  justify-content: center;
   align-items: center;
-  overflow-y: auto;
+  justify-content: center;
+  animation: modalFadeIn var(--transition-base);
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal.show {
+  display: flex !important;
 }
 
 .modal-content {
-  background-color: var(--card-bg);
-  padding: 1.2rem;
-  border-radius: 16px;
-  width: 90%;
+  background: var(--bg-secondary);
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
   max-width: 500px;
-  max-height: 80vh; 
-  overflow-y: auto; 
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  position: relative;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: modalSlideUp var(--transition-slow);
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .modal-content h2 {
-  font-size: 1.03rem;
-  margin-bottom: 1rem;
-  color: var(--text-color);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: var(--spacing-lg);
+}
+
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
 }
 
 .modal-content label {
-  display: block;
-  font-size: 0.88rem;
-  margin-bottom: 0.5rem;
-  color: var(--text-color);
-  font-weight: 500;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xs);
 }
 
 .modal-content input,
 .modal-content select,
 .modal-content textarea {
-  width: 100%;
-  padding: 0.6rem;
-  margin-bottom: 1rem;
-  border-radius: 8px;
-  border: 1px solid #E5E7EB;
-  font-size: 0.88rem;
-  box-sizing: border-box;
-  background-color: #FFFFFF;
-  transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-.modal-content input[readonly] {
-  background-color: #f0f0f0;
-  cursor: not-allowed;
-  color: #666;
-}
-
-input[type="date"] {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
-
-.modal-content input[type="date"] {
-  width: 100%;
-  padding: 0.6rem;
-  padding-left: 0.6rem !important;
-  margin-bottom: 1rem;
-  border-radius: 8px;
-  border: 1px solid #E5E7EB;
-  font-size: 0.88rem;
-  box-sizing: border-box;
-  background-color: #FFFFFF;
-  text-align: left !important;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
-  background-repeat: no-repeat;
-  background-position: right 0.6rem center;
-  background-size: 1rem;
-}
-
-.modal-content input[type="date"]::-webkit-date-and-time-value {
-  text-align: left !important;
-  padding-left: 0 !important;
-  margin-left: 0 !important;
-}
-
-.modal-content input[type="date"]::-webkit-inner-spin-button,
-.modal-content input[type="date"]::-webkit-calendar-picker-indicator {
-  margin-right: 0.7rem;
-}
-
-.modal-content select {
-  background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
-  background-repeat: no-repeat;
-  background-position: right 0.7rem center;
-  background-size: 1rem;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+  padding: 12px 16px;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all var(--transition-base);
+  background: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 .modal-content input:focus,
 .modal-content select:focus,
 .modal-content textarea:focus {
   outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  transform: translateY(-1px);
 }
 
 .modal-content textarea {
@@ -1459,718 +604,167 @@ input[type="date"] {
   min-height: 80px;
 }
 
-.modal-content .btn-group {
+.btn-group {
   display: flex;
-  justify-content: flex-end;
-  gap: 0.4rem;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
 }
 
-.modal-content .btn-group button {
-  flex: 0 0 auto;
-  padding: 0.3rem 0.65rem;
-  border-radius: 8px;
-  font-size: 0.72rem;
-  font-weight: 500;
-  cursor: pointer;
+.btn-group button {
+  flex: 1;
 }
 
-.modal-content .btn-group .save-btn {
-  background: linear-gradient(135deg, var(--edit-btn-color), #60A5FA);
-  color: white;
+.cancel-btn {
+  background: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+  border: 2px solid var(--border-color) !important;
 }
 
-.modal-content .btn-group .cancel-btn {
-  background: linear-gradient(135deg, var(--delete-btn-color), #F87171);
-  color: white;
+.save-btn {
+  background: var(--gradient-primary) !important;
 }
 
-.modal-content .error-message {
-  color: var(--delete-btn-color);
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
-  display: none;
-}
-
+/* ============================================================================
+   9. TOAST NOTIFICATIONS
+   ============================================================================ */
 .toast {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: none;
-  justify-content: center;
-  align-items: center;
+  bottom: 24px;
+  right: 24px;
+  background: var(--bg-secondary);
+  padding: 16px 24px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
   z-index: 3000;
+  transform: translateX(400px);
   opacity: 0;
-  transition: opacity 0.3s ease-in-out;
+  transition: all var(--transition-base);
+  max-width: 350px;
 }
 
 .toast.show {
-  display: flex;
+  transform: translateX(0);
   opacity: 1;
 }
 
-.toast > div {
-  background: #FFFFFF;
-  padding: 1.5rem 2rem;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  max-width: 90%;
-  text-align: center;
+.toast.success {
+  border-left: 4px solid var(--success);
 }
 
-.toast > div > span {
-  font-size: 1rem;
-  font-weight: 500;
-  line-height: 1.4;
+.toast.error {
+  border-left: 4px solid var(--danger);
 }
 
-.toast.success > div > span { color: var(--income-color); }
-.toast.error > div > span { color: var(--delete-btn-color); }
-.toast.warning > div > span { color: #F59E0B; }
-
-#loadingPopup {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 3000;
+.toast.warning {
+  border-left: 4px solid var(--warning);
 }
 
-#loadingPopup > div {
-  background: #FFFFFF;
-  padding: 2rem;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
+.toast.info {
+  border-left: 4px solid var(--info);
 }
 
-#loadingPopup > div > div {
-  border: 4px solid var(--primary-color);
-  border-top: 4px solid transparent;
+/* ============================================================================
+   10. LOADING SPINNER
+   ============================================================================ */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  border: 3px solid var(--border-color);
+  border-top-color: var(--primary);
   border-radius: 50%;
   width: 40px;
   height: 40px;
-  animation: spin 1s linear infinite;
+  animation: spin 0.8s linear infinite;
+  margin: var(--spacing-xl) auto;
 }
 
-#loadingPopup > div > span {
-  font-size: 1rem;
-  color: var(--text-color);
-  font-weight: 500;
-}
+/* ============================================================================
+   11. RESPONSIVE DESIGN
+   ============================================================================ */
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* ==========================================================================
-   7. Thông tin và QR Code
-   Kiểu dáng cho phần thông tin, thẻ thông tin và QR code.
-   ========================================================================== */
-.info-section {
-  width: 100%;
-  max-width: 500px;
-  margin: 0 auto; 
-  padding: 0 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
-  box-sizing: border-box; 
-  align-items: center; 
-}
-
-.info-card {
-  background: var(--card-bg);
-  border-radius: 12px; 
-  padding: 0.7rem 1rem; 
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
-  width: 100%; 
-  max-width: 450px;
-  text-align: center;
-  box-sizing: border-box;
-  min-height: 120px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-
-.info-card:hover {
-  transform: translateY(-5px);
-}
-
-.info-card h1 {
-  font-size: 1.3rem;
-  font-weight: 600;
-  margin-top: 0;
-  margin-bottom: 0.4rem;
-  text-align: left;
-  color: var(--text-color);
-  border-left: 4px solid var(--gradient-start);
-  padding-left: 0.5rem;
-}
-
-.info-card p {
-  margin: 0.25rem 0;
-  font-size: 0.9rem;
-  line-height: 1.6;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.info-card i {
-  color: var(--gradient-start);
-}
-
-.info-card a {
-  color: var(--gradient-start);
-  text-decoration: none;
-}
-
-.info-card a:hover {
-  text-decoration: underline;
-}
-
-.custom-text {
-  text-align: justify;
-  text-align-last: left;
-  font-style: italic;
-  font-size: 0.9rem;
-  color: var(--secondary-color);
-  margin: 0.3rem 0 0.5rem 0;
-  line-height: 1.6;
-}
-
-.qr-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  width: 100%;
-  max-width: 450px;
-  margin: 1rem auto 0;
-}
-
-.qr-frame {
-  padding: 0.75rem;
-  background: var(--card-bg);
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.qr-image {
-  max-width: 100%;
-  width: 300px;
-  height: auto;
-  border-radius: 8px;
-}
-
-.qr-caption {
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  color: var(--secondary-color);
-  font-style: italic;
-}
-
-.cta-button {
-  padding: 0.6rem 1.2rem;
-  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-  color: white;
-  border-radius: 10px;
-  text-decoration: none;
-}
-
-.cta-button:hover {
-  transform: translateY(-3px);
-}
-
-.contact-columns {
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-}
-
-.contact-columns p {
-  margin: 0.5;
-  line-height: 1.4;
-}
-
-.highlight-color {
-  color: var(--gradient-start);
-}
-
-/* ==========================================================================
-   8. Responsive Design
-   Media Queries cho các kích thước màn hình khác nhau.
-   ========================================================================== */
-
-/* Mobile (max-width: 600px) */
-@media (max-width: 600px) {
+/* Mobile Small (max-width: 375px) */
+@media (max-width: 375px) {
   body {
-    padding: 100px 5px 10px;
-    font-size: 0.9rem;
-  }
-
-  h1 {
-    font-size: 1.4rem;
-    margin-top: 1.5rem;
-    margin-bottom: 1rem;
-  }
-
-  .app-header h1 {
-    font-size: 1.3rem;
-  }
-
-  .top-nav {
-    height: 50px;
-    padding: 10px 0;
-  }
-
-  .nav-item i {
-    font-size: 1.2rem;
-  }
-
-  .nav-item span {
-    font-size: 0.65rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .input-group:not(.vertical) {
-    gap: 0.15rem;
-    padding: 0 2px;
-    font-size: 0.7rem;
-  }
-
-  /* Đảm bảo select trong input-group không vertical được căn giữa */
-  .input-group:not(.vertical) select {
-    text-align: center !important;
-    width: 110px;
-    font-size: 0.85rem;
-    padding: 0.35rem 0.6rem;
-    line-height: 1.2;
-  }
-
-  .input-group:not(.vertical) input[type="date"] {
-    width: 145px;
-    font-size: 0.85rem;
-    padding: 0.35rem 0.5rem 0.35rem 0.6rem;
-    line-height: 1.2;
-  }
-
-  /* Đảm bảo select trong input-group vertical không bị căn giữa */
-  .input-group.vertical select {
-    text-align: left !important;
-  }
-
-  button {
-    padding: 0.6rem 1rem;
-    font-size: 0.85rem;
-  }
-
-  .input-group.vertical .input-field {
-    /* Để trống để các trường tràn toàn bộ chiều rộng */
-  }
-
-  .input-group.vertical .input-field .uniform-input {
-    font-size: 0.9rem;
-    padding: 0.6rem 0.8rem;
-  }
-
-  .input-group.vertical button {
-    font-size: 0.9rem;
-    padding: 0.6rem 1rem;
-  }
-
-  .input-group.vertical button#fetchKeywordsBtn {
-    font-size: 0.7rem;
-    padding: 0.35rem 0.6rem;
-  }
-
-  .stats-container {
-    gap: 0.5rem;
-  }
-
-  .stat-box {
-    width: 100px;
-    max-width: 100px;
-    padding: 0.5rem;
-    min-height: auto;
+    padding: 95px 12px 20px;
   }
   
-  .stat-box .title {
-    font-size: 0.8rem;
+  .stat-box {
+    min-width: 100px;
+    padding: var(--spacing-md);
   }
   
-  .stat-box .amount {
-    font-size: 0.9rem;
-  }
-
-  canvas#myChart {
-    max-width: 320px !important;
-  }
-
-  canvas#monthlyChart {
-    max-width: 300px !important;
-    min-height: 250px;
-    max-height: 350px;
-  }
-
-  .custom-legend {
-    grid-template-columns: 1fr;
-    max-width: 320px;
-    font-size: 0.85rem;
-    padding: 0.75rem;
-    gap: 0.5rem;
-  }
-
-  .transaction-box {
-    padding: 0.8rem;
-    max-width: 320px;
-  }
-
-  .keyword-box {
-    padding: 0.8rem;
-    max-width: 320px;
-  }
-
-  .info-section {
-    padding: 0 5px;
-  }
-
-  .info-card {
-    max-width: 100%;
-    padding: 0.65rem 0.8rem;
-    min-height: 100px;
-  }
-
-  .info-card h1 {
-    font-size: 0.95rem;
-    margin-top: 0;
-    margin-bottom: 0.3rem;
-  }
-
-  .info-card p {
-    font-size: 0.85rem;
-    margin: 0.2rem 0;
-    line-height: 1.5;
-  }
-
-  .qr-image {
-    width: 250px;
-  }
-
-  .modal-content input[type="date"] {
-    font-size: 0.9rem;
-    padding: 0.6rem;
-    padding-left: 0.7rem !important;
-    text-align: left !important;
-  }
-
-  .modal-content input[type="date"]::-webkit-date-and-time-value {
-    text-align: left !important;
-  }
-
-  .pagination-btn {
-    min-width: 75px;
-    padding: 0.35rem 0.55rem;
-    font-size: 0.68rem;
-  }
-
-  .button-group {
-    gap: 0.5rem;
-  }
-
-  #addKeywordBtn,
-  #deleteKeywordBtn {
-    font-size: 0.68rem;
-    padding: 0.4rem 0.6rem;
+  .nav-item {
+    min-width: 60px;
+    padding: 6px 8px;
   }
 }
 
-/* Tablet (min-width: 601px and max-width: 1023px) */
-@media (min-width: 601px) and (max-width: 1023px) {
-  body {
-    padding: 198px 20px 20px;
-  }
-
-  h1 {
-    font-size: 1rem;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-  }
-
+/* Tablet (min-width: 768px) */
+@media (min-width: 768px) {
   .stats-container {
-    gap: 1.5rem;
+    gap: var(--spacing-lg);
   }
-
-  .stat-box {
-    width: auto;
-    min-width: 130px;
-  }
-
-  canvas#myChart {
-    max-width: 450px !important;
-  }
-
-  canvas#monthlyChart {
-    max-width: 450px !important;
-    min-height: 300px;
-    max-height: 400px;
-  }
-
-  .info-card {
-    max-width: 400px;
+  
+  .modal-content {
+    width: 600px;
   }
 }
 
 /* Desktop (min-width: 1024px) */
 @media (min-width: 1024px) {
-  .content-wrapper {
-    max-width: 800px;
-  }
-
   body {
-    padding: 118px 30px 30px;
-  }
-
-  h1 {
-    font-size: 1.1rem;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .stats-container {
-    gap: 1.5rem;
-    padding: 0 1rem;
-  }
-
-  .stat-box {
-    width: auto;
-    min-width: 140px;
-    padding: 0.75rem 1rem;
-  }
-
-  .stat-box .title {
-    font-size: 0.9rem;
-  }
-
-  .stat-box .amount {
-    font-size: 1.05rem;
-  }
-
-  .info-card {
-    max-width: 450px;
-  }
-
-  /* Legend cho desktop - 2 cột */
-  .custom-legend {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.85rem;
-    max-width: 700px;
-    padding: 0 1.5rem;
-  }
-
-  .legend-item {
-    padding: 0.6rem 0.75rem;
-  }
-
-  .legend-icon {
-    font-size: 1.4rem;
-    width: 36px;
-    height: 36px;
-  }
-
-  .legend-label {
-    font-size: 0.92rem;
-  }
-
-  .legend-value {
-    font-size: 0.8rem;
-  }
-}
-/* Điều chỉnh pie chart ở tab3 */
-.pie-chart-wrapper {
-  width: 100%;
-  max-width: 350px;
-  margin: 0.5rem auto;
-  aspect-ratio: 1 / 1;
-  position: relative;
-}
-
-#monthlyPieChart {
-  width: 100% !important;
-  height: 100% !important;
-}
-
-/* Styling cho chart container đã được định nghĩa ở trên (dòng 630) */
-
-.custom-legend {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 0.75rem;
-  margin-top: 1.5rem;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0 1rem;
-  background: transparent;
-  border-radius: 0;
-  box-shadow: none;
-  width: 100%;
-  max-width: 600px;
-  box-sizing: border-box;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.5rem 0.65rem;
-  background: var(--card-bg);
-  border-radius: 12px;
-  transition: transform 0.2s, box-shadow 0.2s;
-  cursor: pointer;
-  min-height: auto;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-}
-
-.legend-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-}
-
-.legend-icon {
-  font-size: 1.3rem;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-.legend-color {
-  width: 16px;
-  height: 16px;
-  border-radius: 4px;
-  flex-shrink: 0;
-}
-
-.legend-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
-  align-items: flex-start;
-  justify-content: center;
-  min-width: 0;
-  overflow: hidden;
-}
-
-.legend-label {
-  font-size: 0.88rem;
-  font-weight: 600;
-  color: var(--text-color);
-  line-height: 1.2;
-  width: 100%;
-  text-align: left;
-  margin-bottom: 0.05rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.legend-value {
-  display: flex;
-  align-items: baseline;
-  gap: 0.35rem;
-  font-size: 0.75rem;
-  color: var(--secondary-color);
-  width: 100%;
-  flex-wrap: nowrap;
-  text-align: left;
-  margin-top: 0.05rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.legend-amount {
-  font-weight: 700;
-  color: var(--text-color);
-}
-
-.legend-percentage {
-  font-weight: 500;
-}
-
-@media (max-width: 600px) {
-  .pie-chart-wrapper {
-    max-width: 300px;
+    padding: 120px 32px 32px;
   }
   
-  .custom-legend {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
-    padding: 0 0.5rem;
+  .stats-container {
+    max-width: 800px;
     margin-left: auto;
     margin-right: auto;
-    max-width: 320px;
   }
   
-  .legend-item {
-    padding: 0.45rem 0.6rem;
-  }
-  
-  .legend-icon {
-    font-size: 1.2rem;
-    width: 28px;
-    height: 28px;
-  }
-  
-  .legend-label {
-    font-size: 0.82rem;
-  }
-  
-  .legend-value {
-    font-size: 0.72rem;
-  }
-}
-
-/* Desktop lớn (min-width: 1200px) */
-@media (min-width: 1200px) {
-  .content-wrapper {
-    max-width: 1000px;
-  }
-
-  /* Legend 3 cột cho màn hình rất rộng */
-  .custom-legend {
-    grid-template-columns: repeat(3, 1fr);
+  .transactions-list {
     max-width: 900px;
-  }
-
-  .stat-box {
-    min-width: 160px;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
+
+/* ============================================================================
+   12. UTILITY CLASSES
+   ============================================================================ */
+.text-center {
+  text-align: center;
+}
+
+.mt-1 { margin-top: var(--spacing-sm); }
+.mt-2 { margin-top: var(--spacing-md); }
+.mt-3 { margin-top: var(--spacing-lg); }
+.mt-4 { margin-top: var(--spacing-xl); }
+
+.mb-1 { margin-bottom: var(--spacing-sm); }
+.mb-2 { margin-bottom: var(--spacing-md); }
+.mb-3 { margin-bottom: var(--spacing-lg); }
+.mb-4 { margin-bottom: var(--spacing-xl); }
+
+.hidden {
+  display: none !important;
+}
+
+.notification {
+  padding: var(--spacing-md);
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--info);
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  margin: var(--spacing-md) 0;
+}
+
+/* ============================================================================
+   KẾT THÚC CSS
+   Made with ❤️ - Optimized for performance and beauty
+   ============================================================================ */
