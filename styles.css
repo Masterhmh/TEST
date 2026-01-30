@@ -213,7 +213,6 @@ body {
   padding: 15px 0;
   box-shadow: var(--shadow-md);
   z-index: 1002;
-  height: 60px;
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -228,8 +227,8 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  padding: 8px 10px;
+  gap: 2px;
+  padding: 6px 8px;
   color: rgba(255, 255, 255, 0.7);
   font-size: 0.7rem;
   font-weight: 600;
@@ -237,7 +236,7 @@ body {
   border-radius: var(--radius-md);
   transition: all var(--transition-base);
   white-space: nowrap;
-  min-width: 65px;
+  min-width: 60px;
   position: relative;
   overflow: hidden;
 }
@@ -263,12 +262,12 @@ body {
 }
 
 .nav-item i {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   transition: transform var(--transition-fast);
 }
 
 .nav-item:hover i {
-  transform: scale(1.15) translateY(-2px);
+  transform: scale(1.1);
 }
 
 .nav-item.active {
@@ -579,7 +578,7 @@ label {
 .transaction-box,
 .keyword-box {
   background: var(--card-bg);
-  padding: 1rem;
+  padding: 0.85rem;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
   border-left: 4px solid var(--primary-color);
@@ -607,16 +606,16 @@ label {
 
 .transaction-box .date,
 .transaction-box .id {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: var(--text-secondary);
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.25rem;
 }
 
 .transaction-box .amount {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   font-weight: 800;
-  margin: 0.5rem 0;
+  margin: 0.4rem 0;
 }
 
 .transaction-box .type.income,
@@ -630,42 +629,42 @@ label {
 }
 
 .transaction-box .content {
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.25rem;
 }
 
 .transaction-box .category {
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  padding: 4px 12px;
+  padding: 3px 10px;
   background: var(--background-color);
   border-radius: var(--radius-full);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 600;
   color: var(--text-secondary);
-  margin: 0.3rem 0;
+  margin: 0.25rem 0;
 }
 
 .transaction-box .note {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--text-secondary);
   font-style: italic;
-  margin: 0.3rem 0;
+  margin: 0.25rem 0;
 }
 
 .transaction-box .actions {
   display: flex;
   gap: 0.5rem;
-  margin-top: 0.75rem;
+  margin-top: 0.6rem;
 }
 
 .transaction-box button {
   flex: 1;
-  padding: 8px 14px;
-  font-size: 0.8rem;
+  padding: 7px 12px;
+  font-size: 0.75rem;
 }
 
 .transaction-box button.edit {
@@ -850,7 +849,12 @@ label {
   position: relative;
 }
 
-#monthlyChart,
+#monthlyChart {
+  max-width: 100% !important;
+  height: auto !important;
+  min-height: 300px;
+}
+
 #monthlyPieChart {
   max-width: 100% !important;
   height: auto !important;
