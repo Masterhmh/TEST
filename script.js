@@ -321,8 +321,8 @@ function displayTransactions(data) {
     </div>
   </div>
   <div style="margin-top: 0.5rem;">
-    <button class="edit-btn edit" data-id="${item.id}">Sửa</button>
-    <button class="delete-btn delete" data-id="${item.id}">Xóa</button>
+    <button class="edit-btn edit" data-id="${item.id}"><i class="fas fa-edit"></i> Sửa</button>
+    <button class="delete-btn delete" data-id="${item.id}"><i class="fas fa-trash"></i> Xóa</button>
   </div>
 `;
   container.appendChild(transactionBox);
@@ -1139,8 +1139,8 @@ function displayMonthlyExpenses(data) {
     </div>
   </div>
   <div style="margin-top: 0.5rem;">
-    <button class="edit-btn edit" data-id="${item.id}">Sửa</button>
-    <button class="delete-btn delete" data-id="${item.id}">Xóa</button>
+    <button class="edit-btn edit" data-id="${item.id}"><i class="fas fa-edit"></i> Sửa</button>
+    <button class="delete-btn delete" data-id="${item.id}"><i class="fas fa-trash"></i> Xóa</button>
   </div>
 `;
   container.appendChild(transactionBox);
@@ -1294,8 +1294,8 @@ function displaySearchResults(data) {
     </div>
   </div>
   <div style="margin-top: 0.5rem;">
-    <button class="edit-btn edit" data-id="${item.id}">Sửa</button>
-    <button class="delete-btn delete" data-id="${item.id}">Xóa</button>
+    <button class="edit-btn edit" data-id="${item.id}"><i class="fas fa-edit"></i> Sửa</button>
+    <button class="delete-btn delete" data-id="${item.id}"><i class="fas fa-trash"></i> Xóa</button>
   </div>
 `;
     container.appendChild(transactionBox);
@@ -1730,3 +1730,32 @@ function setupStatBoxObserver() {
   // Điều chỉnh lại khi resize
   window.addEventListener('resize', adjustStatBoxFontSize);
 }
+
+/* ==========================================================================
+   13. Khởi tạo ứng dụng (Application Initialization)
+   Thiết lập các sự kiện và giá trị ban đầu khi trang được load.
+   ========================================================================== */
+document.addEventListener('DOMContentLoaded', function() {
+  // Set ngày hiện tại cho date inputs
+  const today = new Date().toISOString().split('T')[0];
+  const transactionDateInput = document.getElementById('transactionDate');
+  if (transactionDateInput) {
+    transactionDateInput.value = today;
+  }
+  
+  // Set tháng hiện tại cho các select
+  const currentMonth = new Date().getMonth() + 1;
+  const startMonthSelect = document.getElementById('startMonth');
+  const endMonthSelect = document.getElementById('endMonth');
+  const monthSelect = document.getElementById('monthSelect');
+  const searchMonthSelect = document.getElementById('searchMonth');
+  
+  if (startMonthSelect) startMonthSelect.value = currentMonth.toString();
+  if (endMonthSelect) endMonthSelect.value = currentMonth.toString();
+  if (monthSelect) monthSelect.value = currentMonth.toString();
+  
+  // Setup stat box observer
+  setupStatBoxObserver();
+  
+  console.log('MiniApp Tài Chính đã sẵn sàng! ✨');
+});
