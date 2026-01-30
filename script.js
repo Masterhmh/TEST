@@ -198,7 +198,7 @@ window.openTab = function(tabId) {
   document.getElementById(tabId).classList.add('active');
   document.querySelector(`.nav-item[data-tab="${tabId}"]`).classList.add('active');
   
-  if (tabId === 'tab7') {
+  if (tabId === 'tab4') {
     const container = document.getElementById('keywordsContainer');
     if (container) {
       if (cachedKeywords) {
@@ -1010,6 +1010,7 @@ function drawMonthlyPieChart(data) {
     const iconClass = categoryIcons[item.category] || 'fa-circle';
     const legendItem = document.createElement('div');
     legendItem.className = 'legend-item';
+    legendItem.style.cursor = 'pointer';
     legendItem.innerHTML = `
       <div class="legend-color" style="background-color: ${backgroundColors[index]};">
         <i class="fas ${iconClass}" style="color: white;"></i>
@@ -1023,9 +1024,9 @@ function drawMonthlyPieChart(data) {
       </div>
     `;
     
-    // Thêm event listener để xử lý click vào legend item
-    legendItem.addEventListener('click', function() {
-      openCategoryDetail(item.category, backgroundColors[index]);
+    // Thêm event listener để click vào legend
+    legendItem.addEventListener('click', () => {
+      showCategoryDetail(item.category, item.amount, backgroundColors[index]);
     });
     
     customLegend.appendChild(legendItem);
@@ -1343,7 +1344,7 @@ function displaySearchResults(data) {
  * Lấy danh sách từ khóa từ API.
  */
 window.fetchKeywords = async function() {
-  showLoading(true, 'tab5');
+  showLoading(true, 'tab4');
   try {
     const targetUrl = `${apiUrl}?action=getKeywords&sheetId=${sheetId}`;
     const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
@@ -1356,7 +1357,7 @@ window.fetchKeywords = async function() {
     showToast("Lỗi khi lấy dữ liệu từ khóa: " + error.message, "error");
     displayKeywords({ error: true });
   } finally {
-    showLoading(false, 'tab5');
+    showLoading(false, 'tab4');
   }
 };
 
@@ -1366,7 +1367,7 @@ window.fetchKeywords = async function() {
  */
 function displayKeywords(data) {
   const container = document.getElementById('keywordsContainer');
-  const placeholder = document.getElementById('placeholderTab5');
+  const placeholder = document.getElementById('placeholderTab4');
   container.innerHTML = '';
 
   if (!data || data.error || !Array.isArray(data) || data.length === 0) {
@@ -1422,7 +1423,7 @@ window.addKeyword = async function() {
   const keywordsArray = keywordsInput.split(',').map(keyword => keyword.trim()).filter(keyword => keyword);
   const formattedKeywords = keywordsArray.join(', ');
 
-  showLoading(true, 'tab5');
+  showLoading(true, 'tab4');
   try {
     const finalUrl = proxyUrl + encodeURIComponent(apiUrl);
     const response = await fetch(finalUrl, {
@@ -1443,7 +1444,7 @@ window.addKeyword = async function() {
   } catch (error) {
     showToast("Lỗi khi thêm từ khóa: " + error.message, "error");
   } finally {
-    showLoading(false, 'tab5');
+    showLoading(false, 'tab4');
   }
 };
 
@@ -1470,7 +1471,7 @@ window.deleteKeyword = async function() {
   }
 
   try {
-    showLoading(true, 'tab5');
+    showLoading(true, 'tab4');
     const targetUrl = `${apiUrl}?action=getKeywords&sheetId=${sheetId}`;
     const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
     const response = await fetch(finalUrl);
@@ -1525,7 +1526,7 @@ window.deleteKeyword = async function() {
     console.error("Lỗi trong deleteKeyword:", error);
     showToast("Lỗi khi xóa từ khóa: " + error.message, "error");
   } finally {
-    showLoading(false, 'tab5');
+    showLoading(false, 'tab4');
   }
 };
 
@@ -1544,7 +1545,6 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('fetchMonthlyDataBtn').addEventListener('click', window.fetchMonthlyData);
   document.getElementById('fetchTransactionsBtn').addEventListener('click', window.fetchTransactions);
   document.getElementById('addTransactionBtn').addEventListener('click', openAddForm);
-  document.getElementById('fetchExpensesBtn').addEventListener('click', window.fetchMonthlyExpenses);
   document.getElementById('searchTransactionsBtn').addEventListener('click', window.searchTransactions);
   document.getElementById('fetchKeywordsBtn').addEventListener('click', window.fetchKeywords);
   document.getElementById('addKeywordBtn').addEventListener('click', window.addKeyword);
@@ -1563,20 +1563,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (currentPage < totalPages) {
       currentPage++;
       window.fetchTransactions();
-    }
-  });
-  document.getElementById('prevPageMonthly').addEventListener('click', () => {
-    if (currentPageMonthly > 1) {
-      currentPageMonthly--;
-      window.fetchMonthlyExpenses();
-    }
-  });
-  document.getElementById('nextPageMonthly').addEventListener('click', () => {
-    const data = cachedMonthlyExpenses?.data || [];
-    const totalPages = Math.ceil(data.length / expensesPerPage);
-    if (currentPageMonthly < totalPages) {
-      currentPageMonthly++;
-      window.fetchMonthlyExpenses();
     }
   });
   document.getElementById('prevPageSearch').addEventListener('click', () => {
@@ -1734,7 +1720,7 @@ function setupStatBoxObserver() {
   });
   
   // Observe các container có stat-box
-  const containers = document.querySelectorAll('#dailySummary, #monthlyStatsContainer, #monthlyExpenseSummary');
+  const containers = document.querySelectorAll('#dailySummary, #monthlyStatsContainer');
   containers.forEach(container => {
     if (container) {
       observer.observe(container, {
@@ -1748,276 +1734,6 @@ function setupStatBoxObserver() {
   // Điều chỉnh lại khi resize
   window.addEventListener('resize', adjustStatBoxFontSize);
 }
-
-/* ==========================================================================
-   12. Tab 2 Detail: Category Detail Page
-   Các hàm xử lý trang chi tiết khi click vào legend của pie chart.
-   ========================================================================== */
-let currentCategoryDetail = null;
-let currentPageCategoryDetail = 1;
-const transactionsPerPageCategoryDetail = 10;
-
-/**
- * Mở trang chi tiết cho một category
- * @param {string} category - Tên category
- * @param {string} color - Màu của category
- */
-async function openCategoryDetail(category, color) {
-  currentCategoryDetail = { category, color };
-  
-  // Ẩn tab2, hiện tab2Detail
-  document.getElementById('tab2').classList.remove('active');
-  document.getElementById('tab2Detail').classList.add('active');
-  
-  // Cập nhật title
-  document.getElementById('categoryDetailTitle').textContent = `CHI TIẾT: ${category.toUpperCase()}`;
-  
-  // Lấy tháng hiện tại để hiển thị giao dịch
-  const currentMonth = new Date().getMonth() + 1;
-  const currentYear = new Date().getFullYear();
-  
-  // Hiển thị loading
-  document.getElementById('loadingTab2Detail').style.display = 'block';
-  
-  try {
-    // Lấy dữ liệu so sánh các tháng cho category này
-    await fetchCategoryComparisonData(category, color);
-    
-    // Lấy danh sách giao dịch trong tháng hiện tại cho category này
-    await fetchCategoryTransactions(category, currentMonth, currentYear);
-  } catch (error) {
-    showToast("Lỗi khi tải dữ liệu chi tiết: " + error.message, "error");
-  } finally {
-    document.getElementById('loadingTab2Detail').style.display = 'none';
-  }
-}
-
-/**
- * Lấy dữ liệu so sánh các tháng cho một category
- */
-async function fetchCategoryComparisonData(category, color) {
-  const currentYear = new Date().getFullYear();
-  
-  try {
-    // Lấy dữ liệu từ tháng 1 đến tháng 12
-    const promises = [];
-    for (let month = 1; month <= 12; month++) {
-      const targetUrl = `${apiUrl}?action=getExpensesByCategory&month=${month}&year=${currentYear}&sheetId=${sheetId}`;
-      const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
-      promises.push(fetch(finalUrl).then(res => res.json()).then(data => ({ month, data })));
-    }
-    
-    const results = await Promise.all(promises);
-    
-    // Xử lý dữ liệu để lấy số tiền cho category cụ thể
-    const comparisonData = results.map(result => {
-      const categoryData = result.data.find(item => item.category === category);
-      return {
-        month: result.month,
-        amount: categoryData ? categoryData.amount : 0
-      };
-    });
-    
-    // Vẽ biểu đồ cột
-    drawCategoryComparisonChart(comparisonData, category, color);
-  } catch (error) {
-    console.error('Error fetching category comparison:', error);
-    // Vẽ biểu đồ với dữ liệu rỗng
-    const emptyData = Array.from({ length: 12 }, (_, i) => ({ month: i + 1, amount: 0 }));
-    drawCategoryComparisonChart(emptyData, category, color);
-  }
-}
-
-/**
- * Vẽ biểu đồ cột so sánh các tháng cho category
- */
-function drawCategoryComparisonChart(data, category, color) {
-  const ctx = document.getElementById('categoryComparisonChart').getContext('2d');
-  
-  // Destroy chart cũ nếu có
-  if (window.categoryComparisonChartInstance) {
-    window.categoryComparisonChartInstance.destroy();
-  }
-  
-  // Tạo labels và data cho 12 tháng
-  const labels = [];
-  const amounts = [];
-  
-  for (let month = 1; month <= 12; month++) {
-    labels.push(`T${month}`);
-    const monthData = data.find(item => item.month === month);
-    amounts.push(monthData ? monthData.amount : 0);
-  }
-  
-  window.categoryComparisonChartInstance = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: [{
-        label: category,
-        data: amounts,
-        backgroundColor: color + 'CC', // Thêm opacity
-        borderColor: color,
-        borderWidth: 2
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        x: {
-          ticks: {
-            font: {
-              family: 'Nunito, sans-serif',
-              size: 11
-            }
-          }
-        },
-        y: {
-          beginAtZero: true,
-          ticks: {
-            callback: value => value.toLocaleString('vi-VN') + 'đ',
-            font: {
-              family: 'Nunito, sans-serif'
-            }
-          }
-        }
-      },
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: context => `${context.raw.toLocaleString('vi-VN')}đ`
-          },
-          titleFont: {
-            family: 'Nunito, sans-serif'
-          },
-          bodyFont: {
-            family: 'Nunito, sans-serif'
-          }
-        },
-        // Plugin để hiển thị số tiền trên mỗi cột
-        datalabels: {
-          anchor: 'end',
-          align: 'top',
-          formatter: (value) => {
-            return value > 0 ? value.toLocaleString('vi-VN') + 'đ' : '';
-          },
-          color: color,
-          font: {
-            weight: 'bold',
-            size: 9,
-            family: 'Nunito, sans-serif'
-          }
-        }
-      }
-    },
-    plugins: [ChartDataLabels] // Thêm plugin datalabels
-  });
-}
-
-/**
- * Lấy danh sách giao dịch trong tháng cho một category
- */
-async function fetchCategoryTransactions(category, month, year) {
-  try {
-    // Lấy tất cả giao dịch trong tháng
-    const targetUrl = `${apiUrl}?action=getTransactionsByMonth&month=${month}&year=${year}&sheetId=${sheetId}`;
-    const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
-    const response = await fetch(finalUrl);
-    const data = await response.json();
-    
-    if (data.error) throw new Error(data.error);
-    
-    // Lọc chỉ lấy giao dịch của category này
-    const categoryTransactions = Array.isArray(data) 
-      ? data.filter(transaction => transaction.category === category && transaction.type === 'Chi tiêu')
-      : [];
-    
-    displayCategoryTransactions(categoryTransactions);
-  } catch (error) {
-    console.error('Error fetching category transactions:', error);
-    displayCategoryTransactions([]);
-  }
-}
-
-/**
- * Hiển thị danh sách giao dịch cho category
- */
-function displayCategoryTransactions(transactions) {
-  const container = document.getElementById('categoryTransactionsContainer');
-  const pageInfo = document.getElementById('pageInfoCategoryDetail');
-  const prevPageBtn = document.getElementById('prevPageCategoryDetail');
-  const nextPageBtn = document.getElementById('nextPageCategoryDetail');
-  const paginationDiv = document.getElementById('paginationCategoryDetail');
-  
-  container.innerHTML = '';
-  
-  if (!transactions || transactions.length === 0) {
-    container.innerHTML = '<div style="text-align: center; padding: 2rem; color: var(--text-secondary);">Không có giao dịch nào trong tháng này</div>';
-    paginationDiv.style.display = 'none';
-    return;
-  }
-  
-  // Phân trang
-  const totalPages = Math.ceil(transactions.length / transactionsPerPageCategoryDetail);
-  const startIndex = (currentPageCategoryDetail - 1) * transactionsPerPageCategoryDetail;
-  const endIndex = startIndex + transactionsPerPageCategoryDetail;
-  const transactionsToDisplay = transactions.slice(startIndex, endIndex);
-  
-  // Hiển thị giao dịch
-  transactionsToDisplay.forEach(transaction => {
-    const transactionBox = document.createElement('div');
-    transactionBox.className = 'transaction-box';
-    transactionBox.innerHTML = `
-      <div class="transaction-info">
-        <div class="transaction-date">${formatDate(transaction.date)}</div>
-        <div class="transaction-content">${transaction.content || 'Không có mô tả'}</div>
-        <div class="transaction-category">${transaction.category}</div>
-      </div>
-      <div class="transaction-amount expense">-${transaction.amount.toLocaleString('vi-VN')}đ</div>
-    `;
-    container.appendChild(transactionBox);
-  });
-  
-  // Hiển thị phân trang
-  if (totalPages > 1) {
-    paginationDiv.style.display = 'flex';
-    pageInfo.textContent = `Trang ${currentPageCategoryDetail}/${totalPages}`;
-    prevPageBtn.disabled = currentPageCategoryDetail === 1;
-    nextPageBtn.disabled = currentPageCategoryDetail === totalPages;
-    
-    prevPageBtn.onclick = () => {
-      if (currentPageCategoryDetail > 1) {
-        currentPageCategoryDetail--;
-        displayCategoryTransactions(transactions);
-      }
-    };
-    
-    nextPageBtn.onclick = () => {
-      if (currentPageCategoryDetail < totalPages) {
-        currentPageCategoryDetail++;
-        displayCategoryTransactions(transactions);
-      }
-    };
-  } else {
-    paginationDiv.style.display = 'none';
-  }
-}
-
-/**
- * Quay lại tab 2 từ category detail
- */
-document.addEventListener('DOMContentLoaded', function() {
-  const backBtn = document.getElementById('backToTab2Btn');
-  if (backBtn) {
-    backBtn.addEventListener('click', function() {
-      document.getElementById('tab2Detail').classList.remove('active');
-      document.getElementById('tab2').classList.add('active');
-      currentPageCategoryDetail = 1; // Reset page
-    });
-  }
-});
 
 /* ==========================================================================
    13. Khởi tạo ứng dụng (Application Initialization)
@@ -2035,15 +1751,299 @@ document.addEventListener('DOMContentLoaded', function() {
   const currentMonth = new Date().getMonth() + 1;
   const startMonthSelect = document.getElementById('startMonth');
   const endMonthSelect = document.getElementById('endMonth');
-  const monthSelect = document.getElementById('monthSelect');
   const searchMonthSelect = document.getElementById('searchMonth');
   
   if (startMonthSelect) startMonthSelect.value = currentMonth.toString();
   if (endMonthSelect) endMonthSelect.value = currentMonth.toString();
-  if (monthSelect) monthSelect.value = currentMonth.toString();
   
   // Setup stat box observer
   setupStatBoxObserver();
   
   console.log('MiniApp Tài Chính đã sẵn sàng! ✨');
+});
+
+/* ==========================================================================
+   CATEGORY DETAIL VIEW - Click vào legend để xem chi tiết
+   ========================================================================== */
+let currentCategoryDetailPage = 1;
+const categoryDetailPerPage = 10;
+let cachedCategoryTransactions = null;
+let currentCategory = null;
+let currentCategoryData = null;
+
+/**
+ * Hiển thị trang chi tiết của một category
+ */
+function showCategoryDetail(categoryName, categoryAmount, categoryColor) {
+  currentCategory = categoryName;
+  
+  // Ẩn chart container và hiển thị detail view
+  document.querySelector('.chart-container').style.display = 'none';
+  document.getElementById('categoryDetailView').style.display = 'block';
+  
+  // Cập nhật tiêu đề
+  document.getElementById('categoryDetailTitle').textContent = categoryName;
+  document.getElementById('categoryDetailTitle').style.color = categoryColor;
+  
+  // Lấy dữ liệu và vẽ biểu đồ
+  fetchCategoryMonthlyData(categoryName, categoryColor);
+  fetchCategoryTransactions(categoryName);
+}
+
+/**
+ * Quay lại view chính
+ */
+function backToCategoryList() {
+  document.getElementById('categoryDetailView').style.display = 'none';
+  document.querySelector('.chart-container').style.display = 'flex';
+  currentCategoryDetailPage = 1;
+  cachedCategoryTransactions = null;
+  currentCategory = null;
+}
+
+/**
+ * Lấy dữ liệu theo tháng cho một category cụ thể
+ */
+async function fetchCategoryMonthlyData(categoryName, categoryColor) {
+  try {
+    // Lấy khoảng thời gian từ form
+    const startMonth = parseInt(document.getElementById('startMonth').value);
+    const endMonth = parseInt(document.getElementById('endMonth').value);
+    const year = new Date().getFullYear();
+    
+    const targetUrl = `${apiUrl}?action=getMonthlyData&startMonth=${startMonth}&endMonth=${endMonth}&year=${year}&sheetId=${sheetId}`;
+    const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
+    const response = await fetch(finalUrl);
+    const monthlyData = await response.json();
+    
+    if (monthlyData.error) throw new Error(monthlyData.error);
+    
+    // Lọc dữ liệu theo category
+    const categoryMonthlyData = [];
+    for (let m = startMonth; m <= endMonth; m++) {
+      const monthData = monthlyData.find(item => item.month === m);
+      let categoryTotal = 0;
+      
+      if (monthData && monthData.categoryBreakdown) {
+        const categoryItem = monthData.categoryBreakdown.find(c => c.category === categoryName);
+        if (categoryItem) {
+          categoryTotal = categoryItem.amount;
+        }
+      }
+      
+      categoryMonthlyData.push({
+        month: m,
+        amount: categoryTotal
+      });
+    }
+    
+    // Vẽ biểu đồ
+    drawCategoryMonthlyChart(categoryMonthlyData, categoryName, categoryColor);
+    
+  } catch (error) {
+    console.error('Lỗi khi lấy dữ liệu category monthly:', error);
+    showToast('Lỗi khi lấy dữ liệu biểu đồ: ' + error.message, 'error');
+  }
+}
+
+/**
+ * Vẽ biểu đồ cột theo tháng cho category
+ */
+function drawCategoryMonthlyChart(data, categoryName, categoryColor) {
+  const ctx = document.getElementById('categoryMonthlyChart').getContext('2d');
+  
+  // Xóa chart cũ nếu có
+  if (window.categoryMonthlyChartInstance) {
+    window.categoryMonthlyChartInstance.destroy();
+  }
+  
+  const labels = data.map(item => `T${item.month}`);
+  const amounts = data.map(item => item.amount);
+  
+  window.categoryMonthlyChartInstance = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: categoryName,
+        data: amounts,
+        backgroundColor: categoryColor + 'CC',
+        borderColor: categoryColor,
+        borderWidth: 2,
+        borderRadius: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: {
+          display: false
+        },
+        datalabels: {
+          anchor: 'end',
+          align: 'top',
+          color: categoryColor,
+          font: {
+            weight: 'bold',
+            size: 10
+          },
+          formatter: (value) => {
+            if (value === 0) return '';
+            return value.toLocaleString('vi-VN') + 'đ';
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback: function(value) {
+              if (value >= 1000000) {
+                return (value / 1000000).toFixed(1) + 'tr';
+              } else if (value >= 1000) {
+                return (value / 1000).toFixed(0) + 'k';
+              }
+              return value;
+            }
+          }
+        }
+      }
+    },
+    plugins: [ChartDataLabels]
+  });
+}
+
+/**
+ * Lấy danh sách giao dịch của category trong tháng hiện tại
+ */
+async function fetchCategoryTransactions(categoryName) {
+  try {
+    const currentMonth = new Date().getMonth() + 1;
+    const currentYear = new Date().getFullYear();
+    
+    const targetUrl = `${apiUrl}?action=getTransactionsByMonth&month=${currentMonth}&year=${currentYear}&sheetId=${sheetId}`;
+    const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
+    const response = await fetch(finalUrl);
+    const transactions = await response.json();
+    
+    if (transactions.error) throw new Error(transactions.error);
+    
+    // Lọc giao dịch theo category
+    const categoryTransactions = transactions.filter(t => t.category === categoryName);
+    cachedCategoryTransactions = categoryTransactions;
+    
+    displayCategoryTransactions(categoryTransactions);
+    
+  } catch (error) {
+    console.error('Lỗi khi lấy giao dịch category:', error);
+    showToast('Lỗi khi lấy danh sách giao dịch: ' + error.message, 'error');
+  }
+}
+
+/**
+ * Hiển thị danh sách giao dịch của category
+ */
+function displayCategoryTransactions(transactions) {
+  const container = document.getElementById('categoryTransactionsContainer');
+  const paginationDiv = document.getElementById('paginationCategoryDetail');
+  const pageInfo = document.getElementById('pageInfoCategoryDetail');
+  const prevBtn = document.getElementById('prevPageCategoryDetail');
+  const nextBtn = document.getElementById('nextPageCategoryDetail');
+  
+  container.innerHTML = '';
+  
+  if (!transactions || transactions.length === 0) {
+    container.innerHTML = '<div class="notification">Không có giao dịch nào trong tháng hiện tại</div>';
+    paginationDiv.style.display = 'none';
+    return;
+  }
+  
+  container.innerHTML = `<div class="notification">Có ${transactions.length} giao dịch trong tháng hiện tại</div>`;
+  
+  // Pagination
+  const totalPages = Math.ceil(transactions.length / categoryDetailPerPage);
+  const startIndex = (currentCategoryDetailPage - 1) * categoryDetailPerPage;
+  const endIndex = startIndex + categoryDetailPerPage;
+  const paginatedData = transactions.slice(startIndex, endIndex);
+  
+  paginatedData.forEach((item, index) => {
+    const transactionBox = document.createElement('div');
+    transactionBox.className = 'transaction-box';
+    const amountColor = item.type === 'Thu nhập' ? 'var(--income-color)' : 'var(--expense-color)';
+    const typeClass = item.type === 'Thu nhập' ? 'income' : 'expense';
+    const transactionNumber = startIndex + index + 1;
+    
+    transactionBox.innerHTML = `
+      <div class="layer-container" style="position: relative;">
+        <div class="layer-top" style="position: absolute; top: 0; right: 0;">
+          <div class="number">Giao dịch thứ: ${transactionNumber}</div>
+          <div class="id">Mã giao dịch: ${item.id}</div>
+        </div>
+        <div class="layer-bottom" style="width: 100%;">
+          <div class="date">${formatDate(item.date)}</div>
+          <div class="amount" style="color: ${amountColor};">${item.amount.toLocaleString('vi-VN')}đ</div>
+          <div class="content">Nội dung: ${item.content}${item.note ? ` (${item.note})` : ''}</div>
+          <div class="type ${typeClass}">Phân loại: ${item.type}</div>
+          <div class="category">Phân loại chi tiết: ${item.category}</div>
+        </div>
+      </div>
+      <div style="margin-top: 0.5rem;">
+        <button class="edit-btn edit" data-id="${item.id}"><i class="fas fa-edit"></i> Sửa</button>
+        <button class="delete-btn delete" data-id="${item.id}"><i class="fas fa-trash"></i> Xóa</button>
+      </div>
+    `;
+    container.appendChild(transactionBox);
+  });
+  
+  // Setup pagination
+  pageInfo.textContent = `Trang ${currentCategoryDetailPage} / ${totalPages}`;
+  prevBtn.disabled = currentCategoryDetailPage === 1;
+  nextBtn.disabled = currentCategoryDetailPage === totalPages;
+  paginationDiv.style.display = 'flex';
+  
+  // Add event listeners for edit/delete buttons
+  document.querySelectorAll('.edit-btn').forEach(button => {
+    const transactionId = button.getAttribute('data-id');
+    const transaction = transactions.find(item => String(item.id) === String(transactionId));
+    if (transaction) {
+      button.addEventListener('click', () => openEditForm(transaction));
+    }
+  });
+  
+  document.querySelectorAll('.delete-btn').forEach(button => {
+    button.addEventListener('click', () => deleteTransaction(button.getAttribute('data-id')));
+  });
+}
+
+// Event listeners cho category detail pagination
+document.addEventListener('DOMContentLoaded', function() {
+  // Back button
+  const backBtn = document.getElementById('backToCategoryBtn');
+  if (backBtn) {
+    backBtn.addEventListener('click', backToCategoryList);
+  }
+  
+  // Pagination buttons
+  const prevBtn = document.getElementById('prevPageCategoryDetail');
+  const nextBtn = document.getElementById('nextPageCategoryDetail');
+  
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      if (currentCategoryDetailPage > 1) {
+        currentCategoryDetailPage--;
+        displayCategoryTransactions(cachedCategoryTransactions);
+      }
+    });
+  }
+  
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      const totalPages = Math.ceil(cachedCategoryTransactions.length / categoryDetailPerPage);
+      if (currentCategoryDetailPage < totalPages) {
+        currentCategoryDetailPage++;
+        displayCategoryTransactions(cachedCategoryTransactions);
+      }
+    });
+  }
 });
