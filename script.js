@@ -753,9 +753,11 @@ window.fetchMonthlyData = async function() {
     const placeholderTab2 = document.getElementById('placeholderTab2');
     const chartTitleTab2 = document.getElementById('chartTitleTab2');
     const pieChartTitleTab2 = document.getElementById('pieChartTitleTab2');
+    const chartContainer = document.querySelector('#tab2 .chart-container');
     if (placeholderTab2) placeholderTab2.style.display = 'none';
     if (chartTitleTab2) chartTitleTab2.style.display = 'block';
     if (pieChartTitleTab2) pieChartTitleTab2.style.display = 'block';
+    if (chartContainer) chartContainer.classList.add('show'); // Hiển thị chart-container
 
     // Tính tổng thu, tổng chi, số dư từ dữ liệu monthly
     let totalIncome = 0;
