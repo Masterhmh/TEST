@@ -1233,15 +1233,18 @@ label {
   .stat-box {
     min-width: 100px;
     max-width: 130px;
-    padding: 0.75rem;
+    padding: 0.625rem; /* Giảm padding cho mobile */
   }
 
   .stat-box .title {
-    font-size: 0.7rem;
+    font-size: 0.68rem;
+    margin-bottom: 0.3rem; /* Giảm khoảng cách */
+    line-height: 1.2;
   }
 
   .stat-box .amount {
-    font-size: 0.9rem;
+    font-size: 0.85rem; /* Giảm kích thước để cân đối */
+    line-height: 1.3;
   }
 
   .nav-item {
@@ -1260,6 +1263,16 @@ label {
   button {
     padding: 8px 16px;
     font-size: 0.8rem;
+  }
+
+  /* Đồng nhất chiều cao input với button ở mobile */
+  input[type="date"],
+  input[type="text"],
+  input[type="number"],
+  select {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    height: 38px; /* Chiều cao phù hợp với button mobile */
   }
 
   .transaction-box,
@@ -1316,6 +1329,41 @@ label {
   .qr-image {
     width: 220px;
   }
+
+  /* Info section (tab 6) cho mobile */
+  .info-section {
+    gap: 1rem;
+  }
+
+  .info-card {
+    padding: 0.875rem; /* Giảm padding */
+  }
+
+  .info-card h1 {
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+    margin-top: 0.75rem; /* Giảm margin-top cho h1 con */
+  }
+
+  .info-card p {
+    font-size: 0.82rem;
+    line-height: 1.5; /* Giảm line-height cho gọn hơn */
+    margin: 0.35rem 0; /* Giảm khoảng cách giữa các đoạn */
+  }
+
+  .info-card i {
+    margin-right: 0.35rem;
+    font-size: 0.9rem;
+  }
+
+  .qr-container {
+    gap: 0.75rem;
+    margin: 1rem 0;
+  }
+
+  .qr-frame {
+    padding: 0.75rem;
+  }
 }
 
 /* Tablet (min-width: 601px and max-width: 1023px) */
@@ -1330,6 +1378,15 @@ label {
 
   .stat-box {
     min-width: 130px;
+    padding: 0.8rem;
+  }
+
+  .stat-box .title {
+    margin-bottom: 0.35rem;
+  }
+
+  .stat-box .amount {
+    font-size: 0.95rem;
   }
   
   .custom-legend {
@@ -1365,15 +1422,16 @@ label {
 
   .stat-box {
     min-width: 140px;
-    padding: 1.2rem;
+    padding: 1rem;
   }
 
   .stat-box .title {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
+    margin-bottom: 0.4rem;
   }
 
   .stat-box .amount {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
   }
 
   .transactions-list {
