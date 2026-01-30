@@ -1348,12 +1348,17 @@ window.fetchKeywords = async function() {
  */
 function displayKeywords(data) {
   const container = document.getElementById('keywordsContainer');
+  const placeholder = document.getElementById('placeholderTab5');
   container.innerHTML = '';
 
   if (!data || data.error || !Array.isArray(data) || data.length === 0) {
     container.innerHTML = '<div class="notification">Không có từ khóa nào</div>';
+    if (placeholder) placeholder.style.display = 'block';
     return;
   }
+
+  // Ẩn placeholder khi có dữ liệu
+  if (placeholder) placeholder.style.display = 'none';
 
   data.forEach(item => {
     const keywordBox = document.createElement('div');
