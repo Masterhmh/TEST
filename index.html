@@ -39,7 +39,7 @@
     <!-- Tab 1: Giao Dịch Trong Ngày -->
     <div id="tab1" class="tab-content active">
       <h1>GIAO DỊCH TRONG NGÀY</h1>
-      <p class="notification">Vui lòng chọn ngày và ấn "Lọc" để xem dữ liệu.</p>
+      <p class="notification">Vui lòng chọn ngày và ấn "Lọc" để xem các giao dịch có trong ngày.</p>
       <div id="errorMessageTab1" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
       <div id="successMessageTab1" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
       <div id="loadingTab1" style="display: none; text-align: center; margin: 1rem 0;">
@@ -67,7 +67,7 @@
     <!-- Tab 2: Báo Cáo Thu Chi Theo Tháng -->
 <div id="tab2" class="tab-content">
   <h1>BÁO CÁO THU CHI THEO THÁNG</h1>
-  <p class="notification">Vui lòng chọn khoảng thời gian và ấn "Lọc" để xem dữ liệu.</p>
+  <p class="notification">Vui lòng chọn khoảng thời gian và ấn "Lọc" để xem báo cáo.</p>
   <div id="errorMessageTab2" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
   <div id="successMessageTab2" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
   <div id="loadingTab2" style="display: none; text-align: center; margin: 1rem 0;">
@@ -110,7 +110,7 @@
     <!-- Tab 3: Liệt Kê Chi Tiêu Theo Tháng -->
     <div id="tab3" class="tab-content">
       <h1>LIỆT KÊ CHI TIÊU THEO THÁNG</h1>
-      <p class="notification">Chọn tháng và ấn "Lọc" để xem danh sách chi tiêu theo phân loại chi tiết.</p>
+      <p class="notification">Chọn tháng và ấn "Lọc" để xem danh sách chi tiêu trong tháng.</p>
       <div id="errorMessageTab3" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
       <div id="successMessageTab3" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
       <div id="loadingTab3" style="display: none; text-align: center; margin: 1rem 0;">
@@ -210,6 +210,7 @@
         </div>
         <button id="fetchKeywordsBtn">Tải dữ liệu</button>
       </div>
+      <p id="placeholderTab5" class="notification" style="margin-top: 1rem;">Dữ liệu từ khóa sẽ hiển thị ở đây</p>
       <div class="keywords-list" id="keywordsContainer"></div>
     </div>
 
