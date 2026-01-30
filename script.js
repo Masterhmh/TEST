@@ -864,6 +864,16 @@ window.fetchMonthlyData = async function() {
 
     // Gọi API cho pie chart (% chi tiêu theo category cho range months)
     const expenseCategoryData = await fetchExpensesByCategoryForMonths(startMonth, endMonth);
+    
+    // LƯU CACHE CHO CATEGORY DETAIL - QUAN TRỌNG!
+    // Cache dữ liệu để sử dụng khi click vào legend
+    cachedChartData = {
+      monthlyData: monthlyData, // Lưu dữ liệu monthly gốc
+      expenseCategoryData: expenseCategoryData, // Lưu dữ liệu category
+      startMonth: startMonth,
+      endMonth: endMonth
+    };
+    
     drawMonthlyPieChart(expenseCategoryData);
   } catch (error) {
     showToast("Lỗi khi lấy dữ liệu: " + error.message, "error");
@@ -1833,36 +1843,111 @@ function backToCategoryList() {
  */
 async function fetchCategoryMonthlyData(categoryName, categoryColor) {
   try {
-    // Sử dụng dữ liệu đã cache từ cachedChartData
-    if (!cachedChartData || !cachedChartData.monthlyData) {
+    // Kiểm tra xem đã có dữ liệu cache hay chưa
+    if (!cachedChartData) {
       throw new Error('Không có dữ liệu biểu đồ. Vui lòng lọc dữ liệu trước.');
     }
     
-    const monthlyData = cachedChartData.monthlyData;
-    const startMonth = parseInt(document.getElementById('startMonth').value);
-    const endMonth = parseInt(document.getElementById('endMonth').value);
+    const startMonth = cachedChartData.startMonth || parseInt(document.getElementById('startMonth').value);
+    const endMonth = cachedChartData.endMonth || parseInt(document.getElementById('endMonth').value);
     
-    // Lọc dữ liệu theo category
+    // Lấy dữ liệu từ API cho category cụ thể
+    const targetUrl = `${apiUrl}?action=getCategoryMonthlyData&category=${encodeURIComponent(categoryName)}&startMonth=${startMonth}&endMonth=${endMonth}&sheetId=${sheetId}`;
+    const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
+    const response = await fetch(finalUrl);
+    const categoryData = await response.json();
+    
+    if (categoryData.error) {
+      throw new Error(categoryData.error);
+    }
+    
+    // Tạo dữ liệu cho tất cả các tháng trong khoảng (fill 0 cho tháng không có data)
     const categoryMonthlyData = [];
     for (let m = startMonth; m <= endMonth; m++) {
-      const monthData = monthlyData.find(item => item.month === m);
-      let categoryTotal = 0;
-      
-      if (monthData && monthData.categoryBreakdown) {
-        const categoryItem = monthData.categoryBreakdown.find(c => c.category === categoryName);
-        if (categoryItem) {
-          categoryTotal = categoryItem.amount;
-        }
-      }
-      
+      const monthData = categoryData.find(item => item.month === m);
       categoryMonthlyData.push({
         month: m,
-        amount: categoryTotal
+        amount: monthData ? monthData.amount : 0
       });
     }
     
     // Lưu vào cache
     currentCategoryData = categoryMonthlyData;
+    
+    // Vẽ biểu đồ
+    drawCategoryMonthlyChart(categoryMonthlyData, categoryName, categoryColor);
+    
+  } catch (error) {
+    console.error('Lỗi khi lấy dữ liệu category monthly:', error);
+    
+    // Nếu API không hỗ trợ, thử fallback sang cách tính từ dữ liệu có sẵn
+    if (error.message.includes('action') || error.message.includes('API')) {
+      try {
+        await fetchCategoryMonthlyDataFallback(categoryName, categoryColor);
+      } catch (fallbackError) {
+        throw error; // Throw lỗi gốc nếu fallback cũng thất bại
+      }
+    } else {
+      throw error;
+    }
+  }
+}
+
+/**
+ * Fallback: Lấy tất cả giao dịch của category và tính tổng theo tháng
+ */
+async function fetchCategoryMonthlyDataFallback(categoryName, categoryColor) {
+  const startMonth = cachedChartData.startMonth || parseInt(document.getElementById('startMonth').value);
+  const endMonth = cachedChartData.endMonth || parseInt(document.getElementById('endMonth').value);
+  const year = new Date().getFullYear();
+  
+  // Lấy tất cả giao dịch của category trong khoảng thời gian
+  const targetUrl = `${apiUrl}?action=getTransactionsByCategory&category=${encodeURIComponent(categoryName)}&startMonth=${startMonth}&endMonth=${endMonth}&year=${year}&sheetId=${sheetId}`;
+  const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
+  const response = await fetch(finalUrl);
+  const transactions = await response.json();
+  
+  if (transactions.error) {
+    throw new Error(transactions.error);
+  }
+  
+  // Tính tổng theo tháng
+  const monthlyTotals = {};
+  for (let m = startMonth; m <= endMonth; m++) {
+    monthlyTotals[m] = 0;
+  }
+  
+  transactions.forEach(transaction => {
+    if (transaction.date && transaction.amount) {
+      const dateParts = transaction.date.split('/');
+      if (dateParts.length === 3) {
+        const month = parseInt(dateParts[1]);
+        if (month >= startMonth && month <= endMonth) {
+          // Chuyển amount thành số (loại bỏ dấu chấm ngăn cách)
+          const amount = typeof transaction.amount === 'string' 
+            ? parseInt(transaction.amount.replace(/[^0-9]/g, '')) || 0
+            : transaction.amount;
+          monthlyTotals[month] += amount;
+        }
+      }
+    }
+  });
+  
+  // Tạo mảng dữ liệu
+  const categoryMonthlyData = [];
+  for (let m = startMonth; m <= endMonth; m++) {
+    categoryMonthlyData.push({
+      month: m,
+      amount: monthlyTotals[m]
+    });
+  }
+  
+  // Lưu vào cache
+  currentCategoryData = categoryMonthlyData;
+  
+  // Vẽ biểu đồ
+  drawCategoryMonthlyChart(categoryMonthlyData, categoryName, categoryColor);
+}
     
     // Vẽ biểu đồ
     drawCategoryMonthlyChart(categoryMonthlyData, categoryName, categoryColor);
