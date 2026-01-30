@@ -548,8 +548,8 @@ h1 {
     padding-right: 0.25rem;
     padding-left: 0.35rem;
     font-size: 0.7rem;
-    min-width: 130px;
-    max-width: 145px;
+    min-width: 150px;
+    max-width: 165px;
   }
 }
 
@@ -587,8 +587,8 @@ h1 {
     padding-right: 0.2rem;
     padding-left: 0.3rem;
     font-size: 0.65rem;
-    min-width: 120px;
-    max-width: 130px;
+    min-width: 140px;
+    max-width: 155px;
   }
 }
 
@@ -1587,13 +1587,17 @@ input[type="date"] {
 .info-card {
   background: var(--card-bg);
   border-radius: 12px; 
-  padding: 0.75rem 1rem; 
+  padding: 0.7rem 1rem; 
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
   width: 100%; 
   max-width: 450px;
   text-align: center;
   box-sizing: border-box;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .info-card:hover {
@@ -1603,7 +1607,8 @@ input[type="date"] {
 .info-card h1 {
   font-size: 1.3rem;
   font-weight: 600;
-  margin-bottom: 0.3rem;
+  margin-top: 0;
+  margin-bottom: 0.4rem;
   text-align: left;
   color: var(--text-color);
   border-left: 4px solid var(--gradient-start);
@@ -1613,7 +1618,7 @@ input[type="date"] {
 .info-card p {
   margin: 0.25rem 0;
   font-size: 0.9rem;
-  line-height: 1.5;
+  line-height: 1.6;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1638,6 +1643,8 @@ input[type="date"] {
   font-style: italic;
   font-size: 0.9rem;
   color: var(--secondary-color);
+  margin: 0.3rem 0 0.5rem 0;
+  line-height: 1.6;
 }
 
 .qr-container {
@@ -1751,7 +1758,7 @@ input[type="date"] {
   }
 
   .input-group:not(.vertical) input[type="date"] {
-    width: 110px;
+    width: 145px;
     font-size: 0.85rem;
     padding: 0.6rem;
   }
@@ -1838,17 +1845,20 @@ input[type="date"] {
 
   .info-card {
     max-width: 100%;
-    padding: 0.6rem;
+    padding: 0.65rem 0.8rem;
+    min-height: 100px;
   }
 
   .info-card h1 {
     font-size: 0.95rem;
-    margin-bottom: 0.25rem;
+    margin-top: 0;
+    margin-bottom: 0.3rem;
   }
 
   .info-card p {
     font-size: 0.85rem;
     margin: 0.2rem 0;
+    line-height: 1.5;
   }
 
   .qr-image {
