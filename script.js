@@ -814,6 +814,8 @@ window.fetchMonthlyData = async function() {
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        barPercentage: 0.6,
+        categoryPercentage: 0.8,
         scales: {
           x: {
             ticks: {
@@ -1948,7 +1950,7 @@ function drawCategoryMonthlyChart(data, categoryName, categoryColor) {
         maintainAspectRatio: false,
         layout: {
           padding: {
-            top: 30
+            top: 50
           }
         },
         plugins: {
@@ -1958,10 +1960,7 @@ function drawCategoryMonthlyChart(data, categoryName, categoryColor) {
           datalabels: {
             anchor: 'end',
             align: 'end',
-            color: function(context) {
-              // Use dark color for better visibility against white background above bars
-              return '#1E293B';
-            },
+            color: '#94A3B8',
             font: {
               weight: 'bold',
               size: 10
@@ -1987,7 +1986,9 @@ function drawCategoryMonthlyChart(data, categoryName, categoryColor) {
               display: false
             }
           }
-        }
+        },
+        barPercentage: 0.5,
+        categoryPercentage: 0.7
       },
       plugins: [ChartDataLabels]
     });
