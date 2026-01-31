@@ -27,6 +27,11 @@ let currentPageSearch = 1;
 const searchPerPage = 10;
 // Cache chi tiết cho từng category (để tránh load lại khi click vào legend nhiều lần)
 let categoryDetailsCache = {};
+// Debounce timer cho search
+let searchDebounceTimer = null;
+// Rate limiting cho API calls
+let lastApiCall = 0;
+const minApiInterval = 500;
 
 /* ==========================================================================
    2. Hàm tiện ích (Utility Functions)
@@ -38,10 +43,18 @@ let categoryDetailsCache = {};
  * @param {string} type - Loại thông báo (info, success, error, warning).
  */
 function showToast(message, type = "info") {
+  const icons = {
+    success: 'fa-check-circle',
+    error: 'fa-exclamation-circle',
+    warning: 'fa-exclamation-triangle',
+    info: 'fa-info-circle'
+  };
+  
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
   toast.innerHTML = `
-    <div>
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+      <i class="fas ${icons[type] || icons.info}" style="font-size: 1.25rem;"></i>
       <span>${message}</span>
     </div>
   `;
@@ -97,6 +110,7 @@ function showLoadingPopup(show) {
       justify-content: center;
       align-items: center;
       z-index: 3000;
+      animation: fadeIn 0.2s ease;
     `;
     loadingPopup.innerHTML = `
       <div style="
@@ -108,6 +122,7 @@ function showLoadingPopup(show) {
         flex-direction: column;
         align-items: center;
         gap: 1rem;
+        animation: slideUp 0.3s ease;
       ">
         <div style="
           border: 4px solid #16A34A;
@@ -833,6 +848,10 @@ window.fetchMonthlyData = async function() {
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        animation: {
+          duration: 800,
+          easing: 'easeInOutQuart'
+        },
         layout: {
           padding: {
             top: 65
@@ -965,6 +984,12 @@ function drawMonthlyPieChart(data) {
       maintainAspectRatio: true,
       aspectRatio: 1,
       cutout: '60%',
+      animation: {
+        animateRotate: true,
+        animateScale: true,
+        duration: 800,
+        easing: 'easeInOutQuart'
+      },
       plugins: {
         legend: { display: false },
         tooltip: {
@@ -1254,57 +1279,65 @@ async function populateSearchCategories() {
  * Tìm kiếm giao dịch dựa trên các tiêu chí (tháng, nội dung, số tiền, phân loại).
  */
 window.searchTransactions = async function() {
-  const month = document.getElementById('searchMonth').value;
-  const content = document.getElementById('searchContent').value.trim();
-  let amount = document.getElementById('searchAmount').value;
-  amount = amount ? parseNumber(amount).toString() : '';
-  const category = document.getElementById('searchCategory').value;
-  const year = new Date().getFullYear();
-
-  if (!content && !amount && !category) {
-    return showToast("Vui lòng nhập ít nhất một tiêu chí: nội dung, số tiền, hoặc phân loại chi tiết!", "warning");
+  // Clear debounce timer cũ
+  if (searchDebounceTimer) {
+    clearTimeout(searchDebounceTimer);
   }
+  
+  // Debounce 500ms
+  searchDebounceTimer = setTimeout(async () => {
+    const month = document.getElementById('searchMonth').value;
+    const content = document.getElementById('searchContent').value.trim();
+    let amount = document.getElementById('searchAmount').value;
+    amount = amount ? parseNumber(amount).toString() : '';
+    const category = document.getElementById('searchCategory').value;
+    const year = new Date().getFullYear();
 
-  // Tạo cacheKey dựa trên các tiêu chí tìm kiếm
-  const cacheKey = `${year}-${month || 'all'}-${content || ''}-${amount || ''}-${category || ''}`;
+    if (!content && !amount && !category) {
+      return showToast("Vui lòng nhập ít nhất một tiêu chí: nội dung, số tiền, hoặc phân loại chi tiết!", "warning");
+    }
 
-  // Kiểm tra cache
-  if (cachedSearchResults && cachedSearchResults.cacheKey === cacheKey) {
-    displaySearchResults(cachedSearchResults.transactions);
-    return;
-  }
+    // Tạo cacheKey dựa trên các tiêu chí tìm kiếm
+    const cacheKey = `${year}-${month || 'all'}-${content || ''}-${amount || ''}-${category || ''}`;
 
-  showLoading(true, 'tab4');
-  try {
-    let targetUrl = `${apiUrl}?action=searchTransactions&sheetId=${sheetId}&page=${currentPageSearch}&limit=${searchPerPage}`;
-    if (month) targetUrl += `&month=${month}&year=${year}`;
-    if (content) targetUrl += `&content=${encodeURIComponent(content)}`;
-    if (amount) targetUrl += `&amount=${encodeURIComponent(amount)}`;
-    if (category) targetUrl += `&category=${encodeURIComponent(category)}`;
+    // Kiểm tra cache
+    if (cachedSearchResults && cachedSearchResults.cacheKey === cacheKey) {
+      displaySearchResults(cachedSearchResults.transactions);
+      return;
+    }
 
-    console.log("API URL:", targetUrl);
-    const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
-    const response = await fetch(finalUrl);
-    const searchData = await response.json();
-    console.log("API Response:", searchData);
-    if (searchData.error) throw new Error(searchData.error);
+    showLoading(true, 'tab4');
+    try {
+      let targetUrl = `${apiUrl}?action=searchTransactions&sheetId=${sheetId}&page=${currentPageSearch}&limit=${searchPerPage}`;
+      if (month) targetUrl += `&month=${month}&year=${year}`;
+      if (content) targetUrl += `&content=${encodeURIComponent(content)}`;
+      if (amount) targetUrl += `&amount=${encodeURIComponent(amount)}`;
+      if (category) targetUrl += `&category=${encodeURIComponent(category)}`;
 
-    cachedSearchResults = {
-      transactions: searchData.transactions || [],
-      totalTransactions: searchData.totalTransactions || 0,
-      totalPages: searchData.totalPages || 1,
-      currentPage: searchData.currentPage || 1,
-      cacheKey: cacheKey // Lưu cacheKey
-    };
-    currentPageSearch = searchData.currentPage || 1;
+      console.log("API URL:", targetUrl);
+      const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
+      const response = await fetch(finalUrl);
+      const searchData = await response.json();
+      console.log("API Response:", searchData);
+      if (searchData.error) throw new Error(searchData.error);
 
-    displaySearchResults(searchData.transactions);
-  } catch (error) {
-    showToast("Lỗi khi tìm kiếm giao dịch: " + error.message, "error");
-    displaySearchResults({ error: true });
-  } finally {
-    showLoading(false, 'tab4');
-  }
+      cachedSearchResults = {
+        transactions: searchData.transactions || [],
+        totalTransactions: searchData.totalTransactions || 0,
+        totalPages: searchData.totalPages || 1,
+        currentPage: searchData.currentPage || 1,
+        cacheKey: cacheKey // Lưu cacheKey
+      };
+      currentPageSearch = searchData.currentPage || 1;
+
+      displaySearchResults(searchData.transactions);
+    } catch (error) {
+      showToast("Lỗi khi tìm kiếm giao dịch: " + error.message, "error");
+      displaySearchResults({ error: true });
+    } finally {
+      showLoading(false, 'tab4');
+    }
+  }, 500);
 };
 
 /**
@@ -1811,6 +1844,12 @@ document.addEventListener('DOMContentLoaded', function() {
   // Setup stat box observer
   setupStatBoxObserver();
   
+  // Setup dark mode toggle
+  setupDarkModeToggle();
+  
+  // Setup charts comparison (nếu có dữ liệu)
+  setupChartsComparison();
+  
   console.log('MiniApp Tài Chính đã sẵn sàng! ✨');
 });
 
@@ -2017,6 +2056,10 @@ function drawCategoryMonthlyChart(data, categoryName, categoryColor) {
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        animation: {
+          duration: 800,
+          easing: 'easeInOutQuart'
+        },
         layout: {
           padding: {
             top: 60
@@ -2206,4 +2249,149 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
+});
+
+/* ==========================================================================
+   DARK MODE TOGGLE
+   ========================================================================== */
+function setupDarkModeToggle() {
+  // Tạo nút toggle dark mode
+  const toggleBtn = document.createElement('button');
+  toggleBtn.className = 'dark-mode-toggle';
+  toggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
+  toggleBtn.setAttribute('aria-label', 'Toggle Dark Mode');
+  document.body.appendChild(toggleBtn);
+  
+  // Kiểm tra theme đã lưu
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+    toggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
+  }
+  
+  // Xử lý click
+  toggleBtn.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    
+    // Cập nhật icon
+    toggleBtn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+    
+    // Lưu preference
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    
+    // Show toast
+    showToast(isDark ? 'Đã bật chế độ tối' : 'Đã bật chế độ sáng', 'success');
+  });
+}
+
+/* ==========================================================================
+   CHARTS COMPARISON - So sánh dữ liệu giữa các tháng
+   ========================================================================== */
+function setupChartsComparison() {
+  // Function này sẽ được gọi sau khi có dữ liệu
+  // Hiện tại chỉ là placeholder
+}
+
+/**
+ * Hiển thị so sánh giữa tháng hiện tại và tháng trước
+ */
+function displayMonthComparison(currentMonthData, previousMonthData) {
+  const comparisonContainer = document.getElementById('monthComparison');
+  if (!comparisonContainer) return;
+  
+  // Tính toán thay đổi
+  const incomeChange = currentMonthData.income - previousMonthData.income;
+  const expenseChange = currentMonthData.expense - previousMonthData.expense;
+  const balanceChange = (currentMonthData.income - currentMonthData.expense) - 
+                        (previousMonthData.income - previousMonthData.expense);
+  
+  const incomePercentage = previousMonthData.income > 0 
+    ? ((incomeChange / previousMonthData.income) * 100).toFixed(1) 
+    : 0;
+  const expensePercentage = previousMonthData.expense > 0 
+    ? ((expenseChange / previousMonthData.expense) * 100).toFixed(1) 
+    : 0;
+  
+  // Tạo HTML
+  comparisonContainer.innerHTML = `
+    <div class="chart-comparison">
+      <div class="comparison-header">
+        <div class="comparison-title">
+          <i class="fas fa-chart-line"></i> So sánh với tháng trước
+        </div>
+      </div>
+      <div class="comparison-stats">
+        <div class="comparison-stat">
+          <div class="comparison-label">Thu nhập</div>
+          <div class="comparison-value">${currentMonthData.income.toLocaleString('vi-VN')}đ</div>
+          <div class="comparison-change ${incomeChange >= 0 ? 'positive' : 'negative'}">
+            <i class="fas fa-${incomeChange >= 0 ? 'arrow-up' : 'arrow-down'}"></i>
+            ${Math.abs(incomePercentage)}% (${incomeChange >= 0 ? '+' : ''}${incomeChange.toLocaleString('vi-VN')}đ)
+          </div>
+        </div>
+        <div class="comparison-stat">
+          <div class="comparison-label">Chi tiêu</div>
+          <div class="comparison-value">${currentMonthData.expense.toLocaleString('vi-VN')}đ</div>
+          <div class="comparison-change ${expenseChange <= 0 ? 'positive' : 'negative'}">
+            <i class="fas fa-${expenseChange >= 0 ? 'arrow-up' : 'arrow-down'}"></i>
+            ${Math.abs(expensePercentage)}% (${expenseChange >= 0 ? '+' : ''}${expenseChange.toLocaleString('vi-VN')}đ)
+          </div>
+        </div>
+        <div class="comparison-stat">
+          <div class="comparison-label">Số dư</div>
+          <div class="comparison-value">${(currentMonthData.income - currentMonthData.expense).toLocaleString('vi-VN')}đ</div>
+          <div class="comparison-change ${balanceChange >= 0 ? 'positive' : 'negative'}">
+            <i class="fas fa-${balanceChange >= 0 ? 'arrow-up' : 'arrow-down'}"></i>
+            ${balanceChange >= 0 ? '+' : ''}${balanceChange.toLocaleString('vi-VN')}đ
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* ==========================================================================
+   ENHANCED INPUT VALIDATION
+   ========================================================================== */
+/**
+ * Validate số tiền nhập vào
+ */
+function validateAmount(amount) {
+  const numAmount = parseNumber(amount);
+  
+  if (isNaN(numAmount) || numAmount <= 0) {
+    return { valid: false, message: 'Số tiền phải lớn hơn 0!' };
+  }
+  
+  if (numAmount > 999999999999) {
+    return { valid: false, message: 'Số tiền quá lớn!' };
+  }
+  
+  return { valid: true };
+}
+
+/**
+ * Validate ngày nhập vào
+ */
+function validateDate(dateString) {
+  if (!dateString) {
+    return { valid: false, message: 'Vui lòng chọn ngày!' };
+  }
+  
+  const inputDate = new Date(dateString);
+  const today = new Date();
+  today.setHours(23, 59, 59, 999); // Set to end of day
+  
+  if (inputDate > today) {
+    return { valid: false, message: 'Không thể chọn ngày trong tương lai!' };
+  }
+  
+  // Kiểm tra ngày hợp lệ
+  if (isNaN(inputDate.getTime())) {
+    return { valid: false, message: 'Ngày không hợp lệ!' };
+  }
+  
+  return { valid: true };
+}
 });
