@@ -814,6 +814,11 @@ window.fetchMonthlyData = async function() {
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        layout: {
+          padding: {
+            top: 50
+          }
+        },
         barPercentage: 0.6,
         categoryPercentage: 0.8,
         scales: {
@@ -850,9 +855,24 @@ window.fetchMonthlyData = async function() {
             bodyFont: {
               family: 'Nunito, sans-serif'
             }
+          },
+          datalabels: {
+            anchor: 'end',
+            align: 'end',
+            color: '#94A3B8',
+            font: {
+              weight: 'bold',
+              size: 9
+            },
+            rotation: -90,
+            formatter: (value) => {
+              if (value === 0) return '';
+              return value.toLocaleString('vi-VN') + 'đ';
+            }
           }
         }
-      }
+      },
+      plugins: [ChartDataLabels]
     });
     
     // Hiển thị canvas sau khi vẽ xong
@@ -1925,7 +1945,7 @@ function drawCategoryMonthlyChart(data, categoryName, categoryColor) {
     window.categoryMonthlyChartInstance.destroy();
   }
   
-  const labels = data.map(item => `T${item.month}`);
+  const labels = data.map(item => `Tháng ${item.month}`);
   const amounts = data.map(item => item.amount);
   
   console.log('Labels:', labels);
@@ -1950,7 +1970,7 @@ function drawCategoryMonthlyChart(data, categoryName, categoryColor) {
         maintainAspectRatio: false,
         layout: {
           padding: {
-            top: 50
+            top: 60
           }
         },
         plugins: {
@@ -1984,6 +2004,11 @@ function drawCategoryMonthlyChart(data, categoryName, categoryColor) {
           x: {
             grid: {
               display: false
+            },
+            ticks: {
+              autoSkip: false,
+              maxRotation: 0,
+              minRotation: 0
             }
           }
         },
