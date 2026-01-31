@@ -933,8 +933,8 @@ label {
   width: 100% !important;
   height: auto !important;
   max-width: 600px !important;
-  min-height: 400px;
-  max-height: 500px;
+  min-height: 300px;
+  max-height: 380px;
   display: none;
   margin: 0.5rem auto 1rem;
   background: var(--card-bg);
@@ -1402,10 +1402,6 @@ label {
     font-size: 0.8rem;
   }
 
-  .pie-chart-wrapper {
-    max-width: 300px;
-  }
-
   .qr-image {
     width: 220px;
   }
@@ -1603,7 +1599,7 @@ label {
 
 #categoryMonthlyChart {
   width: 100% !important;
-  height: 400px !important;
+  height: 320px !important;
   padding-top: 10px;
 }
 
