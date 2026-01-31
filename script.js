@@ -1867,9 +1867,12 @@ async function showCategoryDetail(categoryName, categoryAmount, categoryColor) {
       currentCategoryData = cachedData.chartData;
       cachedCategoryTransactions = cachedData.transactions;
       
-      // Hiển thị canvas
+      // Tạo canvas mới
       const chartContainer = document.querySelector('#categoryDetailView > div:nth-child(3)');
       chartContainer.innerHTML = '<canvas id="categoryMonthlyChart"></canvas>';
+      
+      // Đợi canvas được render
+      await new Promise(resolve => setTimeout(resolve, 50));
       
       // Vẽ biểu đồ từ cache
       drawCategoryMonthlyChart(cachedData.chartData, categoryName, categoryColor);
@@ -1893,15 +1896,20 @@ async function showCategoryDetail(categoryName, categoryAmount, categoryColor) {
       document.getElementById('categoryTransactionsContainer').innerHTML = '';
       document.getElementById('paginationCategoryDetail').style.display = 'none';
       
-      // Lấy dữ liệu và vẽ biểu đồ
+      // Lấy dữ liệu chart
       await fetchCategoryMonthlyData(categoryName, categoryColor);
       
-      // Xóa loading và hiển thị canvas
+      // Lấy dữ liệu transactions
+      await fetchCategoryTransactions(categoryName);
+      
+      // Xóa loading và tạo canvas mới
       chartContainer.innerHTML = '<canvas id="categoryMonthlyChart"></canvas>';
       
-      // Vẽ lại biểu đồ với canvas mới
-      await fetchCategoryMonthlyData(categoryName, categoryColor);
-      await fetchCategoryTransactions(categoryName);
+      // Đợi một chút để canvas được render
+      await new Promise(resolve => setTimeout(resolve, 50));
+      
+      // Vẽ biểu đồ với canvas mới
+      drawCategoryMonthlyChart(currentCategoryData, categoryName, categoryColor);
       
       // Lưu vào cache
       categoryDetailsCache[cacheKey] = {
@@ -1973,8 +1981,7 @@ async function fetchCategoryMonthlyData(categoryName, categoryColor) {
     // Data đã có format đúng từ API: [{month: 1, amount: 1000}, ...]
     currentCategoryData = data;
     
-    // Vẽ biểu đồ
-    drawCategoryMonthlyChart(data, categoryName, categoryColor);
+    // KHÔNG vẽ biểu đồ ở đây - sẽ vẽ sau khi canvas sẵn sàng
     
   } catch (error) {
     console.error('Lỗi khi lấy dữ liệu category monthly:', error);
