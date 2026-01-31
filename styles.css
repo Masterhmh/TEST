@@ -244,7 +244,7 @@ body {
   overflow: hidden;
 }
 
-/* Hover effect with scale animation */
+/* Soft glow on active/hover - no scaleX wipe animation */
 .nav-item::before {
   content: '';
   position: absolute;
@@ -252,16 +252,15 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(255, 255, 255, 0.1);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform var(--transition-base);
+  background: rgba(255, 255, 255, 0.18);
   border-radius: var(--radius-md);
+  opacity: 0;
+  transition: opacity var(--transition-base);
 }
 
 .nav-item:hover::before,
 .nav-item.active::before {
-  transform: scaleX(1);
+  opacity: 1;
 }
 
 .nav-item i {
@@ -271,6 +270,26 @@ body {
 
 .nav-item:hover i {
   transform: scale(1.1);
+}
+
+/* Click flash: a bright overlay that fades out instantly */
+.nav-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.35);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.nav-item.flash::after {
+  animation: navFlash 300ms ease-out forwards;
+}
+
+@keyframes navFlash {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 .nav-item.active {
@@ -1585,6 +1604,7 @@ label {
 #categoryMonthlyChart {
   width: 100% !important;
   height: 350px !important;
+  padding-top: 10px;
 }
 
 #paginationCategoryDetail {
