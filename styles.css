@@ -1777,9 +1777,7 @@ textarea {
 
 #categoryMonthlyChart {
   width: 100% !important;
-  height: auto !important;
-  min-height: 300px;
-  max-height: 400px;
+  height: 300px !important;
 }
 
 #paginationCategoryDetail {
