@@ -215,11 +215,13 @@ window.openTab = function(tabId) {
   
   if (tabId === 'tab5') {
     const container = document.getElementById('keywordsContainer');
-    if (container) {
-      if (cachedKeywords) {
+    const placeholderTab5 = document.getElementById('placeholderTab5');
+    if (container && placeholderTab5) {
+      if (cachedKeywords && cachedKeywords.length > 0) {
         displayKeywords(cachedKeywords);
       } else {
         container.innerHTML = '';
+        placeholderTab5.style.display = 'block';
       }
     }
   }
@@ -1387,7 +1389,7 @@ function displaySearchResults(data) {
  * Lấy danh sách từ khóa từ API.
  */
 window.fetchKeywords = async function() {
-  showLoading(true, 'tab4');
+  showLoading(true, 'tab5');
   try {
     const targetUrl = `${apiUrl}?action=getKeywords&sheetId=${sheetId}`;
     const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
@@ -1400,7 +1402,7 @@ window.fetchKeywords = async function() {
     showToast("Lỗi khi lấy dữ liệu từ khóa: " + error.message, "error");
     displayKeywords({ error: true });
   } finally {
-    showLoading(false, 'tab4');
+    showLoading(false, 'tab5');
   }
 };
 
@@ -1410,7 +1412,7 @@ window.fetchKeywords = async function() {
  */
 function displayKeywords(data) {
   const container = document.getElementById('keywordsContainer');
-  const placeholder = document.getElementById('placeholderTab4');
+  const placeholder = document.getElementById('placeholderTab5');
   container.innerHTML = '';
 
   if (!data || data.error || !Array.isArray(data) || data.length === 0) {
@@ -1466,7 +1468,7 @@ window.addKeyword = async function() {
   const keywordsArray = keywordsInput.split(',').map(keyword => keyword.trim()).filter(keyword => keyword);
   const formattedKeywords = keywordsArray.join(', ');
 
-  showLoading(true, 'tab4');
+  showLoading(true, 'tab5');
   try {
     const finalUrl = proxyUrl + encodeURIComponent(apiUrl);
     const response = await fetch(finalUrl, {
@@ -1487,7 +1489,7 @@ window.addKeyword = async function() {
   } catch (error) {
     showToast("Lỗi khi thêm từ khóa: " + error.message, "error");
   } finally {
-    showLoading(false, 'tab4');
+    showLoading(false, 'tab5');
   }
 };
 
@@ -1514,7 +1516,7 @@ window.deleteKeyword = async function() {
   }
 
   try {
-    showLoading(true, 'tab4');
+    showLoading(true, 'tab5');
     const targetUrl = `${apiUrl}?action=getKeywords&sheetId=${sheetId}`;
     const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
     const response = await fetch(finalUrl);
@@ -1569,7 +1571,7 @@ window.deleteKeyword = async function() {
     console.error("Lỗi trong deleteKeyword:", error);
     showToast("Lỗi khi xóa từ khóa: " + error.message, "error");
   } finally {
-    showLoading(false, 'tab4');
+    showLoading(false, 'tab5');
   }
 };
 
