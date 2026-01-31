@@ -25,7 +25,6 @@
   <div class="top-nav">
     <div class="nav-item active" data-tab="tab1"><i class="fas fa-exchange-alt"></i><span>Giao dịch</span></div>
     <div class="nav-item" data-tab="tab2"><i class="fas fa-chart-pie"></i><span>Báo Cáo</span></div>
-    <div class="nav-item" data-tab="tab3"><i class="fas fa-receipt"></i><span>Liệt kê</span></div>
     <div class="nav-item" data-tab="tab4"><i class="fas fa-search"></i><span>Tìm kiếm</span></div>
     <div class="nav-item" data-tab="tab5"><i class="fas fa-tags"></i><span>Từ khóa</span></div>
     <div class="nav-item" data-tab="tab6"><i class="fas fa-info-circle"></i><span>Giới thiệu</span></div>
@@ -44,6 +43,7 @@
       <div id="successMessageTab1" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
       <div id="loadingTab1" style="display: none; text-align: center; margin: 1rem 0;">
         <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--primary-color);"></i>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary); font-weight: 600;">Đang tải dữ liệu, vui lòng chờ...</p>
       </div>
       <div class="input-group">
         <input type="date" id="transactionDate">
@@ -72,6 +72,7 @@
   <div id="successMessageTab2" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
   <div id="loadingTab2" style="display: none; text-align: center; margin: 1rem 0;">
     <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--primary-color);"></i>
+    <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary); font-weight: 600;">Đang tải dữ liệu, vui lòng chờ...</p>
   </div>
   <div class="input-group">
     Từ:
@@ -96,7 +97,7 @@
     <div class="stat-box balance"><div class="title">Số dư</div><div class="amount">0đ</div></div>
   </div>
   <p id="placeholderTab2" class="notification" style="margin-top: 1rem;">Dữ liệu báo cáo sẽ hiển thị ở đây</p>
-  <h1 id="chartTitleTab2" style="margin-top: 2rem; display: none;">BIỂU ĐỒ THU CHI THEO THÁNG</h1>
+  <h1 id="chartTitleTab2" style="margin-top: 2rem; display: none;">BIỂU ĐỒ SO SÁNH</h1>
   <canvas id="monthlyChart"></canvas>
   <div class="chart-container">
     <h1 id="pieChartTitleTab2" style="display: none;">CHI TIÊU THEO PHÂN LOẠI</h1>
@@ -116,7 +117,6 @@
     <div style="background: var(--card-bg); border-radius: 16px; padding: 15px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); margin-bottom: 1.5rem;">
       <canvas id="categoryMonthlyChart"></canvas>
     </div>
-    <h2 style="font-size: 1rem; color: var(--text-secondary); margin-bottom: 1rem; text-align: center;">Giao dịch trong tháng hiện tại</h2>
     <div class="transactions-list" id="categoryTransactionsContainer"></div>
     <div id="paginationCategoryDetail" style="display: none; margin-top: 1.5rem;">
       <button id="prevPageCategoryDetail" class="pagination-btn" disabled><i class="fas fa-chevron-left"></i> Trang trước</button>
@@ -126,37 +126,6 @@
   </div>
 </div>
     
-    <!-- Tab 3: Liệt Kê Chi Tiêu Theo Tháng -->
-    <div id="tab3" class="tab-content">
-      <h1>LIỆT KÊ CHI TIÊU THEO THÁNG</h1>
-      <p class="notification">Chọn tháng và ấn "Lọc" để xem danh sách chi tiêu trong tháng.</p>
-      <div id="errorMessageTab3" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
-      <div id="successMessageTab3" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
-      <div id="loadingTab3" style="display: none; text-align: center; margin: 1rem 0;">
-        <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--primary-color);"></i>
-      </div>
-      <div class="input-group">
-        <select id="monthSelect">
-          <option value="1">Tháng 1</option><option value="2">Tháng 2</option><option value="3">Tháng 3</option>
-          <option value="4">Tháng 4</option><option value="5">Tháng 5</option><option value="6">Tháng 6</option>
-          <option value="7">Tháng 7</option><option value="8">Tháng 8</option><option value="9">Tháng 9</option>
-          <option value="10">Tháng 10</option><option value="11">Tháng 11</option><option value="12">Tháng 12</option>
-        </select>
-        <button id="fetchExpensesBtn"><i class="fas fa-filter"></i> Lọc</button>
-      </div>
-      <div class="stats-container" id="monthlyExpenseSummary">
-        <div class="stat-box income"><div class="title">Thu nhập</div><div class="amount">0đ</div></div>
-        <div class="stat-box expense"><div class="title">Chi tiêu</div><div class="amount">0đ</div></div>
-        <div class="stat-box balance"><div class="title">Số dư</div><div class="amount">0đ</div></div>
-      </div>
-      <p id="placeholderTab3" class="notification" style="margin-top: 1rem;">Các giao dịch trong tháng sẽ hiển thị ở đây</p>
-      <div class="transactions-list" id="monthlyExpensesContainer"></div>
-      <div id="paginationMonthly" style="text-align: center; margin-top: 1rem; display: none;">
-        <button id="prevPageMonthly" class="pagination-btn" disabled><i class="fas fa-chevron-left"></i> Trang trước</button>
-        <span id="pageInfoMonthly"></span>
-        <button id="nextPageMonthly" class="pagination-btn">Trang sau <i class="fas fa-chevron-right"></i></button>
-      </div>
-    </div>
 
     <!-- Tab 4: Tìm Kiếm Giao Dịch -->
     <div id="tab4" class="tab-content">
@@ -166,6 +135,7 @@
       <div id="successMessageTab4" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
       <div id="loadingTab4" style="display: none; text-align: center; margin: 1rem 0;">
         <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--primary-color);"></i>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary); font-weight: 600;">Đang tải dữ liệu, vui lòng chờ...</p>
       </div>
       <div class="input-group vertical">
         <div class="input-field">
@@ -211,6 +181,7 @@
       <div id="successMessageTab5" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
       <div id="loadingTab5" style="display: none; text-align: center; margin: 1rem 0;">
         <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--primary-color);"></i>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary); font-weight: 600;">Đang tải dữ liệu, vui lòng chờ...</p>
       </div>
       <div class="input-group vertical">
         <div class="input-field">
