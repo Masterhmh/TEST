@@ -1725,6 +1725,14 @@ document.getElementById('nextPageSearch').addEventListener('click', () => {
   
   // Tự động điều chỉnh font size cho stat-box amount khi có thay đổi DOM
   setupStatBoxObserver();
+  
+  // Setup dark mode toggle
+  setupDarkModeToggle();
+  
+  // Setup charts comparison (nếu có dữ liệu)
+  setupChartsComparison();
+  
+  console.log('MiniApp Tài Chính đã sẵn sàng! ✨');
 });
 
 /**
@@ -1824,34 +1832,7 @@ function setupStatBoxObserver() {
    13. Khởi tạo ứng dụng (Application Initialization)
    Thiết lập các sự kiện và giá trị ban đầu khi trang được load.
    ========================================================================== */
-document.addEventListener('DOMContentLoaded', function() {
-  // Set ngày hiện tại cho date inputs
-  const today = new Date().toISOString().split('T')[0];
-  const transactionDateInput = document.getElementById('transactionDate');
-  if (transactionDateInput) {
-    transactionDateInput.value = today;
-  }
-  
-  // Set tháng hiện tại cho các select
-  const currentMonth = new Date().getMonth() + 1;
-  const startMonthSelect = document.getElementById('startMonth');
-  const endMonthSelect = document.getElementById('endMonth');
-  const searchMonthSelect = document.getElementById('searchMonth');
-  
-  if (startMonthSelect) startMonthSelect.value = currentMonth.toString();
-  if (endMonthSelect) endMonthSelect.value = currentMonth.toString();
-  
-  // Setup stat box observer
-  setupStatBoxObserver();
-  
-  // Setup dark mode toggle
-  setupDarkModeToggle();
-  
-  // Setup charts comparison (nếu có dữ liệu)
-  setupChartsComparison();
-  
-  console.log('MiniApp Tài Chính đã sẵn sàng! ✨');
-});
+// Đã gộp vào DOMContentLoaded đầu tiên ở dòng 1620
 
 /* ==========================================================================
    CATEGORY DETAIL VIEW - Click vào legend để xem chi tiết
