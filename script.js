@@ -574,9 +574,7 @@ async function saveTransaction(updatedTransaction) {
     const activeTab = document.querySelector('.tab-content.active')?.id;
     if (activeTab === 'tab1') {
       await window.fetchTransactions();
-    } else if (activeTab === 'tab5') {
-      await window.fetchMonthlyExpenses();
-    } else if (activeTab === 'tab6') {
+    } else if (activeTab === 'tab4') {
       await window.searchTransactions();
     }
   } catch (error) {
@@ -624,9 +622,7 @@ async function addTransaction(newTransaction) {
       const transactionDateInput = document.getElementById('transactionDate');
       transactionDateInput.value = formattedDateForInput; // Cập nhật giá trị input
       await window.fetchTransactions(); // Tải dữ liệu cho ngày được chọn
-    } else if (activeTab === 'tab5') {
-      await window.fetchMonthlyExpenses();
-    } else if (activeTab === 'tab6') {
+    } else if (activeTab === 'tab4') {
       await window.searchTransactions();
     }
   } catch (error) {
@@ -706,9 +702,7 @@ async function deleteTransaction(transactionId) {
       cachedSearchResults = null;
       if (activeTab === 'tab1') {
         await window.fetchTransactions();
-      } else if (activeTab === 'tab5') {
-        await window.fetchMonthlyExpenses();
-      } else if (activeTab === 'tab6') {
+      } else if (activeTab === 'tab4') {
         await window.searchTransactions();
       }
     } catch (error) {
@@ -1550,7 +1544,14 @@ document.addEventListener('DOMContentLoaded', function() {
   // Gán sự kiện cho các tab điều hướng
   const navItems = document.querySelectorAll('.nav-item');
   navItems.forEach(item => {
-    item.addEventListener('click', () => window.openTab(item.getAttribute('data-tab')));
+    item.addEventListener('click', () => {
+      // Trigger flash animation
+      item.classList.remove('flash');
+      void item.offsetWidth; // force reflow
+      item.classList.add('flash');
+      item.addEventListener('animationend', () => item.classList.remove('flash'), { once: true });
+      window.openTab(item.getAttribute('data-tab'));
+    });
   });
 
   // Gán sự kiện cho các nút chức năng
@@ -1945,25 +1946,29 @@ function drawCategoryMonthlyChart(data, categoryName, categoryColor) {
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        layout: {
+          padding: {
+            top: 30
+          }
+        },
         plugins: {
           legend: {
             display: false
           },
           datalabels: {
-            anchor: 'center',
-            align: 'center',
-            color: '#FFFFFF',
+            anchor: 'end',
+            align: 'end',
+            color: function(context) {
+              // Use dark color for better visibility against white background above bars
+              return '#1E293B';
+            },
             font: {
               weight: 'bold',
-              size: 11
+              size: 10
             },
+            rotation: -90,
             formatter: (value) => {
               if (value === 0) return '';
-              if (value >= 1000000) {
-                return (value / 1000000).toFixed(1) + 'tr';
-              } else if (value >= 1000) {
-                return (value / 1000).toFixed(0) + 'k';
-              }
               return value.toLocaleString('vi-VN') + 'đ';
             }
           }
