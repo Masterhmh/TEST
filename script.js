@@ -198,6 +198,21 @@ window.openTab = function(tabId) {
   document.getElementById(tabId).classList.add('active');
   document.querySelector(`.nav-item[data-tab="${tabId}"]`).classList.add('active');
   
+  if (tabId === 'tab4') {
+    const container = document.getElementById('searchResultsContainer');
+    const placeholderTab4 = document.getElementById('placeholderTab4');
+    const paginationDiv = document.getElementById('paginationSearch');
+    if (container && placeholderTab4) {
+      if (cachedSearchResults && cachedSearchResults.transactions && cachedSearchResults.transactions.length > 0) {
+        displaySearchResults(cachedSearchResults.transactions);
+      } else {
+        container.innerHTML = '';
+        placeholderTab4.style.display = 'block';
+        if (paginationDiv) paginationDiv.style.display = 'none';
+      }
+    }
+  }
+  
   if (tabId === 'tab5') {
     const container = document.getElementById('keywordsContainer');
     if (container) {
