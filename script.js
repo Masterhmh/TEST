@@ -198,13 +198,13 @@ window.openTab = function(tabId) {
   document.getElementById(tabId).classList.add('active');
   document.querySelector(`.nav-item[data-tab="${tabId}"]`).classList.add('active');
   
-  if (tabId === 'tab4') {
+  if (tabId === 'tab5') {
     const container = document.getElementById('keywordsContainer');
     if (container) {
       if (cachedKeywords) {
         displayKeywords(cachedKeywords);
       } else {
-        container.innerHTML = '<div>Vui lòng nhấn "Tải dữ liệu" để xem danh sách từ khóa.</div>';
+        container.innerHTML = '';
       }
     }
   }
@@ -816,7 +816,7 @@ window.fetchMonthlyData = async function() {
         maintainAspectRatio: false,
         layout: {
           padding: {
-            top: 50
+            top: 65
           }
         },
         barPercentage: 0.6,
@@ -2007,8 +2007,8 @@ function drawCategoryMonthlyChart(data, categoryName, categoryColor) {
             },
             ticks: {
               autoSkip: false,
-              maxRotation: 0,
-              minRotation: 0
+              maxRotation: 45,
+              minRotation: 45
             }
           }
         },
