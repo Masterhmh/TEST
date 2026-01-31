@@ -268,12 +268,12 @@ body {
 
 .nav-item i {
   font-size: 1.2rem;
-  transition: transform var(--transition-fast);
+  transition: transform var(--transition-fast), filter var(--transition-fast);
   position: relative;
   z-index: 1;
 }
 
-.nav-item:hover i {
+.nav-item:hover:not(.active) i {
   transform: scale(1.08);
 }
 
@@ -310,38 +310,13 @@ body {
 
 .nav-item.active {
   color: #FFFFFF;
-  position: relative;
+  font-weight: 700;
 }
 
-/* Dot indicator for active tab - positioned at top-left of icon */
-.nav-item.active i::before {
-  content: '';
-  position: absolute;
-  top: -4px;
-  left: -4px;
-  width: 6px;
-  height: 6px;
-  background: #FFFFFF;
-  border-radius: 50%;
-  box-shadow: 0 0 6px rgba(255, 255, 255, 0.8),
-              0 0 12px rgba(255, 255, 255, 0.4);
-  animation: dotPulse 2s ease-in-out infinite;
-}
-
-@keyframes dotPulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.2);
-    opacity: 0.8;
-  }
-}
-
-/* Reset hover glow for non-active items */
-.nav-item:not(.active)::before {
-  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+/* Icon active: to hơn + sáng hơn với drop shadow */
+.nav-item.active i {
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
 }
 
 .nav-item span {
