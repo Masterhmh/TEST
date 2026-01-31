@@ -919,27 +919,27 @@ label {
 
 .pie-chart-wrapper {
   width: 100%;
-  max-width: 500px;
+  max-width: 600px;
   margin: 0.5rem auto;
   aspect-ratio: 1 / 1;
   position: relative;
   background: var(--card-bg);
   border-radius: 16px;
-  padding: 10px;
+  padding: 15px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
 #monthlyChart {
   width: 100% !important;
   height: auto !important;
-  max-width: 500px !important;
-  min-height: 350px;
-  max-height: 450px;
+  max-width: 600px !important;
+  min-height: 400px;
+  max-height: 500px;
   display: none;
   margin: 0.5rem auto 1rem;
   background: var(--card-bg);
   border-radius: 16px;
-  padding: 10px;
+  padding: 15px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
@@ -1603,7 +1603,7 @@ label {
 
 #categoryMonthlyChart {
   width: 100% !important;
-  height: 350px !important;
+  height: 400px !important;
   padding-top: 10px;
 }
 
@@ -1638,4 +1638,16 @@ label {
   font-size: 0.9rem;
   font-weight: 600;
   margin-top: 0.5rem;
+}
+
+/* Category detail chart container with consistent sizing */
+#categoryDetailView > div:nth-child(3) {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
