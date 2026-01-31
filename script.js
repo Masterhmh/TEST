@@ -1850,31 +1850,26 @@ async function fetchCategoryMonthlyData(categoryName, categoryColor) {
     const endMonth = cachedChartData.endMonth;
     const year = new Date().getFullYear();
     
-    // Gọi API để lấy chi tiêu theo category cho nhiều tháng
-    const targetUrl = `${apiUrl}?action=getExpensesByCategoryForMonths&category=${encodeURIComponent(categoryName)}&startMonth=${startMonth}&endMonth=${endMonth}&year=${year}&sheetId=${sheetId}`;
+    // Gọi API để lấy dữ liệu theo tháng cho category
+    const targetUrl = `${apiUrl}?action=getCategoryMonthlyData&category=${encodeURIComponent(categoryName)}&startMonth=${startMonth}&endMonth=${endMonth}&year=${year}&sheetId=${sheetId}`;
     const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
+    
+    console.log('Fetching category monthly data:', targetUrl);
+    
     const response = await fetch(finalUrl);
     const data = await response.json();
+    
+    console.log('Category monthly data response:', data);
     
     if (data.error) {
       throw new Error(data.error);
     }
     
-    // Chuyển đổi dữ liệu từ API thành format cho chart
-    // API trả về array các object {month, amount}
-    const categoryMonthlyData = [];
-    for (let m = startMonth; m <= endMonth; m++) {
-      const monthData = data.find(item => item.month === m);
-      categoryMonthlyData.push({
-        month: m,
-        amount: monthData ? monthData.amount : 0
-      });
-    }
-    
-    currentCategoryData = categoryMonthlyData;
+    // Data đã có format đúng từ API: [{month: 1, amount: 1000}, ...]
+    currentCategoryData = data;
     
     // Vẽ biểu đồ
-    drawCategoryMonthlyChart(categoryMonthlyData, categoryName, categoryColor);
+    drawCategoryMonthlyChart(data, categoryName, categoryColor);
     
   } catch (error) {
     console.error('Lỗi khi lấy dữ liệu category monthly:', error);
@@ -1886,13 +1881,29 @@ async function fetchCategoryMonthlyData(categoryName, categoryColor) {
  * Vẽ biểu đồ cột theo tháng cho category
  */
 function drawCategoryMonthlyChart(data, categoryName, categoryColor) {
-  const ctx = document.getElementById('categoryMonthlyChart').getContext('2d');
-  
-  console.log('Drawing category chart for:', categoryName);
+  console.log('=== drawCategoryMonthlyChart START ===');
+  console.log('Category:', categoryName);
+  console.log('Color:', categoryColor);
   console.log('Data:', data);
+  
+  const canvas = document.getElementById('categoryMonthlyChart');
+  if (!canvas) {
+    console.error('Canvas categoryMonthlyChart not found!');
+    return;
+  }
+  
+  const ctx = canvas.getContext('2d');
+  if (!ctx) {
+    console.error('Cannot get 2d context from canvas!');
+    return;
+  }
+  
+  console.log('Canvas:', canvas);
+  console.log('Context:', ctx);
   
   // Xóa chart cũ nếu có
   if (window.categoryMonthlyChartInstance) {
+    console.log('Destroying old chart instance');
     window.categoryMonthlyChartInstance.destroy();
   }
   
@@ -1902,68 +1913,75 @@ function drawCategoryMonthlyChart(data, categoryName, categoryColor) {
   console.log('Labels:', labels);
   console.log('Amounts:', amounts);
   
-  window.categoryMonthlyChartInstance = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: [{
-        label: categoryName,
-        data: amounts,
-        backgroundColor: categoryColor + 'CC',
-        borderColor: categoryColor,
-        borderWidth: 2,
-        borderRadius: 8
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          display: false
-        },
-        datalabels: {
-          anchor: 'end',
-          align: 'top',
-          color: categoryColor,
-          font: {
-            weight: 'bold',
-            size: 11
-          },
-          formatter: (value) => {
-            if (value === 0) return '';
-            if (value >= 1000000) {
-              return (value / 1000000).toFixed(1) + 'tr';
-            } else if (value >= 1000) {
-              return (value / 1000).toFixed(0) + 'k';
-            }
-            return value.toLocaleString('vi-VN') + 'đ';
-          }
-        }
+  try {
+    window.categoryMonthlyChartInstance = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: categoryName,
+          data: amounts,
+          backgroundColor: categoryColor + 'CC',
+          borderColor: categoryColor,
+          borderWidth: 2,
+          borderRadius: 8
+        }]
       },
-      scales: {
-        y: {
-          beginAtZero: true,
-          ticks: {
-            callback: function(value) {
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          },
+          datalabels: {
+            anchor: 'end',
+            align: 'top',
+            color: categoryColor,
+            font: {
+              weight: 'bold',
+              size: 11
+            },
+            formatter: (value) => {
+              if (value === 0) return '';
               if (value >= 1000000) {
                 return (value / 1000000).toFixed(1) + 'tr';
               } else if (value >= 1000) {
                 return (value / 1000).toFixed(0) + 'k';
               }
-              return value;
+              return value.toLocaleString('vi-VN') + 'đ';
             }
           }
         },
-        x: {
-          grid: {
-            display: false
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                if (value >= 1000000) {
+                  return (value / 1000000).toFixed(1) + 'tr';
+                } else if (value >= 1000) {
+                  return (value / 1000).toFixed(0) + 'k';
+                }
+                return value;
+              }
+            }
+          },
+          x: {
+            grid: {
+              display: false
+            }
           }
         }
-      }
-    },
-    plugins: [ChartDataLabels]
-  });
+      },
+      plugins: [ChartDataLabels]
+    });
+    
+    console.log('Chart created successfully:', window.categoryMonthlyChartInstance);
+    console.log('=== drawCategoryMonthlyChart END ===');
+  } catch (error) {
+    console.error('Error creating chart:', error);
+  }
 }
 
 /**
