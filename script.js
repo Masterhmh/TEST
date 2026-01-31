@@ -1850,43 +1850,24 @@ async function fetchCategoryMonthlyData(categoryName, categoryColor) {
     const endMonth = cachedChartData.endMonth;
     const year = new Date().getFullYear();
     
-    // Gọi API để lấy giao dịch theo category
-    const targetUrl = `${apiUrl}?action=getTransactionsByCategory&category=${encodeURIComponent(categoryName)}&startMonth=${startMonth}&endMonth=${endMonth}&year=${year}&sheetId=${sheetId}`;
+    // Gọi API để lấy chi tiêu theo category cho nhiều tháng
+    const targetUrl = `${apiUrl}?action=getExpensesByCategoryForMonths&category=${encodeURIComponent(categoryName)}&startMonth=${startMonth}&endMonth=${endMonth}&year=${year}&sheetId=${sheetId}`;
     const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
     const response = await fetch(finalUrl);
-    const transactions = await response.json();
+    const data = await response.json();
     
-    if (transactions.error) {
-      throw new Error(transactions.error);
+    if (data.error) {
+      throw new Error(data.error);
     }
     
-    // Tính tổng theo tháng từ danh sách giao dịch
-    const monthlyTotals = {};
-    for (let m = startMonth; m <= endMonth; m++) {
-      monthlyTotals[m] = 0;
-    }
-    
-    transactions.forEach(transaction => {
-      if (transaction.date && transaction.amount) {
-        const dateParts = transaction.date.split('/');
-        if (dateParts.length === 3) {
-          const month = parseInt(dateParts[1]);
-          if (month >= startMonth && month <= endMonth) {
-            const amount = typeof transaction.amount === 'string' 
-              ? parseInt(transaction.amount.replace(/[^0-9]/g, '')) || 0
-              : transaction.amount;
-            monthlyTotals[month] += amount;
-          }
-        }
-      }
-    });
-    
-    // Tạo mảng dữ liệu
+    // Chuyển đổi dữ liệu từ API thành format cho chart
+    // API trả về array các object {month, amount}
     const categoryMonthlyData = [];
     for (let m = startMonth; m <= endMonth; m++) {
+      const monthData = data.find(item => item.month === m);
       categoryMonthlyData.push({
         month: m,
-        amount: monthlyTotals[m]
+        amount: monthData ? monthData.amount : 0
       });
     }
     
