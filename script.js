@@ -25,6 +25,8 @@ const expensesPerPage = 10;
 let cachedSearchResults = null;
 let currentPageSearch = 1;
 const searchPerPage = 10;
+// Cache chi tiết cho từng category (để tránh load lại khi click vào legend nhiều lần)
+let categoryDetailsCache = {};
 
 /* ==========================================================================
    2. Hàm tiện ích (Utility Functions)
@@ -905,6 +907,9 @@ window.fetchMonthlyData = async function() {
       startMonth: startMonth,
       endMonth: endMonth
     };
+    
+    // Xóa cache category cũ khi lọc lại dữ liệu
+    categoryDetailsCache = {};
     
     drawMonthlyPieChart(expenseCategoryData);
   } catch (error) {
@@ -1830,32 +1835,64 @@ async function showCategoryDetail(categoryName, categoryAmount, categoryColor) {
     const detailView = document.getElementById('categoryDetailView');
     detailView.style.display = 'block';
     
-    // Hiển thị loading indicator
-    const chartContainer = document.querySelector('#categoryDetailView > div:nth-child(3)');
-    chartContainer.innerHTML = `
-      <div class="category-loading">
-        <i class="fas fa-spinner fa-spin"></i>
-        <div class="category-loading-text">Đang tải dữ liệu, vui lòng chờ...</div>
-      </div>
-    `;
-    
-    // Ẩn danh sách giao dịch tạm thời
-    document.getElementById('categoryTransactionsContainer').innerHTML = '';
-    document.getElementById('paginationCategoryDetail').style.display = 'none';
-    
     // Cập nhật tiêu đề
     document.getElementById('categoryDetailTitle').textContent = categoryName;
     document.getElementById('categoryDetailTitle').style.color = categoryColor;
     
-    // Lấy dữ liệu và vẽ biểu đồ
-    await fetchCategoryMonthlyData(categoryName, categoryColor);
+    // Kiểm tra cache trước
+    const cacheKey = categoryName;
+    if (categoryDetailsCache[cacheKey]) {
+      console.log(`✅ Sử dụng cache cho category: ${categoryName}`);
+      
+      // Lấy dữ liệu từ cache
+      const cachedData = categoryDetailsCache[cacheKey];
+      currentCategoryData = cachedData.chartData;
+      cachedCategoryTransactions = cachedData.transactions;
+      
+      // Hiển thị canvas
+      const chartContainer = document.querySelector('#categoryDetailView > div:nth-child(3)');
+      chartContainer.innerHTML = '<canvas id="categoryMonthlyChart"></canvas>';
+      
+      // Vẽ biểu đồ từ cache
+      drawCategoryMonthlyChart(cachedData.chartData, categoryName, categoryColor);
+      
+      // Hiển thị danh sách giao dịch từ cache
+      displayCategoryTransactions(cachedData.transactions);
+      
+    } else {
+      console.log(`🔄 Loading dữ liệu mới cho category: ${categoryName}`);
+      
+      // Hiển thị loading indicator
+      const chartContainer = document.querySelector('#categoryDetailView > div:nth-child(3)');
+      chartContainer.innerHTML = `
+        <div class="category-loading">
+          <i class="fas fa-spinner fa-spin"></i>
+          <div class="category-loading-text">Đang tải dữ liệu, vui lòng chờ...</div>
+        </div>
+      `;
+      
+      // Ẩn danh sách giao dịch tạm thời
+      document.getElementById('categoryTransactionsContainer').innerHTML = '';
+      document.getElementById('paginationCategoryDetail').style.display = 'none';
+      
+      // Lấy dữ liệu và vẽ biểu đồ
+      await fetchCategoryMonthlyData(categoryName, categoryColor);
+      
+      // Xóa loading và hiển thị canvas
+      chartContainer.innerHTML = '<canvas id="categoryMonthlyChart"></canvas>';
+      
+      // Vẽ lại biểu đồ với canvas mới
+      await fetchCategoryMonthlyData(categoryName, categoryColor);
+      await fetchCategoryTransactions(categoryName);
+      
+      // Lưu vào cache
+      categoryDetailsCache[cacheKey] = {
+        chartData: currentCategoryData,
+        transactions: cachedCategoryTransactions
+      };
+      console.log(`💾 Đã lưu cache cho category: ${categoryName}`);
+    }
     
-    // Xóa loading và hiển thị canvas
-    chartContainer.innerHTML = '<canvas id="categoryMonthlyChart"></canvas>';
-    
-    // Vẽ lại biểu đồ với canvas mới
-    await fetchCategoryMonthlyData(categoryName, categoryColor);
-    await fetchCategoryTransactions(categoryName);
   } catch (error) {
     console.error('Lỗi khi hiển thị chi tiết category:', error);
     showToast('Lỗi khi tải dữ liệu: ' + error.message, 'error');
@@ -1864,13 +1901,13 @@ async function showCategoryDetail(categoryName, categoryAmount, categoryColor) {
 }
 
 /**
- * Quay lại view chính và xóa cache
+ * Quay lại view chính (KHÔNG xóa cache để tái sử dụng)
  */
 function backToCategoryList() {
   document.getElementById('categoryDetailView').style.display = 'none';
   document.querySelector('.chart-container').style.display = 'flex';
   
-  // Xóa cache và reset
+  // Reset UI state (KHÔNG xóa categoryDetailsCache)
   currentCategoryDetailPage = 1;
   cachedCategoryTransactions = null;
   currentCategory = null;
