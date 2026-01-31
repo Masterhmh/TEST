@@ -231,8 +231,8 @@ body {
   align-items: center;
   justify-content: center;
   gap: 2px;
-  padding: 6px 8px;
-  color: rgba(255, 255, 255, 0.7);
+  padding: 8px 8px;
+  color: rgba(255, 255, 255, 0.5);
   font-size: 0.7rem;
   font-weight: 600;
   cursor: pointer;
@@ -246,7 +246,7 @@ body {
 /* Hover effect - scale nhẹ cho non-active items */
 .nav-item:hover:not(.active) {
   transform: scale(1.05);
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .nav-item i {
