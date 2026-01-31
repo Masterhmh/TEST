@@ -1789,13 +1789,24 @@ let currentCategoryData = null;
 async function showCategoryDetail(categoryName, categoryAmount, categoryColor) {
   currentCategory = categoryName;
   
-  // Hiển thị loading
-  showLoading(true, 'tab2');
-  
   try {
     // Ẩn chart container và hiển thị detail view
     document.querySelector('.chart-container').style.display = 'none';
-    document.getElementById('categoryDetailView').style.display = 'block';
+    const detailView = document.getElementById('categoryDetailView');
+    detailView.style.display = 'block';
+    
+    // Hiển thị loading indicator
+    const chartContainer = document.querySelector('#categoryDetailView > div:nth-child(3)');
+    chartContainer.innerHTML = `
+      <div class="category-loading">
+        <i class="fas fa-spinner fa-spin"></i>
+        <div class="category-loading-text">Đang tải dữ liệu, vui lòng chờ...</div>
+      </div>
+    `;
+    
+    // Ẩn danh sách giao dịch tạm thời
+    document.getElementById('categoryTransactionsContainer').innerHTML = '';
+    document.getElementById('paginationCategoryDetail').style.display = 'none';
     
     // Cập nhật tiêu đề
     document.getElementById('categoryDetailTitle').textContent = categoryName;
@@ -1803,13 +1814,17 @@ async function showCategoryDetail(categoryName, categoryAmount, categoryColor) {
     
     // Lấy dữ liệu và vẽ biểu đồ
     await fetchCategoryMonthlyData(categoryName, categoryColor);
+    
+    // Xóa loading và hiển thị canvas
+    chartContainer.innerHTML = '<canvas id="categoryMonthlyChart"></canvas>';
+    
+    // Vẽ lại biểu đồ với canvas mới
+    await fetchCategoryMonthlyData(categoryName, categoryColor);
     await fetchCategoryTransactions(categoryName);
   } catch (error) {
     console.error('Lỗi khi hiển thị chi tiết category:', error);
     showToast('Lỗi khi tải dữ liệu: ' + error.message, 'error');
     backToCategoryList();
-  } finally {
-    showLoading(false, 'tab2');
   }
 }
 
@@ -1924,7 +1939,7 @@ function drawCategoryMonthlyChart(data, categoryName, categoryColor) {
           backgroundColor: categoryColor + 'CC',
           borderColor: categoryColor,
           borderWidth: 2,
-          borderRadius: 8
+          borderRadius: 0
         }]
       },
       options: {
@@ -1935,9 +1950,9 @@ function drawCategoryMonthlyChart(data, categoryName, categoryColor) {
             display: false
           },
           datalabels: {
-            anchor: 'end',
-            align: 'top',
-            color: categoryColor,
+            anchor: 'center',
+            align: 'center',
+            color: '#FFFFFF',
             font: {
               weight: 'bold',
               size: 11
@@ -1958,12 +1973,7 @@ function drawCategoryMonthlyChart(data, categoryName, categoryColor) {
             beginAtZero: true,
             ticks: {
               callback: function(value) {
-                if (value >= 1000000) {
-                  return (value / 1000000).toFixed(1) + 'tr';
-                } else if (value >= 1000) {
-                  return (value / 1000).toFixed(0) + 'k';
-                }
-                return value;
+                return value.toLocaleString('vi-VN') + 'đ';
               }
             }
           },
