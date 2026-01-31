@@ -241,29 +241,12 @@ body {
   white-space: nowrap;
   min-width: 60px;
   position: relative;
-  overflow: hidden;
 }
 
-/* Soft Glow Layer 1 - Background glow on hover/active */
-.nav-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
-  border-radius: var(--radius-md);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.nav-item:hover::before {
-  opacity: 1;
-}
-
-.nav-item.active::before {
-  opacity: 0.8;
+/* Hover effect - scale nhẹ cho non-active items */
+.nav-item:hover:not(.active) {
+  transform: scale(1.05);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .nav-item i {
@@ -277,35 +260,9 @@ body {
   transform: scale(1.08);
 }
 
-/* Soft Glow Layer 2 - Click effect (gentle pulse) */
-.nav-item::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: var(--radius-md);
-  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.3) 0%, transparent 60%);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.nav-item.flash::after {
-  animation: softGlowPulse 0.5s ease-out forwards;
-}
-
-@keyframes softGlowPulse {
-  0% { 
-    opacity: 0;
-    transform: scale(0.8);
-  }
-  50% { 
-    opacity: 1;
-    transform: scale(1);
-  }
-  100% { 
-    opacity: 0;
-    transform: scale(1.2);
-  }
+/* Click feedback - simple scale */
+.nav-item:active {
+  transform: scale(0.98);
 }
 
 .nav-item.active {
