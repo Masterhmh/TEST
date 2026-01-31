@@ -1584,11 +1584,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const navItems = document.querySelectorAll('.nav-item');
   navItems.forEach(item => {
     item.addEventListener('click', () => {
-      // Trigger flash animation
-      item.classList.remove('flash');
-      void item.offsetWidth; // force reflow
-      item.classList.add('flash');
-      item.addEventListener('animationend', () => item.classList.remove('flash'), { once: true });
       window.openTab(item.getAttribute('data-tab'));
     });
   });
