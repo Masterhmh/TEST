@@ -244,7 +244,7 @@ body {
   overflow: hidden;
 }
 
-/* Soft glow on active/hover - no scaleX wipe animation */
+/* Soft Glow Layer 1 - Background glow on hover/active */
 .nav-item::before {
   content: '';
   position: absolute;
@@ -252,55 +252,73 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(255, 255, 255, 0.18);
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
   border-radius: var(--radius-md);
   opacity: 0;
-  transition: opacity var(--transition-base);
+  transition: opacity 0.3s ease;
 }
 
-.nav-item:hover::before,
-.nav-item.active::before {
+.nav-item:hover::before {
   opacity: 1;
+}
+
+.nav-item.active::before {
+  opacity: 0.8;
 }
 
 .nav-item i {
   font-size: 1.2rem;
   transition: transform var(--transition-fast);
+  position: relative;
+  z-index: 1;
 }
 
 .nav-item:hover i {
-  transform: scale(1.1);
+  transform: scale(1.08);
 }
 
-/* Click flash: a bright overlay that fades out instantly */
+/* Soft Glow Layer 2 - Click effect (gentle pulse) */
 .nav-item::after {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.35);
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.3) 0%, transparent 60%);
   opacity: 0;
   pointer-events: none;
 }
 
 .nav-item.flash::after {
-  animation: navFlash 300ms ease-out forwards;
+  animation: softGlowPulse 0.5s ease-out forwards;
 }
 
-@keyframes navFlash {
-  0%   { opacity: 1; }
-  100% { opacity: 0; }
+@keyframes softGlowPulse {
+  0% { 
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  50% { 
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% { 
+    opacity: 0;
+    transform: scale(1.2);
+  }
 }
 
 .nav-item.active {
   color: #FFFFFF;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(10px);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
 }
 
 .nav-item span {
   font-size: 0.68rem;
   letter-spacing: 0.3px;
+  position: relative;
+  z-index: 1;
 }
 
 /* ============================================================================
@@ -372,28 +390,28 @@ button {
   font-family: inherit;
 }
 
-/* Ripple effect */
+/* Soft Glow Effect - Ánh sáng mềm từ trong ra */
 button::before {
   content: '';
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.25) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  border-radius: var(--radius-md);
 }
 
 button:hover::before {
-  width: 300px;
-  height: 300px;
+  opacity: 1;
 }
 
 button:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-hover);
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.25), 
+              0 0 20px rgba(99, 102, 241, 0.15);
 }
 
 button:active {
@@ -415,14 +433,32 @@ button i {
   background: var(--gradient-success) !important;
 }
 
+.btn-success:hover {
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.25), 
+              0 0 20px rgba(16, 185, 129, 0.15) !important;
+}
+
 .btn-danger {
   background: var(--gradient-danger) !important;
+}
+
+.btn-danger:hover {
+  box-shadow: 0 8px 24px rgba(244, 63, 94, 0.25), 
+              0 0 20px rgba(244, 63, 94, 0.15) !important;
 }
 
 .cancel-btn {
   background: var(--card-bg) !important;
   color: var(--text-color) !important;
   border: 2px solid var(--border-color) !important;
+}
+
+.cancel-btn::before {
+  background: radial-gradient(circle at center, rgba(100, 116, 139, 0.15) 0%, transparent 70%) !important;
+}
+
+.cancel-btn:hover {
+  box-shadow: 0 4px 12px rgba(100, 116, 139, 0.15) !important;
 }
 
 .save-btn {
