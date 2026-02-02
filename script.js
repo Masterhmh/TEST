@@ -358,14 +358,17 @@ function parseNumber(value) {
  * @param {string} tabId - ID của tab cần mở (tab1, tab2, ...).
  */
 window.openTab = async function(tabId) {
+  console.log('🔄 openTab called with:', tabId);
   const tabs = document.querySelectorAll('.nav-item');
   const contents = document.querySelectorAll('.tab-content');
+  console.log('📊 Tabs found:', tabs.length, 'Contents found:', contents.length);
   tabs.forEach(tab => tab.classList.remove('active'));
   contents.forEach(content => content.classList.remove('active'));
   
   // ✨ Load Chart.js nếu mở tab báo cáo
   if (tabId === 'tab2' && !chartJsLoaded) {
     try {
+      console.log('📊 Loading Chart.js...');
       await loadChartJS();
     } catch (error) {
       console.error('Failed to load ChartJS:', error);
@@ -373,8 +376,14 @@ window.openTab = async function(tabId) {
     }
   }
   
-  document.getElementById(tabId).classList.add('active');
-  document.querySelector(`.nav-item[data-tab="${tabId}"]`).classList.add('active');
+  const tabContent = document.getElementById(tabId);
+  const navItem = document.querySelector(`.nav-item[data-tab="${tabId}"]`);
+  console.log('🔍 Tab content:', tabContent, 'Nav item:', navItem);
+  
+  if (tabContent) tabContent.classList.add('active');
+  if (navItem) navItem.classList.add('active');
+  
+  console.log('✅ openTab completed for:', tabId);
   
   if (tabId === 'tab4') {
     const container = document.getElementById('searchResultsContainer');
@@ -1803,10 +1812,14 @@ window.deleteKeyword = async function() {
    Thiết lập sự kiện và giá trị mặc định khi tải trang.
    ========================================================================== */
 document.addEventListener('DOMContentLoaded', function() {
+  console.log('🚀 DOMContentLoaded fired');
+  
   // Gán sự kiện cho các tab điều hướng
   const navItems = document.querySelectorAll('.nav-item');
+  console.log('📍 Số nav items tìm thấy:', navItems.length);
   navItems.forEach(item => {
     item.addEventListener('click', () => {
+      console.log('🖱️ Click vào tab:', item.getAttribute('data-tab'));
       window.openTab(item.getAttribute('data-tab'));
     });
   });
@@ -1891,33 +1904,47 @@ document.getElementById('nextPageSearch').addEventListener('click', () => {
   }
 
   // Thiết lập ngày mặc định cho các ô nhập
+  console.log('📅 Bắt đầu thiết lập ngày mặc định');
   const today = new Date();
   const formattedToday = formatDateToYYYYMMDD(today);
+  console.log('📅 Ngày hiện tại format:', formattedToday);
   const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
   const formattedFirstDay = formatDateToYYYYMMDD(firstDayOfMonth);
 
-  // Mở tab mặc định trước
-  window.openTab('tab1');
+  // ✨ SET NGÀY NGAY LẬP TỨC - KHÔNG DÙNG setTimeout
+  const transactionDateInput = document.getElementById('transactionDate');
+  console.log('🔍 Tìm input transactionDate:', transactionDateInput);
+  if (transactionDateInput) {
+    transactionDateInput.value = formattedToday;
+    console.log('✅ Đã set giá trị:', transactionDateInput.value);
+    
+    // Verify lại sau 200ms
+    setTimeout(() => {
+      console.log('🔍 Verify giá trị sau 200ms:', transactionDateInput.value);
+      if (!transactionDateInput.value) {
+        console.log('⚠️ Giá trị bị mất, set lại');
+        transactionDateInput.value = formattedToday;
+      }
+    }, 200);
+  } else {
+    console.error('❌ Không tìm thấy element transactionDate');
+  }
 
-  // ✨ SET NGÀY SAU KHI TAB ĐÃ MỞ - Sử dụng setTimeout để đảm bảo
-  setTimeout(() => {
-    const transactionDateInput = document.getElementById('transactionDate');
-    if (transactionDateInput) {
-      transactionDateInput.value = formattedToday;
-      console.log('✅ Đã set ngày hiện tại:', formattedToday, 'cho input:', transactionDateInput);
-    } else {
-      console.error('❌ Không tìm thấy element transactionDate');
-    }
-  }, 100);
+  // Mở tab mặc định
+  console.log('🔄 Mở tab1');
+  window.openTab('tab1');
 
   // Khởi tạo dropdown phân loại
   // ✨ PRELOAD CATEGORIES ngay khi app khởi động
   setTimeout(() => {
+    console.log('📦 Preload categories');
     preloadCategories();
   }, 500);
   
   // Tự động điều chỉnh font size cho stat-box amount khi có thay đổi DOM
   setupStatBoxObserver();
+  
+  console.log('✅ DOMContentLoaded hoàn tất');
 });
 
 /**
