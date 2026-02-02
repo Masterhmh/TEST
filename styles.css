@@ -7,93 +7,77 @@
    1. CSS VARIABLES - MODERN DESIGN SYSTEM
    ============================================================================ */
 :root {
-  /* 🎨 Colors - Modern Vibrant Palette */
-  --primary-color: #6366F1;
-  --primary-dark: #4F46E5;
-  --primary-light: #818CF8;
-  --secondary-color: #64748B;
-  --success-color: #10B981;
-  --danger-color: #F43F5E;
-  --warning-color: #F59E0B;
-  --info-color: #3B82F6;
-  
-  /* 🌈 Gradients */
-  --gradient-primary: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
-  --gradient-success: linear-gradient(135deg, #10B981 0%, #059669 100%);
-  --gradient-danger: linear-gradient(135deg, #F43F5E 0%, #DC2626 100%);
-  --gradient-info: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
-  
-  /* 🎭 Backgrounds */
-  --background-color: #F8FAFC;
-  --card-bg: #FFFFFF;
-  --text-color: #1E293B;
-  
-  /* Legacy compatibility */
-  --gradient-start: #6366F1;
-  --gradient-end: #8B5CF6;
-  --income-color: #10B981;
-  --expense-color: #F43F5E;
-  --balance-color: #3B82F6;
-  --edit-btn-color: #06B6D4;
-  --delete-btn-color: #EF4444;
-  
-  /* 📝 Text Colors */
-  --text-primary: #1E293B;
-  --text-secondary: #64748B;
-  --text-light: #94A3B8;
-  
-  /* 🔲 Borders & Shadows */
-  --border-color: #E2E8F0;
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.10);
-  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.12);
-  --shadow-hover: 0 8px 20px rgba(99, 102, 241, 0.15);
-  
-  /* 📏 Spacing */
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-  
-  /* 🎯 Border Radius */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
-  --radius-full: 9999px;
-  
-  /* ⚡ Transitions */
-  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
-}
+  /* 🔥 Primary – Red Orange (Hỏa) */
+  --primary-color: #EA580C;        /* Đỏ cam chủ đạo */
+  --primary-dark: #C2410C;         /* Đỏ cam đậm */
+  --primary-light: #FB923C;        /* Cam sáng */
 
+  /* ⚫ Neutral Contrast – Charcoal / Dark Gray */
+  --neutral-900: #0F172A;          /* Gần đen – chữ chính */
+  --neutral-800: #1F2937;          /* Than đen */
+  --neutral-700: #374151;          /* Xám đậm */
+  --neutral-500: #6B7280;          /* Xám trung */
+  --neutral-300: #D1D5DB;          /* Border */
+  --neutral-100: #F3F4F6;          /* Nền phụ */
+
+  /* 💚 Success – tiết chế (không lấn Hỏa) */
+  --success-color: #16A34A;
+  --income-color: #16A34A;
+
+  /* 🔴 Danger – Fire Red */
+  --danger-color: #DC2626;
+  --expense-color: #DC2626;
+
+  /* 🟠 Info / Balance */
+  --balance-color: #F97316;
+  --info-color: #F97316;
+  --warning-color: #D97706;
+
+  /* 🌈 Gradients – nổi trên nền xám */
+  --gradient-primary: linear-gradient(135deg, #EA580C 0%, #FB923C 100%);
+  --gradient-danger: linear-gradient(135deg, #DC2626 0%, #F87171 100%);
+  --gradient-info: linear-gradient(135deg, #F97316 0%, #FDBA74 100%);
+
+  /* 🎭 Backgrounds */
+  --background-color: #F9FAFB;     /* Nền sáng trung tính */
+  --card-bg: #FFFFFF;
+
+  /* 📝 Text */
+  --text-primary: #0F172A;
+  --text-secondary: #374151;
+  --text-light: #6B7280;
+
+  /* 🔲 Border & Shadow */
+  --border-color: #E5E7EB;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.12);
+  --shadow-hover: 0 8px 24px rgba(234, 88, 12, 0.35);
+}
 /* ============================================================================
-   2. DARK MODE SUPPORT
+   2. DARK MODE SUPPORT - WOOD ELEMENT Theme (Xanh Lá Cây)
    ============================================================================ */
 @media (prefers-color-scheme: dark) {
   :root {
-    --primary-color: #818CF8;
-    --secondary-color: #94A3B8;
-    --background-color: #0F172A;
-    --card-bg: #1E293B;
-    --text-color: #F1F5F9;
-    --gradient-start: #6366F1;
-    --gradient-end: #8B5CF6;
-    --income-color: #34D399;
-    --expense-color: #FB7185;
-    --balance-color: #60A5FA;
-    --edit-btn-color: #22D3EE;
-    --delete-btn-color: #F87171;
-    --stat-box-bg-start: #1E293B;
-    --stat-box-bg-end: #334155;
-    --input-bg: #1E293B;
-    --input-border: #475569;
-    --stat-title-color: #F1F5F9;
-    --border-color: #334155;
-    --text-primary: #F1F5F9;
-    --text-secondary: #94A3B8;
+    --primary-color: #4ADE80;        /* Green 400 - Xanh sáng cho dark */
+    --secondary-color: #A1A1AA;      /* Zinc Gray */
+    --background-color: #0C1713;     /* Dark green tint */
+    --card-bg: #14532D;              /* Green 900 */
+    --text-color: #F0FDF4;           /* Green 50 */
+    --gradient-start: #16A34A;
+    --gradient-end: #22C55E;
+    --income-color: #4ADE80;         /* Green 400 - Thu nhập sáng */
+    --expense-color: #F87171;        /* Red 400 - Chi tiêu sáng */
+    --balance-color: #FCD34D;        /* Amber 300 - Số dư vàng */
+    --edit-btn-color: #22D3EE;       /* Cyan 400 */
+    --delete-btn-color: #F87171;     /* Red 400 */
+    --stat-box-bg-start: #14532D;    /* Green 900 */
+    --stat-box-bg-end: #166534;      /* Green 800 */
+    --input-bg: #166534;             /* Green 800 */
+    --input-border: #15803D;         /* Green 700 */
+    --stat-title-color: #F0FDF4;     /* Green 50 */
+    --border-color: #166534;         /* Green 800 */
+    --text-primary: #F0FDF4;
+    --text-secondary: #BBF7D0;       /* Green 200 */
   }
 
   /* Stat-box trong dark mode */
@@ -344,7 +328,7 @@ h1 {
   font-size: clamp(1rem, 3vw, 1.2rem);
   font-weight: 800;
   color: var(--primary-color);
-  margin: 2rem 0 1rem 0; /* Tăng margin-top từ 1.5rem lên 2rem */
+  margin: 2.5rem 0 1.5rem 0; /* ⚡ Tăng margin-top từ 2rem lên 2.5rem và margin-bottom từ 1rem lên 1.5rem */
   text-align: center;
   letter-spacing: -0.3px;
   text-transform: uppercase;
@@ -389,8 +373,8 @@ button:hover::before {
 
 button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.25), 
-              0 0 20px rgba(99, 102, 241, 0.15);
+  box-shadow: 0 8px 24px rgba(21, 128, 61, 0.25), 
+              0 0 20px rgba(21, 128, 61, 0.15);
 }
 
 button:active {
@@ -413,8 +397,8 @@ button i {
 }
 
 .btn-success:hover {
-  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.25), 
-              0 0 20px rgba(16, 185, 129, 0.15) !important;
+  box-shadow: 0 8px 24px rgba(34, 197, 94, 0.25), 
+              0 0 20px rgba(34, 197, 94, 0.15) !important;
 }
 
 .btn-danger {
@@ -422,8 +406,8 @@ button i {
 }
 
 .btn-danger:hover {
-  box-shadow: 0 8px 24px rgba(244, 63, 94, 0.25), 
-              0 0 20px rgba(244, 63, 94, 0.15) !important;
+  box-shadow: 0 8px 24px rgba(220, 38, 38, 0.25), 
+              0 0 20px rgba(220, 38, 38, 0.15) !important;
 }
 
 .cancel-btn {
