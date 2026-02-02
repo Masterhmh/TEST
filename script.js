@@ -32,6 +32,15 @@ let categoryDetailsCache = {};
 let toastQueue = [];
 let isShowingToast = false;
 
+// ⚡ GIẢI PHÁP: Định nghĩa cấu hình cột cố định để đồng nhất giữa các biểu đồ
+// Điều này đảm bảo độ rộng cột giữa biểu đồ TỔNG QUAN và biểu đồ Category Detail đồng nhất
+const FIXED_BAR_CONFIG = {
+  barPercentage: 0.8,        // Tỷ lệ cột so với khoảng trống (0.8 = 80% không gian)
+  categoryPercentage: 0.9,   // Tỷ lệ nhóm cột so với category (0.9 = 90% không gian category)
+  maxBarThickness: 60,       // Độ rộng tối đa của cột (pixel)
+  minBarLength: 2            // Chiều cao tối thiểu để hiển thị cột
+};
+
 /* ==========================================================================
    2. Hàm tiện ích (Utility Functions)
    Các hàm hỗ trợ hiển thị thông báo, định dạng ngày giờ và quản lý giao diện.
@@ -934,10 +943,11 @@ window.fetchMonthlyData = async function() {
             top: 65
           }
         },
-        // ⚡ TỐI ƯU: Cột có width cố định, không phụ thuộc vào giá trị
-        // Công thức: Ít tháng = cột rộng hơn, nhiều tháng = cột hẹp lại nhưng đồng đều
-        barPercentage: 1.0,
-        categoryPercentage: Math.min(0.95, 3 / monthRange.length),
+        // ⚡ TỐI ƯU: Sử dụng cấu hình cột cố định để đồng nhất với biểu đồ Category Detail
+        // Thay vì tính toán động dựa trên số tháng, sử dụng giá trị cố định
+        barPercentage: FIXED_BAR_CONFIG.barPercentage,
+        categoryPercentage: FIXED_BAR_CONFIG.categoryPercentage,
+        maxBarThickness: FIXED_BAR_CONFIG.maxBarThickness,
         scales: {
           x: {
             ticks: {
@@ -2160,9 +2170,11 @@ function drawCategoryMonthlyChart(data, categoryName, categoryColor) {
             }
           }
         },
-        // ⚡ TỐI ƯU: Cột có width cố định, không phụ thuộc vào giá trị
-        barPercentage: 1.0,
-        categoryPercentage: Math.min(0.95, 3 / data.length)
+        // ⚡ TỐI ƯU: Sử dụng cấu hình cột cố định để đồng nhất với biểu đồ TỔNG QUAN
+        // Giờ đây cả 2 biểu đồ sẽ có cùng độ rộng cột bất kể số lượng dữ liệu
+        barPercentage: FIXED_BAR_CONFIG.barPercentage,
+        categoryPercentage: FIXED_BAR_CONFIG.categoryPercentage,
+        maxBarThickness: FIXED_BAR_CONFIG.maxBarThickness
       },
       plugins: [ChartDataLabels]
     });
