@@ -319,30 +319,30 @@ window.openTab = function(tabId) {
     }, 200);
   });
   
-  if (tabId === 'tab4') {
+  if (tabId === 'tab3') {
     const container = document.getElementById('searchResultsContainer');
-    const placeholderTab4 = document.getElementById('placeholderTab4');
+    const placeholderTab3 = document.getElementById('placeholderTab3');
     const paginationDiv = document.getElementById('paginationSearch');
-    if (container && placeholderTab4) {
+    if (container && placeholderTab3) {
       if (cachedSearchResults && cachedSearchResults.transactions && cachedSearchResults.transactions.length > 0) {
         displaySearchResults(cachedSearchResults.transactions);
       } else {
         container.innerHTML = '';
-        placeholderTab4.style.display = 'block';
+        placeholderTab3.style.display = 'block';
         if (paginationDiv) paginationDiv.style.display = 'none';
       }
     }
   }
   
-  if (tabId === 'tab5') {
+  if (tabId === 'tab4') {
     const container = document.getElementById('keywordsContainer');
-    const placeholderTab5 = document.getElementById('placeholderTab5');
-    if (container && placeholderTab5) {
+    const placeholderTab4 = document.getElementById('placeholderTab4');
+    if (container && placeholderTab4) {
       if (cachedKeywords && cachedKeywords.length > 0) {
         displayKeywords(cachedKeywords);
       } else {
         container.innerHTML = '';
-        placeholderTab5.style.display = 'block';
+        placeholderTab4.style.display = 'block';
       }
     }
   }
@@ -720,7 +720,7 @@ async function saveTransaction(updatedTransaction) {
     const activeTab = document.querySelector('.tab-content.active')?.id;
     if (activeTab === 'tab1') {
       await window.fetchTransactions();
-    } else if (activeTab === 'tab4') {
+    } else if (activeTab === 'tab3') {
       await window.searchTransactions();
     }
   } catch (error) {
@@ -776,7 +776,7 @@ async function addTransaction(newTransaction) {
       const transactionDateInput = document.getElementById('transactionDate');
       transactionDateInput.value = formattedDateForInput; // Cập nhật giá trị input
       await window.fetchTransactions(); // Tải dữ liệu cho ngày được chọn
-    } else if (activeTab === 'tab4') {
+    } else if (activeTab === 'tab3') {
       await window.searchTransactions();
     }
   } catch (error) {
@@ -803,9 +803,9 @@ async function deleteTransaction(transactionId) {
 
   if (activeTab === 'tab1') {
     cacheData = cachedTransactions;
-  } else if (activeTab === 'tab5') {
+  } else if (activeTab === 'tab2') {
     cacheData = cachedMonthlyExpenses;
-  } else if (activeTab === 'tab6') {
+  } else if (activeTab === 'tab3') {
     cacheData = cachedSearchResults;
   }
 
@@ -864,7 +864,7 @@ async function deleteTransaction(transactionId) {
       
       if (activeTab === 'tab1') {
         await window.fetchTransactions();
-      } else if (activeTab === 'tab4') {
+      } else if (activeTab === 'tab3') {
         await window.searchTransactions();
       }
     } catch (error) {
@@ -1362,7 +1362,7 @@ window.fetchMonthlyExpenses = async function() {
     return;
   }
 
-  showLoading(true, 'tab3');
+  showLoading(true, 'tab2');
   try {
     const targetUrl = `${apiUrl}?action=getTransactionsByMonth&month=${month}&year=${year}&sheetId=${sheetId}`;
     const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
@@ -1375,7 +1375,7 @@ window.fetchMonthlyExpenses = async function() {
     showToast("Lỗi khi lấy dữ liệu giao dịch: " + error.message, "error");
     displayMonthlyExpenses({ error: true });
   } finally {
-    showLoading(false, 'tab3');
+    showLoading(false, 'tab2');
   }
 };
 
@@ -1478,7 +1478,7 @@ function displayMonthlyExpenses(data) {
 }
 
 /* ==========================================================================
-   9. Tab 4: Tìm kiếm giao dịch (Search Transactions Tab)
+   9. Tab 3: Tìm kiếm giao dịch (Search Transactions Tab)
    Các hàm tìm kiếm và hiển thị kết quả giao dịch.
    ========================================================================== */
 /**
@@ -1555,7 +1555,7 @@ window.searchTransactions = async function() {
   }
 
   console.log(`🌐 Gọi API cho chế độ ${searchMode}, key: ${cacheKey}`);
-  showLoading(true, 'tab4');
+  showLoading(true, 'tab3');
   try {
     let targetUrl = `${apiUrl}?action=searchTransactions&sheetId=${sheetId}&page=${currentPageSearch}&limit=${searchPerPage}&year=${year}`;
     
@@ -1599,7 +1599,7 @@ window.searchTransactions = async function() {
     showToast("Lỗi khi tìm kiếm giao dịch: " + error.message, "error");
     displaySearchResults({ error: true });
   } finally {
-    showLoading(false, 'tab4');
+    showLoading(false, 'tab3');
   }
 };
 
@@ -1683,14 +1683,14 @@ function displaySearchResults(data) {
 }
 
 /* ==========================================================================
-   10. Tab 5: Quản lý từ khóa (Keywords Tab)
+   10. Tab 4: Quản lý từ khóa (Keywords Tab)
    Các hàm lấy, hiển thị, thêm và xóa từ khóa.
    ========================================================================== */
 /**
  * Lấy danh sách từ khóa từ API.
  */
 window.fetchKeywords = async function() {
-  showLoading(true, 'tab5');
+  showLoading(true, 'tab4');
   try {
     const targetUrl = `${apiUrl}?action=getKeywords&sheetId=${sheetId}`;
     const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
@@ -1703,7 +1703,7 @@ window.fetchKeywords = async function() {
     showToast("Lỗi khi lấy dữ liệu từ khóa: " + error.message, "error");
     displayKeywords({ error: true });
   } finally {
-    showLoading(false, 'tab5');
+    showLoading(false, 'tab4');
   }
 };
 
@@ -1769,7 +1769,7 @@ window.addKeyword = async function() {
   const keywordsArray = keywordsInput.split(',').map(keyword => keyword.trim()).filter(keyword => keyword);
   const formattedKeywords = keywordsArray.join(', ');
 
-  showLoading(true, 'tab5');
+  showLoading(true, 'tab4');
   try {
     const finalUrl = proxyUrl + encodeURIComponent(apiUrl);
     const response = await fetch(finalUrl, {
@@ -1790,7 +1790,7 @@ window.addKeyword = async function() {
   } catch (error) {
     showToast("Lỗi khi thêm từ khóa: " + error.message, "error");
   } finally {
-    showLoading(false, 'tab5');
+    showLoading(false, 'tab4');
   }
 };
 
@@ -1817,7 +1817,7 @@ window.deleteKeyword = async function() {
   }
 
   try {
-    showLoading(true, 'tab5');
+    showLoading(true, 'tab4');
     const targetUrl = `${apiUrl}?action=getKeywords&sheetId=${sheetId}`;
     const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
     const response = await fetch(finalUrl);
@@ -1872,7 +1872,7 @@ window.deleteKeyword = async function() {
     console.error("Lỗi trong deleteKeyword:", error);
     showToast("Lỗi khi xóa từ khóa: " + error.message, "error");
   } finally {
-    showLoading(false, 'tab5');
+    showLoading(false, 'tab4');
   }
 };
 
