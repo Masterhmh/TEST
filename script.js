@@ -45,6 +45,8 @@ let cachedFinancialData = null;
 let cachedChartData = null;
 let cachedTransactions = null;
 let cachedKeywords = null;
+let cachedCategories = null; // ✨ NEW: Cache categories
+let categoriesLoaded = false; // ✨ NEW: Track if categories are loaded
 let currentPage = 1;
 const transactionsPerPage = 10;
 let cachedMonthlyExpenses = null;
@@ -55,6 +57,141 @@ let currentPageSearch = 1;
 const searchPerPage = 10;
 // Cache chi tiết cho từng category (để tránh load lại khi click vào legend nhiều lần)
 let categoryDetailsCache = {};
+
+// ✨ NEW: Chart.js lazy loading
+let chartJsLoaded = false;
+let chartJsLoading = false;
+
+PERFORMANCE UTILITIES - NEW
+   ========================================================================== */
+
+/**
+ * ✨ Debounce function
+ */
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
+/**
+ * ✨ Lazy load Chart.js
+ */
+async function loadChartJS() {
+  if (chartJsLoaded) return Promise.resolve();
+  if (chartJsLoading) {
+    return new Promise(resolve => {
+      const checkLoaded = setInterval(() => {
+        if (chartJsLoaded) {
+          clearInterval(checkLoaded);
+          resolve();
+        }
+      }, 100);
+    });
+  }
+  
+  chartJsLoading = true;
+  
+  return new Promise((resolve, reject) => {
+    if (typeof Chart !== 'undefined') {
+      chartJsLoaded = true;
+      chartJsLoading = false;
+      resolve();
+      return;
+    }
+    
+    const script1 = document.createElement('script');
+    script1.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+    script1.onload = () => {
+      const script2 = document.createElement('script');
+      script2.src = 'https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2';
+      script2.onload = () => {
+        chartJsLoaded = true;
+        chartJsLoading = false;
+        console.log('✅ Chart.js loaded successfully');
+        resolve();
+      };
+      script2.onerror = () => {
+        chartJsLoading = false;
+        reject(new Error('Failed to load ChartJS DataLabels'));
+      };
+      document.head.appendChild(script2);
+    };
+    script1.onerror = () => {
+      chartJsLoading = false;
+      reject(new Error('Failed to load ChartJS'));
+    };
+    document.head.appendChild(script1);
+  });
+}
+
+/**
+ * ✨ Preload categories ngay khi app khởi động
+ */
+async function preloadCategories() {
+  if (categoriesLoaded || !apiUrl || !sheetId) return;
+  
+  console.log('🚀 Preloading categories...');
+  try {
+    const targetUrl = `${apiUrl}?action=getCategories&sheetId=${sheetId}`;
+    const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
+    const response = await fetch(finalUrl);
+    const categoriesData = await response.json();
+    
+    if (categoriesData && !categoriesData.error) {
+      cachedCategories = categoriesData;
+      categoriesLoaded = true;
+      console.log('✅ Categories preloaded:', categoriesData.length, 'items');
+      
+      // Populate dropdowns ngay
+      populateSearchCategories();
+      populateKeywordCategories();
+    }
+  } catch (error) {
+    console.warn('⚠️ Preload categories failed:', error);
+  }
+}
+
+/**
+ * ✨ Animate number
+ */
+function animateNumber(element, start, end, duration = 800) {
+  if (!element) return;
+  
+  const startTime = performance.now();
+  const diff = end - start;
+  
+  function update(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+    const current = start + (diff * easeOutQuart);
+    
+    element.textContent = formatNumberWithCommas(Math.round(current).toString()) + 'đ';
+    
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    }
+  }
+  
+  requestAnimationFrame(update);
+}
+
+/**
+ * ✨ Skeleton loading
+ */
+function showSkeletonLoading(container, count = 5) {
+  const skeletons = Array(count).fill(0).map(() => `
+    <div class="skeleton skeleton-transaction"></div>
+  `).join('');
+  container.innerHTML = skeletons;
+}
 
 /* ==========================================================================
    2. Hàm tiện ích (Utility Functions)
@@ -220,11 +357,22 @@ function parseNumber(value) {
  * Mở tab được chọn và cập nhật giao diện.
  * @param {string} tabId - ID của tab cần mở (tab1, tab2, ...).
  */
-window.openTab = function(tabId) {
+window.openTab = async function(tabId) {
   const tabs = document.querySelectorAll('.nav-item');
   const contents = document.querySelectorAll('.tab-content');
   tabs.forEach(tab => tab.classList.remove('active'));
   contents.forEach(content => content.classList.remove('active'));
+  
+  // ✨ Load Chart.js nếu mở tab báo cáo
+  if (tabId === 'tab2' && !chartJsLoaded) {
+    try {
+      await loadChartJS();
+    } catch (error) {
+      console.error('Failed to load ChartJS:', error);
+      showToast('Không thể tải biểu đồ. Vui lòng thử lại!', 'error');
+    }
+  }
+  
   document.getElementById(tabId).classList.add('active');
   document.querySelector(`.nav-item[data-tab="${tabId}"]`).classList.add('active');
   
@@ -409,12 +557,22 @@ function displayTransactions(data) {
  * @returns {Array} Danh sách phân loại.
  */
 async function fetchCategories() {
+  // ✨ Nếu đã có cache, return luôn
+  if (cachedCategories && categoriesLoaded) {
+    return cachedCategories;
+  }
+  
   try {
     const targetUrl = `${apiUrl}?action=getCategories&sheetId=${sheetId}`;
     const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
     const response = await fetch(finalUrl);
     const categoriesData = await response.json();
     if (categoriesData.error) throw new Error(categoriesData.error);
+    
+    // ✨ Cache data
+    cachedCategories = categoriesData;
+    categoriesLoaded = true;
+    
     return categoriesData;
   } catch (error) {
     showToast("Lỗi khi lấy danh sách phân loại: " + error.message, "error");
@@ -1282,7 +1440,16 @@ function displayMonthlyExpenses(data) {
  */
 async function populateSearchCategories() {
   const categorySelect = document.getElementById('searchCategory');
-  const categories = await fetchCategories();
+  if (!categorySelect) return;
+  
+  // ✨ Nếu đã có cache, sử dụng ngay
+  let categories = cachedCategories;
+  
+  // Nếu chưa có cache, fetch
+  if (!categories || !categoriesLoaded) {
+    categories = await fetchCategories();
+  }
+  
   categorySelect.innerHTML = '<option value="">Tất cả</option>';
   categories.forEach(category => {
     const option = document.createElement('option');
@@ -1488,7 +1655,16 @@ function displayKeywords(data) {
  */
 async function populateKeywordCategories() {
   const categorySelect = document.getElementById('keywordCategory');
-  const categories = await fetchCategories();
+  if (!categorySelect) return;
+  
+  // ✨ Nếu đã có cache, sử dụng ngay
+  let categories = cachedCategories;
+  
+  // Nếu chưa có cache, fetch
+  if (!categories || !categoriesLoaded) {
+    categories = await fetchCategories();
+  }
+  
   categorySelect.innerHTML = '<option value="">Chọn phân loại</option>';
   categories.forEach(category => {
     const option = document.createElement('option');
@@ -1726,11 +1902,13 @@ document.getElementById('nextPageSearch').addEventListener('click', () => {
   }
 
   // Khởi tạo dropdown phân loại
-  populateSearchCategories();
-  populateKeywordCategories();
+  // ✨ PRELOAD CATEGORIES ngay khi app khởi động
+setTimeout(() => {
+  preloadCategories();
+}, 500);
 
-  // Mở tab mặc định
-  window.openTab('tab1');
+// Mở tab mặc định
+window.openTab('tab1');
   
   // Tự động điều chỉnh font size cho stat-box amount khi có thay đổi DOM
   setupStatBoxObserver();
