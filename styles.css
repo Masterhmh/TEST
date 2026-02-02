@@ -157,7 +157,7 @@ html {
 body {
   font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   margin: 0;
-  padding: 80px 20px 20px;
+  padding: 84px 20px 20px; /* ⚡ Tăng từ 80px lên 84px để tránh overlap với nav-bar */
   background-color: var(--background-color);
   color: var(--text-color);
   line-height: 1.6;
@@ -213,10 +213,11 @@ body {
   display: flex;
   justify-content: space-around;
   background: var(--gradient-primary);
-  padding: 10px 0;
+  padding: 12px 0; /* ⚡ Tăng từ 10px lên 12px để tránh cắt phần sáng của icon active */
   box-shadow: var(--shadow-md);
   z-index: 1002;
   overflow-x: auto;
+  overflow-y: visible; /* ⚡ Cho phép hiệu ứng scale và glow không bị cắt */
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -231,7 +232,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 2px;
-  padding: 8px 8px;
+  padding: 10px 8px; /* ⚡ Tăng padding vertical từ 8px lên 10px để hiệu ứng active không bị cắt */
   color: rgba(255, 255, 255, 0.5);
   font-size: 0.7rem;
   font-weight: 600;
