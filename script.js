@@ -1710,6 +1710,60 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('addKeywordBtn').addEventListener('click', window.addKeyword);
   document.getElementById('deleteKeywordBtn').addEventListener('click', window.deleteKeyword);
   
+  // Gán sự kiện cho các nút filter mode trong Tab 2
+  const filterMonthlyBtn = document.getElementById('filterMonthlyBtn');
+  const filterYearlyBtn = document.getElementById('filterYearlyBtn');
+  const filterCustomBtn = document.getElementById('filterCustomBtn');
+  const monthRangeSelector = document.getElementById('monthRangeSelector');
+  
+  // Hàm helper để set active button
+  function setActiveFilterButton(activeBtn) {
+    [filterMonthlyBtn, filterYearlyBtn, filterCustomBtn].forEach(btn => {
+      btn.classList.remove('active');
+    });
+    activeBtn.classList.add('active');
+  }
+  
+  // Xử lý nút "Hàng tháng" - lọc tháng hiện tại
+  filterMonthlyBtn.addEventListener('click', function() {
+    setActiveFilterButton(this);
+    monthRangeSelector.style.display = 'none';
+    
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1; // getMonth() trả về 0-11
+    
+    // Set cả startMonth và endMonth = tháng hiện tại
+    document.getElementById('startMonth').value = currentMonth;
+    document.getElementById('endMonth').value = currentMonth;
+    
+    // Tự động lọc
+    window.fetchMonthlyData();
+  });
+  
+  // Xử lý nút "Hàng năm" - lọc từ tháng 1 đến tháng hiện tại
+  filterYearlyBtn.addEventListener('click', function() {
+    setActiveFilterButton(this);
+    monthRangeSelector.style.display = 'none';
+    
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1;
+    
+    // Set startMonth = 1, endMonth = tháng hiện tại
+    document.getElementById('startMonth').value = 1;
+    document.getElementById('endMonth').value = currentMonth;
+    
+    // Tự động lọc
+    window.fetchMonthlyData();
+  });
+  
+  // Xử lý nút "Tùy chọn" - hiển thị dropdown để người dùng chọn
+  filterCustomBtn.addEventListener('click', function() {
+    setActiveFilterButton(this);
+    monthRangeSelector.style.display = 'flex';
+    
+    // Không tự động lọc, chờ người dùng chọn và nhấn nút "Lọc"
+  });
+  
    // Gán sự kiện cho các nút phân trang
   document.getElementById('prevPage').addEventListener('click', () => {
     if (currentPage > 1) {
