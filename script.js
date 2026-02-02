@@ -934,8 +934,9 @@ window.fetchMonthlyData = async function() {
             top: 65
           }
         },
-        barPercentage: 0.6,
-        categoryPercentage: 0.8,
+        // ⚡ TỐI ƯU: Tự động tính toán để cột có kích thước đồng đều
+        barPercentage: Math.min(0.9, 1 / monthRange.length * 8),
+        categoryPercentage: 0.95,
         scales: {
           x: {
             ticks: {
@@ -1895,13 +1896,14 @@ document.addEventListener('DOMContentLoaded', function() {
     transactionDateInput.value = today;
   }
   
-  // Set tháng hiện tại cho các select
+  // Set tháng mặc định: Từ tháng 1 đến tháng hiện tại
   const currentMonth = new Date().getMonth() + 1;
   const startMonthSelect = document.getElementById('startMonth');
   const endMonthSelect = document.getElementById('endMonth');
   const searchMonthSelect = document.getElementById('searchMonth');
   
-  if (startMonthSelect) startMonthSelect.value = currentMonth.toString();
+  // ⚡ THAY ĐỔI: Luôn bắt đầu từ tháng 1, kết thúc ở tháng hiện tại
+  if (startMonthSelect) startMonthSelect.value = '1';
   if (endMonthSelect) endMonthSelect.value = currentMonth.toString();
   
   // Setup stat box observer
@@ -2157,8 +2159,9 @@ function drawCategoryMonthlyChart(data, categoryName, categoryColor) {
             }
           }
         },
-        barPercentage: 0.5,
-        categoryPercentage: 0.7
+        // ⚡ TỐI ƯU: Tự động tính toán để cột có kích thước đồng đều
+        barPercentage: Math.min(0.9, 1 / data.length * 8),
+        categoryPercentage: 0.95
       },
       plugins: [ChartDataLabels]
     });
