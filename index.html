@@ -1,54 +1,55 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <!-- ==========================================================================
-       1. Thiết lập Meta và Liên kết
-       Cấu hình meta, favicon, font và các thư viện bên ngoài.
-       ========================================================================== -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#6366F1">
+  <meta name="description" content="Ứng dụng quản lý tài chính cá nhân thông minh">
   <title>Mini App Tổng Quan Chi Tiêu</title>
   
-  <!-- Preconnect to external resources for faster loading -->
+  <!-- Preconnect to external domains for faster loading -->
   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://cdn.jsdelivr.net">
   
-  <!-- Font Awesome - với async loading -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
-  
-  <!-- Google Fonts - optimized loading -->
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- Main CSS -->
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Styles -->
   <link rel="stylesheet" href="styles.css">
   
-  <!-- Preload critical scripts -->
-  <link rel="preload" href="script.js" as="script">
+  <!-- Chart.js sẽ được load động - KHÔNG thêm script tag ở đây -->
 </head>
 <body>
-  <!-- ==========================================================================
-       2. Thanh Điều Hướng (Header và Navigation)
-       Cấu trúc header và thanh điều hướng cố định trên cùng.
-       ========================================================================== -->
   <div class="app-header">
     <h3>©masterhmh</h3>
   </div>
-  <div class="top-nav">
-    <div class="nav-item active" data-tab="tab1"><i class="fas fa-exchange-alt"></i><span>Giao dịch</span></div>
-    <div class="nav-item" data-tab="tab2"><i class="fas fa-chart-pie"></i><span>Báo Cáo</span></div>
-    <div class="nav-item" data-tab="tab4"><i class="fas fa-search"></i><span>Tìm kiếm</span></div>
-    <div class="nav-item" data-tab="tab5"><i class="fas fa-tags"></i><span>Từ khóa</span></div>
-    <div class="nav-item" data-tab="tab6"><i class="fas fa-info-circle"></i><span>Giới thiệu</span></div>
-  </div>
+  <nav class="top-nav" role="navigation">
+    <div class="nav-item active" data-tab="tab1" role="button" tabindex="0">
+      <i class="fas fa-exchange-alt"></i>
+      <span>Giao dịch</span>
+    </div>
+    <div class="nav-item" data-tab="tab2" role="button" tabindex="0">
+      <i class="fas fa-chart-pie"></i>
+      <span>Báo Cáo</span>
+    </div>
+    <div class="nav-item" data-tab="tab4" role="button" tabindex="0">
+      <i class="fas fa-search"></i>
+      <span>Tìm kiếm</span>
+    </div>
+    <div class="nav-item" data-tab="tab5" role="button" tabindex="0">
+      <i class="fas fa-tags"></i>
+      <span>Từ khóa</span>
+    </div>
+    <div class="nav-item" data-tab="tab6" role="button" tabindex="0">
+      <i class="fas fa-info-circle"></i>
+      <span>Giới thiệu</span>
+    </div>
+  </nav>
 
-  <!-- ==========================================================================
-       3. Nội Dung Chính (Content Wrapper)
-       Container chính chứa các tab nội dung.
-       ========================================================================== -->
   <div class="content-wrapper">
     <!-- Tab 1: Giao Dịch Trong Ngày -->
     <div id="tab1" class="tab-content active">
@@ -59,10 +60,9 @@
       </p>
       <div id="errorMessageTab1" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
       <div id="successMessageTab1" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
-      <div id="loadingTab1" class="skeleton-loader" style="display: none;">
-        <div class="skeleton-box"></div>
-        <div class="skeleton-box"></div>
-        <div class="skeleton-box"></div>
+      <div id="loadingTab1" style="display: none; text-align: center; margin: 1rem 0;">
+        <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--primary-color);"></i>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary); font-weight: 600;">Đang tải dữ liệu, vui lòng chờ...</p>
       </div>
       <div class="input-group">
         <input type="date" id="transactionDate">
@@ -89,10 +89,9 @@
   <p class="notification">Chọn khoảng thời gian và ấn <strong>"Lọc"</strong> để xem báo cáo.</p>
   <div id="errorMessageTab2" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
   <div id="successMessageTab2" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
-  <div id="loadingTab2" class="skeleton-loader" style="display: none;">
-    <div class="skeleton-box"></div>
-    <div class="skeleton-box"></div>
-    <div class="skeleton-box"></div>
+  <div id="loadingTab2" style="display: none; text-align: center; margin: 1rem 0;">
+    <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--primary-color);"></i>
+    <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary); font-weight: 600;">Đang tải dữ liệu, vui lòng chờ...</p>
   </div>
   <div class="input-group">
     Từ:
@@ -153,12 +152,21 @@
       <p class="notification">Nhập nội dung, số tiền hoặc phân loại chi tiết, sau đó ấn <strong>"Tìm kiếm"</strong> để xem kết quả.</p>
       <div id="errorMessageTab4" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
       <div id="successMessageTab4" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
-      <div id="loadingTab4" class="skeleton-loader" style="display: none;">
-        <div class="skeleton-box"></div>
-        <div class="skeleton-box"></div>
-        <div class="skeleton-box"></div>
+      <div id="loadingTab4" style="display: none; text-align: center; margin: 1rem 0;">
+        <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--primary-color);"></i>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary); font-weight: 600;">Đang tải dữ liệu, vui lòng chờ...</p>
       </div>
       <div class="input-group vertical">
+        <div class="input-field">
+          <label>Tháng: </label>
+          <select id="searchMonth" class="uniform-input">
+            <option value="">Tất cả</option>
+            <option value="1">Tháng 1</option><option value="2">Tháng 2</option><option value="3">Tháng 3</option>
+            <option value="4">Tháng 4</option><option value="5">Tháng 5</option><option value="6">Tháng 6</option>
+            <option value="7">Tháng 7</option><option value="8">Tháng 8</option><option value="9">Tháng 9</option>
+            <option value="10">Tháng 10</option><option value="11">Tháng 11</option><option value="12">Tháng 12</option>
+          </select>
+        </div>
         <div class="input-field">
           <label>Nội dung: </label>
           <input type="text" id="searchContent" class="uniform-input" placeholder="Nhập nội dung giao dịch">
@@ -170,30 +178,32 @@
         <div class="input-field">
           <label>Phân loại chi tiết: </label>
           <select id="searchCategory" class="uniform-input">
-            <option value="">Chọn phân loại</option>
+            <option value="">Tất cả</option>
           </select>
         </div>
-        <button id="searchBtn"><i class="fas fa-search"></i> Tìm kiếm</button>
+        <button id="searchTransactionsBtn"><i class="fas fa-search"></i> Tìm kiếm</button>
       </div>
-      <p id="placeholderTab4" class="notification" style="margin-top: 1rem;">Kết quả tìm kiếm sẽ hiển thị ở đây</p>
+      <p id="placeholderTab4" class="notification" style="margin-top: 1rem;">Dữ liệu tìm kiếm sẽ hiển thị ở đây</p>
       <div class="transactions-list" id="searchResultsContainer"></div>
-      <div id="paginationSearch" style="text-align: center; margin-top: 1rem; display: none;">
+      <div id="paginationSearch" style="display: none; margin-top: 1.5rem;">
         <button id="prevPageSearch" class="pagination-btn" disabled><i class="fas fa-chevron-left"></i> Trang trước</button>
         <span id="pageInfoSearch"></span>
         <button id="nextPageSearch" class="pagination-btn">Trang sau <i class="fas fa-chevron-right"></i></button>
       </div>
     </div>
 
-    <!-- Tab 5: Quản Lý Từ Khóa -->
+    <!-- Tab 5: Quản lý từ khóa -->
     <div id="tab5" class="tab-content">
       <h1>QUẢN LÝ TỪ KHÓA</h1>
-      <p class="notification">Thêm từ khóa để tự động phân loại giao dịch. Ví dụ: "đổ xăng" → Xe cộ</p>
+      <p class="notification">
+      Thêm hoặc xóa từ khóa để tự động phân loại giao dịch.<br>
+      Ấn <strong>"Tải dữ liệu"</strong> để xem danh sách từ khóa hiện tại.
+      </p>
       <div id="errorMessageTab5" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
       <div id="successMessageTab5" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
-      <div id="loadingTab5" class="skeleton-loader" style="display: none;">
-        <div class="skeleton-box"></div>
-        <div class="skeleton-box"></div>
-        <div class="skeleton-box"></div>
+      <div id="loadingTab5" style="display: none; text-align: center; margin: 1rem 0;">
+        <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--primary-color);"></i>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary); font-weight: 600;">Đang tải dữ liệu, vui lòng chờ...</p>
       </div>
       <div class="input-group vertical">
         <div class="input-field">
@@ -233,7 +243,7 @@
         </div>
         <div class="qr-container">
           <div class="qr-frame">
-            <img id="qrImage" src="https://i.pinimg.com/736x/7c/13/53/7c135389e26cbc6460626deb9e2aa5c6.jpg" alt="QR Code" class="qr-image" loading="lazy">
+            <img id="qrImage" src="https://i.pinimg.com/736x/7c/13/53/7c135389e26cbc6460626deb9e2aa5c6.jpg" alt="QR Code" class="qr-image">
           </div>
           <p class="qr-caption">Quét mã QR để ủng hộ qua Momo</p>
         </div>
@@ -247,10 +257,7 @@
       </div>
     </div>
 
-    <!-- ==========================================================================
-         4. Modal và Popup
-         Các modal để chỉnh sửa, thêm, xóa giao dịch.
-         ========================================================================== -->
+    <!-- Modals -->
     <div id="editModal" class="modal">
       <div class="modal-content">
         <h2>Chỉnh sửa giao dịch</h2>
@@ -321,32 +328,6 @@
     </div>
   </div>
 
-  <!-- ==========================================================================
-       5. Script Liên Kết - Lazy load Chart.js khi cần
-       ========================================================================== -->
-  <script>
-    // Lazy load Chart.js và ChartDataLabels khi cần
-    window.loadChartJS = function() {
-      return new Promise((resolve, reject) => {
-        if (window.Chart) {
-          resolve();
-          return;
-        }
-        
-        const script1 = document.createElement('script');
-        script1.src = 'https://cdn.jsdelivr.net/npm/chart.js';
-        script1.onload = () => {
-          const script2 = document.createElement('script');
-          script2.src = 'https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2';
-          script2.onload = resolve;
-          script2.onerror = reject;
-          document.head.appendChild(script2);
-        };
-        script1.onerror = reject;
-        document.head.appendChild(script1);
-      });
-    };
-  </script>
   <script src="script.js"></script>
 </body>
 </html>
