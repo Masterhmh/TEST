@@ -2137,19 +2137,21 @@ async function showCategoryDetail(categoryName, categoryAmount, categoryColor) {
   currentCategory = categoryName;
   
   try {
-    // Ẩn chart container và hiển thị detail view
+    // Ẩn chart container
     document.querySelector('.chart-container').style.display = 'none';
     const detailView = document.getElementById('categoryDetailView');
-    detailView.style.display = 'block';
-    
-    // Cập nhật tiêu đề
-    document.getElementById('categoryDetailTitle').textContent = categoryName;
-    document.getElementById('categoryDetailTitle').style.color = categoryColor;
     
     // Kiểm tra cache trước
     const cacheKey = categoryName;
     if (categoryDetailsCache[cacheKey]) {
       console.log(`✅ Sử dụng cache cho category: ${categoryName}`);
+      
+      // Hiển thị detail view
+      detailView.style.display = 'block';
+      
+      // Cập nhật tiêu đề
+      document.getElementById('categoryDetailTitle').textContent = categoryName;
+      document.getElementById('categoryDetailTitle').style.color = categoryColor;
       
       // Lấy dữ liệu từ cache
       const cachedData = categoryDetailsCache[cacheKey];
@@ -2169,6 +2171,14 @@ async function showCategoryDetail(categoryName, categoryAmount, categoryColor) {
     } else {
       console.log(`🔄 Loading dữ liệu mới cho category: ${categoryName}`);
       
+      // Hiển thị detail view với loading
+      detailView.style.display = 'block';
+      detailView.style.opacity = '0.5';
+      
+      // Cập nhật tiêu đề
+      document.getElementById('categoryDetailTitle').textContent = categoryName;
+      document.getElementById('categoryDetailTitle').style.color = categoryColor;
+      
       // Hiển thị loading indicator
       const chartContainer = document.querySelector('#categoryDetailView > div:nth-child(3)');
       chartContainer.innerHTML = `
@@ -2179,18 +2189,33 @@ async function showCategoryDetail(categoryName, categoryAmount, categoryColor) {
       `;
       
       // Ẩn danh sách giao dịch tạm thời
-      document.getElementById('categoryTransactionsContainer').innerHTML = '';
+      const transactionsContainer = document.getElementById('categoryTransactionsContainer');
+      transactionsContainer.innerHTML = '';
+      transactionsContainer.style.opacity = '0';
       document.getElementById('paginationCategoryDetail').style.display = 'none';
       
-      // Lấy dữ liệu và vẽ biểu đồ
-      await fetchCategoryMonthlyData(categoryName, categoryColor);
+      // Lấy dữ liệu song song (parallel) để nhanh hơn
+      await Promise.all([
+        fetchCategoryMonthlyData(categoryName, categoryColor),
+        fetchCategoryTransactions(categoryName)
+      ]);
       
       // Xóa loading và hiển thị canvas
       chartContainer.innerHTML = '<canvas id="categoryMonthlyChart"></canvas>';
       
-      // Vẽ lại biểu đồ với canvas mới
-      await fetchCategoryMonthlyData(categoryName, categoryColor);
-      await fetchCategoryTransactions(categoryName);
+      // Vẽ biểu đồ
+      drawCategoryMonthlyChart(currentCategoryData, categoryName, categoryColor);
+      
+      // Hiển thị danh sách giao dịch
+      displayCategoryTransactions(cachedCategoryTransactions);
+      
+      // Fade in transactions container
+      transactionsContainer.style.opacity = '1';
+      transactionsContainer.style.transition = 'opacity 0.3s ease-in-out';
+      
+      // Fade in toàn bộ detail view
+      detailView.style.opacity = '1';
+      detailView.style.transition = 'opacity 0.3s ease-in-out';
       
       // Lưu vào cache
       categoryDetailsCache[cacheKey] = {
@@ -2262,8 +2287,7 @@ async function fetchCategoryMonthlyData(categoryName, categoryColor) {
     // Data đã có format đúng từ API: [{month: 1, amount: 1000}, ...]
     currentCategoryData = data;
     
-    // Vẽ biểu đồ
-    drawCategoryMonthlyChart(data, categoryName, categoryColor);
+    // KHÔNG vẽ biểu đồ ở đây nữa, để showCategoryDetail điều khiển
     
   } catch (error) {
     console.error('Lỗi khi lấy dữ liệu category monthly:', error);
@@ -2413,7 +2437,7 @@ async function fetchCategoryTransactions(categoryName) {
       // Lọc giao dịch theo category
       const categoryTransactions = transactions.filter(t => t.category === categoryName);
       cachedCategoryTransactions = categoryTransactions;
-      displayCategoryTransactions(categoryTransactions);
+      // KHÔNG hiển thị ở đây nữa
     } 
     // Nếu lọc nhiều tháng
     else {
@@ -2435,7 +2459,7 @@ async function fetchCategoryTransactions(categoryName) {
       // Lọc giao dịch theo category
       const categoryTransactions = allTransactions.filter(t => t.category === categoryName);
       cachedCategoryTransactions = categoryTransactions;
-      displayCategoryTransactions(categoryTransactions);
+      // KHÔNG hiển thị ở đây nữa
     }
     
   } catch (error) {
@@ -2469,9 +2493,9 @@ function displayCategoryTransactions(transactions) {
   let periodText = 'trong khoảng thời gian đã lọc';
   if (startMonth && endMonth) {
     if (startMonth === endMonth) {
-      periodText = `trong tháng ${startMonth}`;
+      periodText = `trong <strong>tháng ${startMonth}</strong>`;
     } else {
-      periodText = `từ tháng ${startMonth} đến tháng ${endMonth}`;
+      periodText = `từ <strong>tháng ${startMonth}</strong> đến <strong>tháng ${endMonth}</strong>`;
     }
   }
   
