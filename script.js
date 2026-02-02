@@ -1503,8 +1503,32 @@ window.searchTransactions = async function() {
     return showToast("Vui lòng nhập ít nhất một tiêu chí: nội dung, số tiền, hoặc phân loại chi tiết!", "warning");
   }
 
-  // Tạo cacheKey dựa trên các tiêu chí tìm kiếm
-  const cacheKey = `${year}-${content || ''}-${amount || ''}-${category || ''}`;
+  // Xác định chế độ tìm kiếm dựa vào nút active
+  let searchMode = 'yearly'; // mặc định
+  let startMonth = 1;
+  let endMonth = new Date().getMonth() + 1;
+  
+  if (document.getElementById('searchYearlyBtn').classList.contains('active')) {
+    searchMode = 'yearly';
+    startMonth = 1;
+    endMonth = 12; // Tìm cả năm
+  } else if (document.getElementById('searchMonthlyBtn').classList.contains('active')) {
+    searchMode = 'monthly';
+    const singleMonth = parseInt(document.getElementById('searchSingleMonth').value);
+    startMonth = singleMonth;
+    endMonth = singleMonth;
+  } else if (document.getElementById('searchCustomBtn').classList.contains('active')) {
+    searchMode = 'custom';
+    startMonth = parseInt(document.getElementById('searchStartMonth').value);
+    endMonth = parseInt(document.getElementById('searchEndMonth').value);
+    
+    if (startMonth > endMonth) {
+      return showToast("Tháng bắt đầu phải nhỏ hơn hoặc bằng tháng kết thúc!", "warning");
+    }
+  }
+
+  // Tạo cacheKey dựa trên các tiêu chí tìm kiếm bao gồm khoảng thời gian
+  const cacheKey = `${year}-${startMonth}-${endMonth}-${content || ''}-${amount || ''}-${category || ''}`;
 
   // Kiểm tra cache
   if (cachedSearchResults && cachedSearchResults.cacheKey === cacheKey) {
@@ -1515,6 +1539,14 @@ window.searchTransactions = async function() {
   showLoading(true, 'tab4');
   try {
     let targetUrl = `${apiUrl}?action=searchTransactions&sheetId=${sheetId}&page=${currentPageSearch}&limit=${searchPerPage}&year=${year}`;
+    
+    // Thêm tham số tháng
+    if (searchMode === 'monthly') {
+      targetUrl += `&month=${startMonth}`;
+    } else if (searchMode === 'custom' || searchMode === 'yearly') {
+      targetUrl += `&startMonth=${startMonth}&endMonth=${endMonth}`;
+    }
+    
     if (content) targetUrl += `&content=${encodeURIComponent(content)}`;
     if (amount) targetUrl += `&amount=${encodeURIComponent(amount)}`;
     if (category) targetUrl += `&category=${encodeURIComponent(category)}`;
@@ -1844,9 +1876,24 @@ document.addEventListener('DOMContentLoaded', function() {
   const filterCustomBtn = document.getElementById('filterCustomBtn');
   const monthRangeSelector = document.getElementById('monthRangeSelector');
   
-  // Hàm helper để set active button
+  // Gán sự kiện cho các nút filter mode trong Tab 4 (Search)
+  const searchYearlyBtn = document.getElementById('searchYearlyBtn');
+  const searchMonthlyBtn = document.getElementById('searchMonthlyBtn');
+  const searchCustomBtn = document.getElementById('searchCustomBtn');
+  const searchMonthSelector = document.getElementById('searchMonthSelector');
+  const searchRangeSelector = document.getElementById('searchRangeSelector');
+  
+  // Hàm helper để set active button cho Tab 2
   function setActiveFilterButton(activeBtn) {
     [filterMonthlyBtn, filterYearlyBtn, filterCustomBtn].forEach(btn => {
+      btn.classList.remove('active');
+    });
+    activeBtn.classList.add('active');
+  }
+  
+  // Hàm helper để set active button cho Tab 4
+  function setActiveSearchButton(activeBtn) {
+    [searchYearlyBtn, searchMonthlyBtn, searchCustomBtn].forEach(btn => {
       btn.classList.remove('active');
     });
     activeBtn.classList.add('active');
@@ -1904,6 +1951,36 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Sử dụng cache cho chế độ custom
     window.fetchMonthlyDataWithCache('custom', startMonth, endMonth);
+  });
+  
+  // Xử lý nút "Cả năm" trong Tab 4 (Search)
+  searchYearlyBtn.addEventListener('click', function() {
+    setActiveSearchButton(this);
+    searchMonthSelector.style.display = 'none';
+    searchRangeSelector.style.display = 'none';
+  });
+  
+  // Xử lý nút "Theo tháng" trong Tab 4 (Search)
+  searchMonthlyBtn.addEventListener('click', function() {
+    setActiveSearchButton(this);
+    searchMonthSelector.style.display = 'flex';
+    searchRangeSelector.style.display = 'none';
+    
+    // Set giá trị mặc định là tháng hiện tại
+    const currentMonth = new Date().getMonth() + 1;
+    document.getElementById('searchSingleMonth').value = currentMonth;
+  });
+  
+  // Xử lý nút "Khoảng thời gian" trong Tab 4 (Search)
+  searchCustomBtn.addEventListener('click', function() {
+    setActiveSearchButton(this);
+    searchMonthSelector.style.display = 'none';
+    searchRangeSelector.style.display = 'flex';
+    
+    // Set giá trị mặc định
+    const currentMonth = new Date().getMonth() + 1;
+    document.getElementById('searchStartMonth').value = '1';
+    document.getElementById('searchEndMonth').value = currentMonth;
   });
   
    // Gán sự kiện cho các nút phân trang
