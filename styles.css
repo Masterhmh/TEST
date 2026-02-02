@@ -1,6 +1,6 @@
 /* ============================================================================
-   💎 MINIAPP TÀI CHÍNH - PERFORMANCE OPTIMIZED CSS
-   Cải tiến: Hiệu năng + Toast hiện đại + Animations mượt mà
+   💎 MINIAPP TÀI CHÍNH - MODERN OPTIMIZED CSS
+   Kết hợp: Bố cục cũ + Animations mới + Màu sắc hiện đại
    ============================================================================ */
 
 /* ============================================================================
@@ -63,11 +63,10 @@
   --radius-xl: 20px;
   --radius-full: 9999px;
   
-  /* ⚡ Transitions - Tối ưu cho hiệu năng */
+  /* ⚡ Transitions */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-bounce: 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 /* ============================================================================
@@ -97,6 +96,7 @@
     --text-secondary: #94A3B8;
   }
 
+  /* Stat-box trong dark mode */
   .stat-box {
     background: linear-gradient(135deg, var(--stat-box-bg-start), var(--stat-box-bg-end)) !important;
   }
@@ -105,12 +105,14 @@
     color: var(--stat-title-color) !important;
   }
 
+  /* Transaction & Keyword boxes */
   .transaction-box,
   .keyword-box {
     background: linear-gradient(135deg, var(--stat-box-bg-start), var(--stat-box-bg-end)) !important;
     border: 1px solid var(--input-border) !important;
   }
 
+  /* Input fields */
   input[type="date"],
   input[type="text"],
   input[type="number"],
@@ -121,6 +123,7 @@
     border-color: var(--input-border) !important;
   }
 
+  /* Calendar & Select icons */
   input[type="date"]::-webkit-calendar-picker-indicator,
   input[type="month"]::-webkit-calendar-picker-indicator {
     filter: invert(90%);
@@ -129,13 +132,13 @@
   select {
     background-image: url('data:image/svg+xml;charset=UTF-8,<svg fill="%23F1F5F9" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') !important;
     background-repeat: no-repeat !important;
-    background-position: right 12px center !important;
+    background-position: right 12px center !important; /* Tăng từ 10px lên 12px */
     background-size: 20px !important;
   }
 }
 
 /* ============================================================================
-   3. GLOBAL RESET & BASE STYLES - PERFORMANCE OPTIMIZED
+   3. GLOBAL RESET & BASE STYLES
    ============================================================================ */
 * {
   margin: 0;
@@ -145,409 +148,154 @@
 
 html {
   font-size: 16px;
+  scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: var(--background-color);
+  margin: 0;
+  padding: 80px 20px 20px;
+  background-color: var(--background-color);
   color: var(--text-color);
   line-height: 1.6;
+  min-height: 100vh;
+  width: 100%;
+  min-width: 320px;
   overflow-x: hidden;
-  /* Performance: Tối ưu rendering */
-  -webkit-tap-highlight-color: transparent;
-  touch-action: pan-y;
+  transition: background var(--transition-base);
 }
 
 /* ============================================================================
-   4. 🎯 MODERN TOAST NOTIFICATIONS - ENHANCED VERSION
-   ============================================================================ */
-.toast-container {
-  position: fixed;
-  top: 80px;
-  right: 20px;
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  pointer-events: none;
-  /* Performance optimization */
-  will-change: transform;
-  contain: layout style paint;
-}
-
-.toast {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  min-width: 300px;
-  max-width: 420px;
-  padding: 16px 20px;
-  background: var(--card-bg);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15), 0 0 1px rgba(0, 0, 0, 0.1);
-  border-left: 4px solid;
-  opacity: 0;
-  transform: translateX(400px);
-  transition: all var(--transition-base);
-  pointer-events: auto;
-  position: relative;
-  overflow: hidden;
-  backdrop-filter: blur(10px);
-  /* Performance optimization */
-  will-change: transform, opacity;
-  contain: layout style paint;
-}
-
-.toast.show {
-  opacity: 1;
-  transform: translateX(0);
-  animation: toastSlideIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-.toast.hide {
-  opacity: 0;
-  transform: translateX(400px);
-  transition: all 0.3s ease-in;
-}
-
-/* Toast Types with Modern Icons */
-.toast.success {
-  border-left-color: var(--success-color);
-}
-
-.toast.error {
-  border-left-color: var(--danger-color);
-}
-
-.toast.warning {
-  border-left-color: var(--warning-color);
-}
-
-.toast.info {
-  border-left-color: var(--info-color);
-}
-
-/* Toast Icon Container */
-.toast-icon {
-  flex-shrink: 0;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  font-size: 14px;
-  font-weight: bold;
-  /* Performance: Use transform instead of position */
-  transform: translateZ(0);
-}
-
-.toast.success .toast-icon {
-  background: var(--success-color);
-  color: white;
-}
-
-.toast.error .toast-icon {
-  background: var(--danger-color);
-  color: white;
-}
-
-.toast.warning .toast-icon {
-  background: var(--warning-color);
-  color: white;
-}
-
-.toast.info .toast-icon {
-  background: var(--info-color);
-  color: white;
-}
-
-/* Toast Content */
-.toast-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.toast-title {
-  font-weight: 700;
-  font-size: 14px;
-  color: var(--text-primary);
-  line-height: 1.3;
-}
-
-.toast-message {
-  font-size: 13px;
-  color: var(--text-secondary);
-  line-height: 1.4;
-}
-
-/* Close Button */
-.toast-close {
-  flex-shrink: 0;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  cursor: pointer;
-  border-radius: 4px;
-  transition: all var(--transition-fast);
-  font-size: 18px;
-  line-height: 1;
-  padding: 0;
-}
-
-.toast-close:hover {
-  background: rgba(0, 0, 0, 0.05);
-  color: var(--text-primary);
-}
-
-/* Progress Bar */
-.toast-progress {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 3px;
-  background: currentColor;
-  opacity: 0.3;
-  animation: toastProgress 3s linear forwards;
-  /* Performance optimization */
-  will-change: width;
-  transform: translateZ(0);
-}
-
-.toast.success .toast-progress {
-  color: var(--success-color);
-}
-
-.toast.error .toast-progress {
-  color: var(--danger-color);
-}
-
-.toast.warning .toast-progress {
-  color: var(--warning-color);
-}
-
-.toast.info .toast-progress {
-  color: var(--info-color);
-}
-
-/* Toast Animations */
-@keyframes toastSlideIn {
-  0% {
-    opacity: 0;
-    transform: translateX(400px) scale(0.8);
-  }
-  50% {
-    transform: translateX(-10px) scale(1.02);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-  }
-}
-
-@keyframes toastProgress {
-  0% {
-    width: 100%;
-  }
-  100% {
-    width: 0%;
-  }
-}
-
-/* Mobile Responsive */
-@media (max-width: 480px) {
-  .toast-container {
-    top: 70px;
-    right: 10px;
-    left: 10px;
-  }
-  
-  .toast {
-    min-width: auto;
-    max-width: 100%;
-    padding: 14px 16px;
-  }
-  
-  .toast-title {
-    font-size: 13px;
-  }
-  
-  .toast-message {
-    font-size: 12px;
-  }
-}
-
-/* ============================================================================
-   5. 🎨 ENHANCED LOADING STATES
-   ============================================================================ */
-/* Loading Spinner with better animation */
-.loading-spinner {
-  display: inline-block;
-  width: 24px;
-  height: 24px;
-  border: 3px solid rgba(99, 102, 241, 0.2);
-  border-top-color: var(--primary-color);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  /* Performance optimization */
-  will-change: transform;
-  transform: translateZ(0);
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* Skeleton Loading for Charts */
-.chart-skeleton {
-  background: linear-gradient(
-    90deg,
-    rgba(99, 102, 241, 0.05) 25%,
-    rgba(99, 102, 241, 0.1) 50%,
-    rgba(99, 102, 241, 0.05) 75%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: var(--radius-lg);
-  height: 300px;
-  /* Performance optimization */
-  will-change: background-position;
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
-
-/* ============================================================================
-   6. 📱 APP HEADER & NAVIGATION - PERFORMANCE OPTIMIZED
+   4. HEADER & NAVIGATION WITH ANIMATIONS
    ============================================================================ */
 .app-header {
+  background: var(--card-bg);
+  padding: 10px;
+  text-align: center;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  height: 60px;
-  background: var(--gradient-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  box-shadow: var(--shadow-md);
-  /* Performance optimization */
-  will-change: transform;
-  transform: translateZ(0);
-  contain: layout style paint;
+  z-index: 1001;
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(10px);
+  animation: slideDown var(--transition-base);
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .app-header h3 {
-  color: white;
-  font-size: 1.25rem;
-  font-weight: 800;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--secondary-color);
   letter-spacing: 0.5px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .top-nav {
   position: fixed;
-  top: 60px;
+  top: 34px;
   left: 0;
   right: 0;
-  background: var(--card-bg);
   display: flex;
   justify-content: space-around;
-  padding: 8px 0;
-  box-shadow: var(--shadow-sm);
-  z-index: 999;
-  border-bottom: 2px solid var(--border-color);
-  /* Performance optimization */
-  will-change: transform;
-  transform: translateZ(0);
-  contain: layout style paint;
+  background: var(--gradient-primary);
+  padding: 10px 0;
+  box-shadow: var(--shadow-md);
+  z-index: 1002;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.top-nav::-webkit-scrollbar {
+  display: none;
 }
 
 .nav-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  padding: 8px 12px;
+  justify-content: center;
+  gap: 2px;
+  padding: 8px 8px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.7rem;
+  font-weight: 600;
   cursor: pointer;
   border-radius: var(--radius-md);
-  transition: all var(--transition-fast);
-  color: var(--text-secondary);
-  flex: 1;
-  max-width: 100px;
-  /* Performance: Use transform for animations */
-  will-change: transform, background-color;
+  transition: all var(--transition-base);
+  white-space: nowrap;
+  min-width: 60px;
+  position: relative;
 }
 
-.nav-item:hover {
-  background: rgba(99, 102, 241, 0.08);
-  transform: translateY(-2px);
-}
-
-.nav-item.active {
-  color: var(--primary-color);
-  background: rgba(99, 102, 241, 0.1);
-  font-weight: 700;
+/* Hover effect - scale nhẹ cho non-active items */
+.nav-item:hover:not(.active) {
+  transform: scale(1.05);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .nav-item i {
-  font-size: 1.25rem;
-  transition: transform var(--transition-fast);
+  font-size: 1.2rem;
+  transition: transform var(--transition-fast), filter var(--transition-fast);
+  position: relative;
+  z-index: 1;
 }
 
-.nav-item:hover i,
+.nav-item:hover:not(.active) i {
+  transform: scale(1.08);
+}
+
+/* Click feedback - simple scale */
+.nav-item:active {
+  transform: scale(0.98);
+}
+
+.nav-item.active {
+  color: #FFFFFF;
+  font-weight: 700;
+}
+
+/* Icon active: to hơn + sáng hơn với drop shadow */
 .nav-item.active i {
-  transform: scale(1.1);
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
 }
 
 .nav-item span {
-  font-size: 0.75rem;
-  font-weight: 600;
-  white-space: nowrap;
+  font-size: 0.68rem;
+  letter-spacing: 0.3px;
+  position: relative;
+  z-index: 1;
 }
 
 /* ============================================================================
-   7. 📦 CONTENT WRAPPER - OPTIMIZED
+   5. CONTENT WRAPPER & TABS
    ============================================================================ */
 .content-wrapper {
-  margin-top: 130px;
-  padding: 0 16px 30px;
-  /* Performance optimization */
-  contain: layout style;
-}
-
-.tab-content {
-  display: none;
-  animation: fadeIn 0.3s ease-in;
-  /* Performance optimization */
-  will-change: opacity;
-}
-
-.tab-content.active {
-  display: block;
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: fadeIn var(--transition-slow);
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -555,152 +303,213 @@ body {
   }
 }
 
-/* ============================================================================
-   8. 📊 STATS CONTAINER - ENHANCED
-   ============================================================================ */
-.stats-container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin: 20px 0;
-  /* Performance optimization */
-  contain: layout style;
+.tab-content {
+  display: none;
+  animation: tabFadeIn var(--transition-base);
 }
 
-.stat-box {
-  background: var(--card-bg);
-  padding: 16px;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  transition: all var(--transition-base);
-  border: 2px solid transparent;
-  /* Performance optimization */
-  will-change: transform, box-shadow;
-  transform: translateZ(0);
+.tab-content.active {
+  display: block;
 }
 
-.stat-box:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: var(--shadow-hover);
+@keyframes tabFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-.stat-box.income {
-  border-color: var(--income-color);
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(5, 150, 105, 0.05) 100%);
-}
-
-.stat-box.expense {
-  border-color: var(--expense-color);
-  background: linear-gradient(135deg, rgba(244, 63, 94, 0.05) 0%, rgba(220, 38, 38, 0.05) 100%);
-}
-
-.stat-box.balance {
-  border-color: var(--balance-color);
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(37, 99, 235, 0.05) 100%);
-}
-
-.stat-box .title {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  font-weight: 600;
-  margin-bottom: 8px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.stat-box .amount {
-  font-size: 1.25rem;
+h1 {
+  font-size: clamp(1rem, 3vw, 1.2rem);
   font-weight: 800;
-  line-height: 1.2;
-}
-
-.stat-box.income .amount {
-  color: var(--income-color);
-}
-
-.stat-box.expense .amount {
-  color: var(--expense-color);
-}
-
-.stat-box.balance .amount {
-  color: var(--balance-color);
+  color: var(--primary-color);
+  margin: 2rem 0 1rem 0; /* Tăng margin-top từ 1.5rem lên 2rem */
+  text-align: center;
+  letter-spacing: -0.3px;
+  text-transform: uppercase;
 }
 
 /* ============================================================================
-   9. 🎯 BUTTONS - MODERN & PERFORMANT
+   6. BUTTONS - MODERN WITH RIPPLE EFFECT
    ============================================================================ */
 button {
-  font-family: inherit;
-  font-weight: 700;
+  padding: 10px 20px;
+  background: var(--gradient-primary);
+  color: white;
   border: none;
   border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all var(--transition-fast);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px 20px;
-  font-size: 0.9rem;
-  /* Performance optimization */
-  will-change: transform, box-shadow;
-  transform: translateZ(0);
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+  font-family: inherit;
 }
 
-button:hover:not(:disabled) {
+/* Soft Glow Effect - Ánh sáng mềm từ trong ra */
+button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.25) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  border-radius: var(--radius-md);
+}
+
+button:hover::before {
+  opacity: 1;
+}
+
+button:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.25), 
+              0 0 20px rgba(99, 102, 241, 0.15);
 }
 
-button:active:not(:disabled) {
+button:active {
   transform: translateY(0);
 }
 
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
 }
 
 button i {
-  font-size: 1rem;
+  margin-right: 6px;
+  font-size: 0.9rem;
 }
 
-/* Primary Button */
-button:not([class]) {
-  background: var(--gradient-primary);
-  color: white;
+.btn-success {
+  background: var(--gradient-success) !important;
 }
 
-button:not([class]):hover:not(:disabled) {
-  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+.btn-success:hover {
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.25), 
+              0 0 20px rgba(16, 185, 129, 0.15) !important;
+}
+
+.btn-danger {
+  background: var(--gradient-danger) !important;
+}
+
+.btn-danger:hover {
+  box-shadow: 0 8px 24px rgba(244, 63, 94, 0.25), 
+              0 0 20px rgba(244, 63, 94, 0.15) !important;
+}
+
+.cancel-btn {
+  background: var(--card-bg) !important;
+  color: var(--text-color) !important;
+  border: 2px solid var(--border-color) !important;
+}
+
+.cancel-btn::before {
+  background: radial-gradient(circle at center, rgba(100, 116, 139, 0.15) 0%, transparent 70%) !important;
+}
+
+.cancel-btn:hover {
+  box-shadow: 0 4px 12px rgba(100, 116, 139, 0.15) !important;
+}
+
+.save-btn {
+  background: var(--gradient-primary) !important;
 }
 
 /* ============================================================================
-   10. 📝 FORMS & INPUTS - OPTIMIZED
+   7. INPUT GROUPS & FORMS
    ============================================================================ */
 .input-group {
   display: flex;
+  gap: 0.75rem;
   align-items: center;
-  gap: 10px;
   flex-wrap: wrap;
-  margin-bottom: 20px;
+  margin: 1rem 0;
+  justify-content: center;
+}
+
+.input-group.vertical {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.input-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.button-group {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.button-group button {
+  flex: 1;
 }
 
 input[type="date"],
 input[type="text"],
 input[type="number"],
-select,
-textarea {
-  padding: 12px 16px;
+select {
+  padding: 10px 14px;
   border: 2px solid var(--border-color);
-  border-radius: var(--radius-md);
-  font-size: 0.95rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
   font-family: inherit;
+  transition: all var(--transition-base);
   background: var(--card-bg);
   color: var(--text-color);
-  transition: all var(--transition-fast);
-  /* Performance optimization */
-  will-change: border-color, box-shadow;
+  height: 42px; /* Chiều cao đồng nhất với button */
+  box-sizing: border-box; /* Đảm bảo padding được tính trong height */
+  line-height: normal; /* Reset line-height */
+}
+
+/* Kiểm soát calendar picker indicator */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 1;
+  width: 20px;
+  height: 20px;
+}
+
+/* Tùy chỉnh select để ẩn mũi tên mặc định và thêm icon custom */
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding-right: 38px; /* Tăng padding-right để tạo khoảng cách cho icon */
+  background-image: url('data:image/svg+xml;charset=UTF-8,<svg fill="%236366F1" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 12px center; /* Dịch icon ra xa hơn */
+  background-size: 20px;
+  cursor: pointer;
+}
+
+/* Loại trừ textarea */
+textarea {
+  padding: 10px 14px;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-family: inherit;
+  transition: all var(--transition-base);
+  background: var(--card-bg);
+  color: var(--text-color);
+  min-height: 80px;
 }
 
 input:focus,
@@ -709,137 +518,239 @@ textarea:focus {
   outline: none;
   border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  transform: translateY(-1px);
+}
+
+input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.8;
+}
+
+label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
 }
 
 /* ============================================================================
-   11. 🎨 TRANSACTIONS & LISTS - ENHANCED
+   8. STATS CONTAINER - MODERN CARDS
    ============================================================================ */
-.transactions-list {
+.stats-container {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+}
+
+.stat-box {
+  flex: 1;
+  min-width: 110px;
+  max-width: 150px;
+  background: var(--card-bg);
+  padding: 0.55rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  text-align: center;
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Top border animation */
+.stat-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-primary);
+  transform: scaleX(0);
+  transition: transform var(--transition-base);
+}
+
+.stat-box:hover::before {
+  transform: scaleX(1);
+}
+
+.stat-box:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.stat-box.income::before {
+  background: var(--gradient-success);
+}
+
+.stat-box.expense::before {
+  background: var(--gradient-danger);
+}
+
+.stat-box.balance::before {
+  background: var(--gradient-info);
+}
+
+.stat-box .title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
+
+.stat-box .amount {
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.income .amount {
+  color: var(--income-color);
+  text-shadow: 0 1px 2px rgba(16, 185, 129, 0.1);
+}
+
+.expense .amount {
+  color: var(--expense-color);
+  text-shadow: 0 1px 2px rgba(244, 63, 94, 0.1);
+}
+
+.balance .amount {
+  color: var(--balance-color);
+  text-shadow: 0 1px 2px rgba(59, 130, 246, 0.1);
+}
+
+/* ============================================================================
+   9. TRANSACTION CARDS - BEAUTIFUL ANIMATED
+   ============================================================================ */
+.transactions-list,
+.keywords-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  /* Performance optimization */
-  contain: layout style;
+  gap: 0.85rem;
+  margin-top: 1rem;
 }
 
-.transaction-box {
+.transaction-box,
+.keyword-box {
   background: var(--card-bg);
-  padding: 16px;
+  padding: 0.85rem;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
-  border-left: 4px solid;
-  transition: all var(--transition-base);
-  /* Performance optimization */
-  will-change: transform, box-shadow;
-  transform: translateZ(0);
-}
-
-.transaction-box:hover {
-  transform: translateX(4px);
-  box-shadow: var(--shadow-md);
-}
-
-.transaction-box.income {
-  border-left-color: var(--income-color);
-}
-
-.transaction-box.expense {
-  border-left-color: var(--expense-color);
-}
-
-/* ============================================================================
-   12. 📱 RESPONSIVE DESIGN
-   ============================================================================ */
-@media (max-width: 768px) {
-  .stats-container {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-  
-  .nav-item span {
-    font-size: 0.7rem;
-  }
-  
-  .content-wrapper {
-    padding: 0 12px 20px;
-  }
-}
-
-/* ============================================================================
-   13. 🎯 CHART OPTIMIZATIONS
-   ============================================================================ */
-canvas {
-  /* Performance: Force GPU acceleration */
-  transform: translateZ(0);
-  will-change: transform;
-}
-
-.chart-container {
-  /* Performance: Contain layout calculations */
-  contain: layout style paint;
-  background: var(--card-bg);
-  padding: 20px;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  margin: 20px 0;
-}
-
-/* ============================================================================
-   14. 💡 UTILITY CLASSES
-   ============================================================================ */
-.text-center {
-  text-align: center;
-}
-
-.mt-1 { margin-top: var(--spacing-sm); }
-.mt-2 { margin-top: var(--spacing-md); }
-.mt-3 { margin-top: var(--spacing-lg); }
-
-.mb-1 { margin-bottom: var(--spacing-sm); }
-.mb-2 { margin-bottom: var(--spacing-md); }
-.mb-3 { margin-bottom: var(--spacing-lg); }
-
-/* Performance: Reduce motion for users who prefer it */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* ============================================================================
-   15. 🎨 ADDITIONAL COMPONENTS (giữ nguyên phần còn lại của CSS cũ)
-   ============================================================================ */
-h1 {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: var(--text-primary);
-  margin-bottom: 1rem;
-  text-align: center;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-
-.notification {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%);
-  padding: 14px 18px;
-  border-radius: var(--radius-lg);
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  line-height: 1.6;
   border-left: 4px solid var(--primary-color);
-  margin-bottom: 1rem;
+  transition: all var(--transition-base);
+  animation: slideIn var(--transition-base);
+  animation-fill-mode: both;
+  line-height: 1.4;
 }
 
-.notification strong {
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.transaction-box:hover,
+.keyword-box:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateX(4px);
+}
+
+.transaction-box .date,
+.transaction-box .id {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 0.15rem;
+}
+
+.transaction-box .amount {
+  font-size: 1rem;
+  font-weight: 800;
+  margin: 0.3rem 0;
+}
+
+.transaction-box .type.income,
+.transaction-box.income .amount {
+  color: var(--income-color);
+}
+
+.transaction-box .type.expense,
+.transaction-box.expense .amount {
+  color: var(--expense-color);
+}
+
+.transaction-box .content {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.15rem;
+}
+
+.transaction-box .category {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 3px 10px;
+  background: var(--background-color);
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin: 0.15rem 0;
+}
+
+.transaction-box .note {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin: 0.15rem 0;
+}
+
+.transaction-box .actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.transaction-box button {
+  flex: 1;
+  padding: 7px 12px;
+  font-size: 0.75rem;
+}
+
+.transaction-box button.edit {
+  background: var(--gradient-primary);
+}
+
+.transaction-box button.delete {
+  background: var(--gradient-danger);
+}
+
+/* Keyword boxes */
+.keyword-box .category {
+  font-size: 1rem;
+  font-weight: 600;
   color: var(--primary-color);
-  font-weight: 700;
+  margin-bottom: 0.5rem;
 }
 
-/* Modal Styles */
+.keyword-box .keywords {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ============================================================================
+   10. MODALS - SMOOTH & ELEGANT
+   ============================================================================ */
 .modal {
   display: none;
   position: fixed;
@@ -847,31 +758,38 @@ h1 {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
   z-index: 2000;
   align-items: center;
   justify-content: center;
-  animation: fadeIn 0.2s ease-in;
+  padding: 20px;
+  animation: modalFadeIn var(--transition-base);
 }
 
-.modal.active {
-  display: flex;
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal.show {
+  display: flex !important;
 }
 
 .modal-content {
   background: var(--card-bg);
-  padding: 30px;
+  padding: 1.5rem;
   border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
   max-width: 500px;
-  width: 90%;
-  max-height: 85vh;
+  width: 100%;
+  max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  animation: modalSlideUp 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  /* Performance optimization */
-  will-change: transform;
-  transform: translateZ(0);
+  animation: modalSlideUp var(--transition-slow);
 }
 
 @keyframes modalSlideUp {
@@ -886,231 +804,403 @@ h1 {
 }
 
 .modal-content h2 {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 800;
-  color: var(--text-primary);
-  margin-bottom: 20px;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
   text-align: center;
 }
 
-.modal-content form label {
-  display: block;
-  margin-top: 15px;
-  margin-bottom: 5px;
-  font-weight: 600;
-  color: var(--text-primary);
-  font-size: 0.9rem;
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
-.modal-content form input,
-.modal-content form select,
-.modal-content form textarea {
-  width: 100%;
-  padding: 12px 16px;
+.modal-content label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.modal-content input,
+.modal-content select,
+.modal-content textarea {
+  padding: 10px 14px;
   border: 2px solid var(--border-color);
   border-radius: var(--radius-md);
   font-size: 0.95rem;
   font-family: inherit;
-  transition: all var(--transition-fast);
+  transition: all var(--transition-base);
+  background: var(--background-color);
+  color: var(--text-color);
 }
 
-.modal-content form textarea {
+.modal-content textarea {
   resize: vertical;
   min-height: 80px;
 }
 
 .btn-group {
   display: flex;
-  gap: 12px;
-  margin-top: 25px;
+  gap: 0.75rem;
+  margin-top: 1rem;
 }
 
-.save-btn,
-.cancel-btn {
+.btn-group button {
   flex: 1;
-  padding: 14px 20px;
-  border: none;
-  border-radius: var(--radius-md);
-  font-weight: 700;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: all var(--transition-fast);
+  padding: 10px 18px;
+}
+
+.error-message {
+  color: var(--danger-color);
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 0.5rem;
+  background: rgba(244, 63, 94, 0.1);
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.75rem;
+  display: none;
+}
+
+.error-message:not(:empty) {
+  display: block;
+}
+
+/* ============================================================================
+   11. PAGINATION
+   ============================================================================ */
+.pagination {
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 8px;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
 }
 
-.save-btn {
-  background: var(--gradient-success);
-  color: white;
-}
-
-.save-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
-}
-
-.cancel-btn {
-  background: var(--secondary-color);
-  color: white;
-}
-
-.cancel-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(100, 116, 139, 0.3);
-}
-
-/* Pagination */
 .pagination-btn {
-  background: var(--card-bg);
-  color: var(--primary-color);
-  border: 2px solid var(--primary-color);
-  margin: 0 8px;
+  padding: 8px 16px;
+  font-size: 0.8rem;
+  min-width: 90px;
 }
 
-.pagination-btn:hover:not(:disabled) {
-  background: var(--primary-color);
-  color: white;
-}
-
-.pagination-btn:disabled {
-  border-color: var(--border-color);
+#pageInfo,
+#pageInfoMonthly,
+#pageInfoSearch {
+  font-size: 0.85rem;
+  font-weight: 600;
   color: var(--text-secondary);
 }
 
-/* Custom Legend */
+/* ============================================================================
+   12. CHARTS & LEGENDS
+   ============================================================================ */
+.chart-container {
+  margin-top: 0;
+  width: 100%;
+  max-width: 100%;
+  display: none; /* Ẩn ban đầu */
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.chart-container.show {
+  display: flex; /* Hiện khi có class show */
+}
+
+.chart-container h1 {
+  margin-bottom: 0.3rem;
+  margin-top: 0.5rem;
+}
+
+.pie-chart-wrapper {
+  width: 100%;
+  max-width: 600px;
+  margin: 0.5rem auto;
+  aspect-ratio: 1 / 1;
+  position: relative;
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+#monthlyChart {
+  width: 100% !important;
+  height: auto !important;
+  max-width: 600px !important;
+  min-height: 300px;
+  max-height: 380px;
+  display: none;
+  margin: 0.5rem auto 1rem;
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+#monthlyChart.show {
+  display: block;
+}
+
+#monthlyPieChart {
+  width: 100% !important;
+  height: auto !important;
+  display: none;
+  margin: 0 auto;
+}
+
+#monthlyPieChart.show {
+  display: block;
+}
+
 .custom-legend {
+  width: 100%;
+  max-width: 650px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 12px;
-  margin-top: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.85rem;
+  font-size: 0.95rem;
+  padding: 0 1rem;
+  margin: 0.8rem auto 0;
+  box-sizing: border-box;
+}
+
+.custom-legend-column {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.85rem;
 }
 
 .legend-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
+  gap: 0.75rem;
+  padding: 0.85rem;
   background: var(--card-bg);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   cursor: pointer;
-  transition: all var(--transition-fast);
-  border: 2px solid transparent;
+  transition: all var(--transition-base);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .legend-item:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--primary-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .legend-color {
-  width: 16px;
-  height: 16px;
-  border-radius: 4px;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
+
+.legend-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+  line-height: 1.3;
+  align-items: flex-start; /* Căn trái các nội dung */
 }
 
 .legend-text {
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--text-primary);
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  text-align: left; /* Căn trái tiêu đề */
 }
 
 .legend-value {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
   font-size: 0.8rem;
-  color: var(--text-secondary);
-  margin-left: auto;
-  font-weight: 700;
+  line-height: 1.3;
 }
 
-/* Info Cards */
+.legend-amount {
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.legend-percentage {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* ============================================================================
+   13. LOADING SPINNER
+   ============================================================================ */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  border: 3px solid var(--border-color);
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 0.8s linear infinite;
+  margin: 1.5rem auto;
+}
+
+/* ============================================================================
+   14. NOTIFICATIONS & TOAST
+   ============================================================================ */
+.notification {
+  padding: 0.85rem;
+  background: var(--card-bg);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--info-color);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin: 1rem 0;
+  box-shadow: var(--shadow-sm);
+  line-height: 1.5;
+}
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--card-bg);
+  padding: 16px 24px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  z-index: 3000;
+  transform: translateX(400px);
+  opacity: 0;
+  transition: all var(--transition-base);
+  max-width: 350px;
+}
+
+.toast.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.toast.success {
+  border-left: 4px solid var(--success-color);
+}
+
+.toast.error {
+  border-left: 4px solid var(--danger-color);
+}
+
+.toast.warning {
+  border-left: 4px solid var(--warning-color);
+}
+
+.toast.info {
+  border-left: 4px solid var(--info-color);
+}
+
+/* ============================================================================
+   15. INFO SECTION (TAB 6)
+   ============================================================================ */
 .info-section {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1.5rem;
+  margin-top: 1rem;
 }
 
 .info-card {
   background: var(--card-bg);
-  padding: 24px;
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-sm);
-  border: 2px solid var(--border-color);
+  padding: 0.85rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
   transition: all var(--transition-base);
 }
 
 .info-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
-  border-color: var(--primary-color);
 }
 
 .info-card h1 {
-  font-size: 1.3rem;
-  color: var(--primary-color);
-  margin-bottom: 12px;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
   text-align: left;
 }
 
 .info-card p {
-  margin-bottom: 10px;
-  line-height: 1.7;
+  font-size: 0.9rem;
   color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0.35rem 0;
 }
 
-.custom-text {
-  font-size: 0.95rem;
-  line-height: 1.8;
-  text-align: justify;
+.info-card .custom-text {
+  color: var(--text-primary);
+  font-weight: 500;
 }
 
-/* QR Container */
+.info-card strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.info-card i {
+  margin-right: 0.5rem;
+}
+
 .qr-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: var(--card-bg);
-  padding: 30px;
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-sm);
-  border: 2px solid var(--border-color);
+  gap: 1rem;
+  margin: 1.5rem 0;
 }
 
 .qr-frame {
-  padding: 20px;
-  background: white;
+  background: var(--card-bg);
+  padding: 1rem;
   border-radius: var(--radius-lg);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  margin-bottom: 16px;
+  box-shadow: var(--shadow-md);
 }
 
 .qr-image {
-  display: block;
-  width: 200px;
-  height: 200px;
+  width: 250px;
+  height: auto;
   border-radius: var(--radius-md);
 }
 
 .qr-caption {
   font-size: 0.9rem;
   color: var(--text-secondary);
-  font-weight: 600;
   text-align: center;
+  font-weight: 600;
 }
 
-/* Contact Columns */
 .contact-columns {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-}
-
-.contact-columns p {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .contact-columns a {
@@ -1125,151 +1215,435 @@ h1 {
   text-decoration: underline;
 }
 
-/* Keywords List */
-.keywords-list {
+/* ============================================================================
+   16. SEARCH SECTION (TAB 4)
+   ============================================================================ */
+.search-transaction {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 1rem;
+  margin: 1rem 0;
 }
 
-.keyword-box {
-  background: var(--card-bg);
-  padding: 16px;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  border-left: 4px solid var(--primary-color);
-  transition: all var(--transition-base);
-}
-
-.keyword-box:hover {
-  transform: translateX(4px);
-  box-shadow: var(--shadow-md);
-}
-
-/* Chart Wrapper */
-.pie-chart-wrapper {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-/* Input Field Vertical */
-.input-group.vertical {
-  flex-direction: column;
-  align-items: stretch;
-}
-
-.input-field {
+.search-field {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0.5rem;
 }
 
-.input-field label {
+.search-field label {
+  font-size: 0.85rem;
   font-weight: 600;
-  color: var(--text-primary);
-  font-size: 0.9rem;
-}
-
-.uniform-input {
-  width: 100%;
-}
-
-.button-group {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.button-group button {
-  flex: 1;
-}
-
-/* Error Message */
-.error-message {
-  background: rgba(244, 63, 94, 0.1);
-  color: var(--danger-color);
-  padding: 12px 16px;
-  border-radius: var(--radius-md);
-  margin-bottom: 16px;
-  display: none;
-  font-size: 0.9rem;
-  font-weight: 600;
-  border-left: 4px solid var(--danger-color);
-}
-
-/* Transaction Details */
-.transaction-details {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 8px 16px;
-  font-size: 0.9rem;
-  margin-top: 8px;
-}
-
-.transaction-details .label {
-  font-weight: 700;
   color: var(--text-secondary);
 }
 
-.transaction-details .value {
-  color: var(--text-primary);
-  font-weight: 600;
+.search-field input {
+  width: 100%;
 }
 
-/* Action Buttons in Transaction Box */
-.action-buttons {
-  display: flex;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.edit-btn,
-.delete-btn {
-  flex: 1;
-  padding: 10px 16px;
-  border-radius: var(--radius-md);
-  font-weight: 700;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-
-.edit-btn {
-  background: var(--edit-btn-color);
-  color: white;
-}
-
-.edit-btn:hover {
-  background: #0891B2;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(6, 182, 212, 0.3);
-}
-
-.delete-btn {
-  background: var(--delete-btn-color);
-  color: white;
-}
-
-.delete-btn:hover {
-  background: #DC2626;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
+.search-transaction button {
+  width: 100%;
 }
 
 /* ============================================================================
-   16. 🎯 PERFORMANCE: WILL-CHANGE CLEANUP
+   17. RESPONSIVE DESIGN
    ============================================================================ */
-/* Remove will-change after animations complete */
-.toast:not(.show):not(.hide),
-.stat-box:not(:hover),
-.transaction-box:not(:hover),
-.nav-item:not(:hover),
-button:not(:hover) {
-  will-change: auto;
+
+/* Mobile Small (max-width: 600px) */
+@media (max-width: 600px) {
+  body {
+    padding: 70px 16px 20px;
+  }
+
+  h1 {
+    font-size: 0.95rem;
+  }
+
+  .stat-box {
+    min-width: 100px;
+    max-width: 130px;
+    padding: 0.625rem; /* Giảm padding cho mobile */
+  }
+
+  .stat-box .title {
+    font-size: 0.68rem;
+    margin-bottom: 0.3rem; /* Giảm khoảng cách */
+    line-height: 1.2;
+  }
+
+  .stat-box .amount {
+    font-size: 0.9rem; /* Tăng lên cho dễ đọc hơn */
+    line-height: 1.3;
+  }
+
+  .nav-item {
+    min-width: 60px;
+    padding: 6px 8px;
+  }
+
+  .nav-item i {
+    font-size: 1rem;
+  }
+
+  .nav-item span {
+    font-size: 0.65rem;
+  }
+
+  button {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    height: auto;
+    line-height: 1.2;
+    border: none;
+    vertical-align: middle;
+  }
+
+  /* Đồng nhất chiều cao input với button ở mobile */
+  input[type="date"],
+  input[type="text"],
+  input[type="number"],
+  select {
+    padding: 6px 10px !important; /* 6px padding + 2px border = 8px như button */
+    font-size: 0.8rem !important;
+    height: auto !important;
+    line-height: 1.2 !important;
+    box-sizing: border-box !important;
+    border-width: 2px !important;
+    vertical-align: middle !important;
+  }
+  
+  /* Đảm bảo input date không có margin/padding thừa */
+  input[type="date"]::-webkit-date-and-time-value {
+    text-align: left;
+    padding: 0;
+    margin: 0;
+  }
+  
+  /* Điều chỉnh icon dropdown cho select ở mobile */
+  select {
+    padding-right: 30px !important; /* Giảm padding-right để icon không bị sát */
+    background-position: right 7px center !important; /* Dịch icon vào trong hơn */
+    background-size: 16px !important; /* Giảm kích thước icon */
+  }
+
+  /* Kiểm soát calendar picker ở mobile */
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    width: 16px !important;
+    height: 16px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  /* Reset các thuộc tính webkit của input date */
+  input[type="date"]::-webkit-datetime-edit {
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 1.2 !important;
+  }
+  
+  input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+    padding: 0 !important;
+  }
+  
+  input[type="date"]::-webkit-datetime-edit-text {
+    padding: 0 2px !important;
+  }
+  
+  input[type="date"]::-webkit-datetime-edit-month-field,
+  input[type="date"]::-webkit-datetime-edit-day-field,
+  input[type="date"]::-webkit-datetime-edit-year-field {
+    padding: 0 !important;
+  }
+
+  .transaction-box,
+  .keyword-box {
+    padding: 0.75rem;
+  }
+
+  .transaction-box .amount {
+    font-size: 0.95rem;
+  }
+
+  .modal-content {
+    padding: 1.2rem;
+  }
+
+  .pagination-btn {
+    min-width: 75px;
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
+
+  .custom-legend {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    padding: 0 0.5rem;
+  }
+  
+  .legend-item {
+    padding: 0.75rem;
+  }
+  
+  .legend-color {
+    width: 36px;
+    height: 36px;
+    font-size: 1.15rem;
+  }
+  
+  .legend-text {
+    font-size: 0.8rem;
+  }
+  
+  .legend-value {
+    font-size: 0.75rem;
+  }
+  
+  .legend-amount {
+    font-size: 0.8rem;
+  }
+
+  .qr-image {
+    width: 220px;
+  }
+
+  /* Info section (tab 6) cho mobile */
+  .info-section {
+    gap: 1rem;
+  }
+
+  .info-card {
+    padding: 0.875rem; /* Giảm padding */
+  }
+
+  .info-card h1 {
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+    margin-top: 0.75rem; /* Giảm margin-top cho h1 con */
+  }
+
+  .info-card p {
+    font-size: 0.82rem;
+    line-height: 1.5; /* Giảm line-height cho gọn hơn */
+    margin: 0.35rem 0; /* Giảm khoảng cách giữa các đoạn */
+  }
+
+  .info-card i {
+    margin-right: 0.35rem;
+    font-size: 0.9rem;
+  }
+
+  .qr-container {
+    gap: 0.75rem;
+    margin: 1rem 0;
+  }
+
+  .qr-frame {
+    padding: 0.75rem;
+  }
+}
+
+/* Tablet (min-width: 601px and max-width: 1023px) */
+@media (min-width: 601px) and (max-width: 1023px) {
+  body {
+    padding: 85px 24px 24px;
+  }
+
+  .stats-container {
+    gap: 1.2rem;
+  }
+
+  .stat-box {
+    min-width: 130px;
+    padding: 0.8rem;
+  }
+
+  .stat-box .title {
+    margin-bottom: 0.35rem;
+  }
+
+  .stat-box .amount {
+    font-size: 1.02rem; /* Tăng lên cho rõ ràng hơn */
+  }
+  
+  .custom-legend {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+  }
+  
+  .legend-item {
+    padding: 0.8rem;
+  }
+
+  .modal-content {
+    width: 600px;
+  }
+
+  /* Input và select cho tablet */
+  input[type="date"],
+  input[type="text"],
+  input[type="number"],
+  select {
+    height: 40px;
+  }
+
+  select {
+    padding-right: 36px;
+    background-position: right 11px center;
+  }
+}
+
+/* Desktop (min-width: 1024px) */
+@media (min-width: 1024px) {
+  body {
+    padding: 95px 30px 30px;
+  }
+
+  .content-wrapper {
+    max-width: 900px;
+  }
+
+  .stats-container {
+    gap: 1.5rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .stat-box {
+    min-width: 140px;
+    padding: 1rem;
+  }
+
+  .stat-box .title {
+    font-size: 0.78rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .stat-box .amount {
+    font-size: 1.15rem; /* Tăng lên cho rõ ràng hơn */
+  }
+
+  .transactions-list {
+    max-width: 850px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .custom-legend {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.85rem;
+    max-width: 700px;
+  }
+  
+  .legend-item {
+    padding: 0.85rem;
+  }
+
+  .info-card {
+    max-width: 550px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .search-transaction {
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Large Desktop (min-width: 1200px) */
+@media (min-width: 1200px) {
+  .content-wrapper {
+    max-width: 1000px;
+  }
+
+  .custom-legend {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 900px;
+    gap: 1rem 1.5rem;
+  }
+}
+
+/* ============================================================================
+   18. UTILITY CLASSES
+   ============================================================================ */
+.hidden {
+  display: none !important;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-1 { margin-top: var(--spacing-sm); }
+.mt-2 { margin-top: var(--spacing-md); }
+.mt-3 { margin-top: var(--spacing-lg); }
+
+.mb-1 { margin-bottom: var(--spacing-sm); }
+.mb-2 { margin-bottom: var(--spacing-md); }
+.mb-3 { margin-bottom: var(--spacing-lg); }
+
+/* ============================================================================
+   KẾT THÚC CSS
+   Kết hợp hoàn hảo: Bố cục cũ + Animations mới + Màu sắc hiện đại
+   Made with ❤️ by masterhmh
+   ============================================================================ */
+
+/* ============================================================================
+   CATEGORY DETAIL VIEW - Custom Styles
+   ============================================================================ */
+#categoryDetailView {
+  display: none;
+}
+
+#categoryMonthlyChart {
+  width: 100% !important;
+  height: 320px !important;
+  padding-top: 10px;
+}
+
+#paginationCategoryDetail {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+/* Loading indicator for category detail */
+.category-loading {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary);
+}
+
+.category-loading i {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.category-loading-text {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+/* Category detail chart container with consistent sizing */
+#categoryDetailView > div:nth-child(3) {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
