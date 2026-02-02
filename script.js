@@ -934,9 +934,10 @@ window.fetchMonthlyData = async function() {
             top: 65
           }
         },
-        // ⚡ TỐI ƯU: Tự động tính toán để cột có kích thước đồng đều
-        barPercentage: Math.min(0.9, 1 / monthRange.length * 8),
-        categoryPercentage: 0.95,
+        // ⚡ TỐI ƯU: Cột có width cố định, không phụ thuộc vào giá trị
+        // Công thức: Ít tháng = cột rộng hơn, nhiều tháng = cột hẹp lại nhưng đồng đều
+        barPercentage: 1.0,
+        categoryPercentage: Math.min(0.95, 3 / monthRange.length),
         scales: {
           x: {
             ticks: {
@@ -2159,9 +2160,9 @@ function drawCategoryMonthlyChart(data, categoryName, categoryColor) {
             }
           }
         },
-        // ⚡ TỐI ƯU: Tự động tính toán để cột có kích thước đồng đều
-        barPercentage: Math.min(0.9, 1 / data.length * 8),
-        categoryPercentage: 0.95
+        // ⚡ TỐI ƯU: Cột có width cố định, không phụ thuộc vào giá trị
+        barPercentage: 1.0,
+        categoryPercentage: Math.min(0.95, 3 / data.length)
       },
       plugins: [ChartDataLabels]
     });
