@@ -1766,22 +1766,45 @@ label {
    FIX: NÚT QUAY LẠI - CATEGORY DETAIL
    ============================================================================ */
 #backToCategoryBtn {
-  background: var(--card-bg) !important;
-  color: var(--text-primary) !important;
-  border: 2px solid var(--primary-color) !important;
-  box-shadow: var(--shadow-md) !important;
+  background: var(--gradient-primary) !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: var(--shadow-sm) !important;
   transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Soft Glow Effect giống các nút khác */
+#backToCategoryBtn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.25) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  border-radius: var(--radius-md);
+}
+
+#backToCategoryBtn:hover::before {
+  opacity: 1;
 }
 
 #backToCategoryBtn:hover {
-  background: var(--primary-color) !important;
-  color: white !important;
   transform: translateY(-2px);
-  box-shadow: var(--shadow-hover) !important;
+  box-shadow: 0 8px 24px rgba(234, 88, 12, 0.35), 
+              0 0 20px rgba(234, 88, 12, 0.2) !important;
+}
+
+#backToCategoryBtn:active {
+  transform: translateY(0);
 }
 
 #backToCategoryBtn i {
-  color: inherit !important;
+  color: white !important;
   margin-right: 0.5rem;
 }
 
@@ -1810,42 +1833,21 @@ label {
     color: var(--text-secondary) !important;
   }
   
-  /* Fix: Nút quay lại trong dark mode */
+  /* Fix: Nút quay lại trong dark mode - giống các nút khác */
   #backToCategoryBtn {
-    background: var(--card-bg) !important;
-    color: var(--text-primary) !important;
-    border-color: var(--primary-color) !important;
+    background: var(--gradient-primary) !important;
+    color: white !important;
+    border: none !important;
   }
   
   #backToCategoryBtn:hover {
-    background: var(--primary-color) !important;
-    color: white !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(251, 146, 60, 0.35), 
+                0 0 20px rgba(251, 146, 60, 0.2) !important;
   }
   
   #backToCategoryBtn i {
-    color: inherit !important;
-    opacity: 1 !important;
-  }
-}
-
-/* ============================================================================
-   FIX: LIGHT MODE - NÚT QUAY LẠI
-   ============================================================================ */
-@media (prefers-color-scheme: light) {
-  #backToCategoryBtn {
-    background: white !important;
-    color: var(--primary-color) !important;
-    border: 2px solid var(--primary-color) !important;
-    font-weight: 600;
-  }
-  
-  #backToCategoryBtn:hover {
-    background: var(--primary-color) !important;
     color: white !important;
-  }
-  
-  #backToCategoryBtn i {
-    color: inherit !important;
     opacity: 1 !important;
   }
 }
