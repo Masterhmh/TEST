@@ -2099,9 +2099,13 @@ document.getElementById('nextPageSearch').addEventListener('click', () => {
   const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
   const formattedFirstDay = formatDateToYYYYMMDD(firstDayOfMonth);
 
+  console.log('Setting transaction date to:', formattedToday);
   const transactionDateInput = document.getElementById('transactionDate');
   if (transactionDateInput) {
     transactionDateInput.value = formattedToday;
+    console.log('Transaction date input value set:', transactionDateInput.value);
+  } else {
+    console.error('transactionDate input not found!');
   }
 
   // Khởi tạo dropdown phân loại
@@ -2109,8 +2113,6 @@ document.getElementById('nextPageSearch').addEventListener('click', () => {
   populateKeywordCategories();
 
   // Khởi tạo hiển thị dropdown "Theo tháng" mặc định cho Tab 4 (Search)
-  const searchMonthSelector = document.getElementById('searchMonthSelector');
-  const searchRangeSelector = document.getElementById('searchRangeSelector');
   if (searchMonthSelector && searchRangeSelector) {
     searchMonthSelector.style.display = 'flex';
     searchRangeSelector.style.display = 'none';
