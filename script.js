@@ -2112,6 +2112,18 @@ document.getElementById('nextPageSearch').addEventListener('click', () => {
   populateSearchCategories();
   populateKeywordCategories();
 
+  // Khởi tạo hiển thị dropdown "Theo tháng" mặc định cho Tab 2 (Báo Cáo)
+  if (singleMonthSelector && monthRangeSelector) {
+    singleMonthSelector.style.display = 'flex';
+    monthRangeSelector.style.display = 'none';
+    // Set giá trị mặc định là tháng hiện tại
+    const currentMonth = new Date().getMonth() + 1;
+    const singleMonthInput = document.getElementById('singleMonth');
+    if (singleMonthInput) {
+      singleMonthInput.value = currentMonth;
+    }
+  }
+
   // Khởi tạo hiển thị dropdown "Theo tháng" mặc định cho Tab 4 (Search)
   if (searchMonthSelector && searchRangeSelector) {
     searchMonthSelector.style.display = 'flex';
