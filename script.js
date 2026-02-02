@@ -28,6 +28,13 @@ const searchPerPage = 10;
 // Cache chi tiết cho từng category (để tránh load lại khi click vào legend nhiều lần)
 let categoryDetailsCache = {};
 
+// ⚡ Cache cho 3 chế độ lọc Tab 2 (Hàng tháng, Hàng năm, Tùy chọn)
+let filterModeCache = {
+  monthly: null,    // Cache cho chế độ "Hàng tháng"
+  yearly: null,     // Cache cho chế độ "Hàng năm"
+  custom: {}        // Cache cho chế độ "Tùy chọn" (key: "startMonth-endMonth")
+};
+
 // ⚡ TỐI ƯU: Toast queue để tránh nhiều toast cùng lúc
 let toastQueue = [];
 let isShowingToast = false;
@@ -692,9 +699,17 @@ async function saveTransaction(updatedTransaction) {
     if (result.error) throw new Error(result.error);
     showToast("Cập nhật giao dịch thành công!", "success");
     closeEditForm();
+    
+    // Clear cache
     cachedTransactions = null;
     cachedMonthlyExpenses = null;
     cachedSearchResults = null;
+    
+    // ⚡ Clear cache Tab 2 (filter modes)
+    filterModeCache.monthly = null;
+    filterModeCache.yearly = null;
+    filterModeCache.custom = {};
+    
     const activeTab = document.querySelector('.tab-content.active')?.id;
     if (activeTab === 'tab1') {
       await window.fetchTransactions();
@@ -731,9 +746,17 @@ async function addTransaction(newTransaction) {
     if (result.error) throw new Error(result.error);
     showToast(`Đã thêm giao dịch và tải dữ liệu cho ngày ${newTransaction.date}`, "success");
     closeAddForm();
+    
+    // Clear cache
     cachedTransactions = null;
     cachedMonthlyExpenses = null;
     cachedSearchResults = null;
+    
+    // ⚡ Clear cache Tab 2 (filter modes)
+    filterModeCache.monthly = null;
+    filterModeCache.yearly = null;
+    filterModeCache.custom = {};
+    
     const activeTab = document.querySelector('.tab-content.active')?.id;
 
     // Lấy ngày từ giao dịch vừa thêm
@@ -821,9 +844,17 @@ async function deleteTransaction(transactionId) {
       const result = await response.json();
       if (result.error) throw new Error(result.error);
       showToast("Xóa giao dịch thành công!", "success");
+      
+      // Clear cache
       cachedTransactions = null;
       cachedMonthlyExpenses = null;
       cachedSearchResults = null;
+      
+      // ⚡ Clear cache Tab 2 (filter modes)
+      filterModeCache.monthly = null;
+      filterModeCache.yearly = null;
+      filterModeCache.custom = {};
+      
       if (activeTab === 'tab1') {
         await window.fetchTransactions();
       } else if (activeTab === 'tab4') {
@@ -867,148 +898,10 @@ window.fetchMonthlyData = async function() {
     const monthlyData = await response.json();
     if (monthlyData.error) throw new Error(monthlyData.error);
 
-    // Ẩn placeholder và hiển thị tiêu đề
-    const placeholderTab2 = document.getElementById('placeholderTab2');
-    const chartTitleTab2 = document.getElementById('chartTitleTab2');
-    const pieChartTitleTab2 = document.getElementById('pieChartTitleTab2');
-    const chartContainer = document.querySelector('#tab2 .chart-container');
-    if (placeholderTab2) placeholderTab2.style.display = 'none';
-    if (chartTitleTab2) chartTitleTab2.style.display = 'block';
-    if (pieChartTitleTab2) pieChartTitleTab2.style.display = 'block';
-    if (chartContainer) chartContainer.classList.add('show'); // Hiển thị chart-container
-
-    // Tính tổng thu, tổng chi, số dư từ dữ liệu monthly
-    let totalIncome = 0;
-    let totalExpense = 0;
-    monthlyData.forEach(item => {
-      totalIncome += item.income || 0;
-      totalExpense += item.expense || 0;
-    });
-    const totalBalance = totalIncome - totalExpense;
-
-    // Hiển thị tổng thu/chi/số dư
-    const statsContainer = document.getElementById('monthlyStatsContainer');
-    statsContainer.innerHTML = `
-      <div class="stat-box income"><div class="title">Thu nhập</div><div class="amount">${totalIncome.toLocaleString('vi-VN')}đ</div></div>
-      <div class="stat-box expense"><div class="title">Chi tiêu</div><div class="amount">${totalExpense.toLocaleString('vi-VN')}đ</div></div>
-      <div class="stat-box balance"><div class="title">Số dư</div><div class="amount">${totalBalance.toLocaleString('vi-VN')}đ</div></div>
-    `;
-
-    // Vẽ bar chart theo range tháng người dùng chọn
-    const ctx = document.getElementById('monthlyChart').getContext('2d');
-    const monthlyChartElement = document.getElementById('monthlyChart');
-    if (window.monthlyChartInstance) window.monthlyChartInstance.destroy();
-    
-    // Tạo mảng tháng từ startMonth đến endMonth
-    const monthRange = [];
-    for (let m = startMonth; m <= endMonth; m++) {
-      monthRange.push(m);
-    }
-    
-    const labels = monthRange.map(month => `Tháng ${month}`);
-    
-    // Tạo map từ data hiện có
-    const dataMap = {};
-    monthlyData.forEach(item => {
-      dataMap[item.month] = item;
-    });
-    
-    // Fill data cho các tháng trong range (0 nếu không có data)
-    const incomeData = monthRange.map(month => dataMap[month]?.income || 0);
-    const expenseData = monthRange.map(month => dataMap[month]?.expense || 0);
-    
-    window.monthlyChartInstance = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: 'Thu nhập',
-          data: incomeData,
-          backgroundColor: 'rgba(16, 185, 129, 0.8)',
-          borderColor: 'rgba(16, 185, 129, 1)',
-          borderWidth: 1
-        }, {
-          label: 'Chi tiêu',
-          data: expenseData,
-          backgroundColor: 'rgba(244, 63, 94, 0.8)',
-          borderColor: 'rgba(244, 63, 94, 1)',
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        layout: {
-          padding: {
-            top: 65
-          }
-        },
-        // ⚡ TỐI ƯU: Sử dụng cấu hình cột cố định để đồng nhất với biểu đồ Category Detail
-        // Thay vì tính toán động dựa trên số tháng, sử dụng giá trị cố định
-        barPercentage: FIXED_BAR_CONFIG.barPercentage,
-        categoryPercentage: FIXED_BAR_CONFIG.categoryPercentage,
-        maxBarThickness: FIXED_BAR_CONFIG.maxBarThickness,
-        scales: {
-          x: {
-            ticks: {
-              autoSkip: false,
-              maxRotation: 45,
-              minRotation: 0,
-              font: {
-                family: 'Nunito, sans-serif',
-                size: 11
-              }
-            }
-          },
-          y: { 
-            beginAtZero: true, 
-            ticks: { 
-              callback: value => value.toLocaleString('vi-VN') + 'đ',
-              font: {
-                family: 'Nunito, sans-serif'
-              }
-            } 
-          }
-        },
-        plugins: {
-          legend: { display: false },
-          tooltip: { 
-            callbacks: { 
-              label: context => `${context.dataset.label}: ${context.raw.toLocaleString('vi-VN')}đ` 
-            },
-            titleFont: {
-              family: 'Nunito, sans-serif'
-            },
-            bodyFont: {
-              family: 'Nunito, sans-serif'
-            }
-          },
-          datalabels: {
-            anchor: 'end',
-            align: 'end',
-            color: '#94A3B8',
-            font: {
-              weight: 'bold',
-              size: 9
-            },
-            rotation: -90,
-            formatter: (value) => {
-              if (value === 0) return '';
-              return value.toLocaleString('vi-VN') + 'đ';
-            }
-          }
-        }
-      },
-      plugins: [ChartDataLabels]
-    });
-    
-    // Hiển thị canvas sau khi vẽ xong
-    monthlyChartElement.classList.add('show');
-
-    // Gọi API cho pie chart (% chi tiêu theo category cho range months)
+    // Gọi API cho pie chart
     const expenseCategoryData = await fetchExpensesByCategoryForMonths(startMonth, endMonth);
     
-    // LƯU CACHE - QUAN TRỌNG để click legend hoạt động!
+    // Lưu vào cache chung
     cachedChartData = {
       monthlyData: monthlyData,
       expenseCategoryData: expenseCategoryData,
@@ -1019,13 +912,244 @@ window.fetchMonthlyData = async function() {
     // Xóa cache category cũ khi lọc lại dữ liệu
     categoryDetailsCache = {};
     
-    drawMonthlyPieChart(expenseCategoryData);
+    // Render UI
+    renderMonthlyDataUI(monthlyData, expenseCategoryData, startMonth, endMonth);
+    
   } catch (error) {
     showToast("Lỗi khi lấy dữ liệu: " + error.message, "error");
   } finally {
     showLoading(false, 'tab2');
   }
 };
+
+/**
+ * ⚡ Hàm mới: Load dữ liệu với cache cho các chế độ lọc
+ * @param {string} mode - Chế độ lọc: 'monthly', 'yearly', 'custom'
+ * @param {number} startMonth - Tháng bắt đầu
+ * @param {number} endMonth - Tháng kết thúc
+ */
+window.fetchMonthlyDataWithCache = async function(mode, startMonth, endMonth) {
+  // Tạo cache key cho chế độ custom
+  const customKey = `${startMonth}-${endMonth}`;
+  
+  // Kiểm tra cache
+  let cachedData = null;
+  if (mode === 'monthly') {
+    cachedData = filterModeCache.monthly;
+  } else if (mode === 'yearly') {
+    cachedData = filterModeCache.yearly;
+  } else if (mode === 'custom') {
+    cachedData = filterModeCache.custom[customKey];
+  }
+  
+  // Nếu có cache, sử dụng luôn
+  if (cachedData) {
+    console.log(`📦 Sử dụng cache cho chế độ ${mode}`);
+    renderMonthlyDataUI(
+      cachedData.monthlyData, 
+      cachedData.expenseCategoryData, 
+      cachedData.startMonth, 
+      cachedData.endMonth
+    );
+    
+    // Cập nhật cachedChartData để click legend hoạt động
+    cachedChartData = cachedData;
+    return;
+  }
+  
+  // Nếu chưa có cache, gọi API
+  console.log(`🌐 Gọi API cho chế độ ${mode}`);
+  showLoading(true, 'tab2');
+  
+  try {
+    // Gọi API cho bar chart
+    const targetUrl = `${apiUrl}?action=getMonthlyData&startMonth=${startMonth}&endMonth=${endMonth}&sheetId=${sheetId}`;
+    const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
+    const response = await fetch(finalUrl);
+    const monthlyData = await response.json();
+    if (monthlyData.error) throw new Error(monthlyData.error);
+
+    // Gọi API cho pie chart
+    const expenseCategoryData = await fetchExpensesByCategoryForMonths(startMonth, endMonth);
+    
+    // Tạo object cache
+    const cacheObject = {
+      monthlyData: monthlyData,
+      expenseCategoryData: expenseCategoryData,
+      startMonth: startMonth,
+      endMonth: endMonth
+    };
+    
+    // Lưu vào cache theo chế độ
+    if (mode === 'monthly') {
+      filterModeCache.monthly = cacheObject;
+    } else if (mode === 'yearly') {
+      filterModeCache.yearly = cacheObject;
+    } else if (mode === 'custom') {
+      filterModeCache.custom[customKey] = cacheObject;
+    }
+    
+    // Lưu vào cache chung để click legend hoạt động
+    cachedChartData = cacheObject;
+    
+    // Xóa cache category cũ
+    categoryDetailsCache = {};
+    
+    // Render UI
+    renderMonthlyDataUI(monthlyData, expenseCategoryData, startMonth, endMonth);
+    
+  } catch (error) {
+    showToast("Lỗi khi lấy dữ liệu: " + error.message, "error");
+  } finally {
+    showLoading(false, 'tab2');
+  }
+};
+
+/**
+ * ⚡ Hàm helper: Render UI cho dữ liệu monthly
+ */
+function renderMonthlyDataUI(monthlyData, expenseCategoryData, startMonth, endMonth) {
+  // Ẩn placeholder và hiển thị tiêu đề
+  const placeholderTab2 = document.getElementById('placeholderTab2');
+  const chartTitleTab2 = document.getElementById('chartTitleTab2');
+  const pieChartTitleTab2 = document.getElementById('pieChartTitleTab2');
+  const chartContainer = document.querySelector('#tab2 .chart-container');
+  if (placeholderTab2) placeholderTab2.style.display = 'none';
+  if (chartTitleTab2) chartTitleTab2.style.display = 'block';
+  if (pieChartTitleTab2) pieChartTitleTab2.style.display = 'block';
+  if (chartContainer) chartContainer.classList.add('show');
+
+  // Tính tổng thu, tổng chi, số dư
+  let totalIncome = 0;
+  let totalExpense = 0;
+  monthlyData.forEach(item => {
+    totalIncome += item.income || 0;
+    totalExpense += item.expense || 0;
+  });
+  const totalBalance = totalIncome - totalExpense;
+
+  // Hiển thị tổng thu/chi/số dư
+  const statsContainer = document.getElementById('monthlyStatsContainer');
+  statsContainer.innerHTML = `
+    <div class="stat-box income"><div class="title">Thu nhập</div><div class="amount">${totalIncome.toLocaleString('vi-VN')}đ</div></div>
+    <div class="stat-box expense"><div class="title">Chi tiêu</div><div class="amount">${totalExpense.toLocaleString('vi-VN')}đ</div></div>
+    <div class="stat-box balance"><div class="title">Số dư</div><div class="amount">${totalBalance.toLocaleString('vi-VN')}đ</div></div>
+  `;
+
+  // Vẽ bar chart
+  const ctx = document.getElementById('monthlyChart').getContext('2d');
+  const monthlyChartElement = document.getElementById('monthlyChart');
+  if (window.monthlyChartInstance) window.monthlyChartInstance.destroy();
+  
+  // Tạo mảng tháng từ startMonth đến endMonth
+  const monthRange = [];
+  for (let m = startMonth; m <= endMonth; m++) {
+    monthRange.push(m);
+  }
+  
+  const labels = monthRange.map(month => `Tháng ${month}`);
+  
+  // Tạo map từ data hiện có
+  const dataMap = {};
+  monthlyData.forEach(item => {
+    dataMap[item.month] = item;
+  });
+  
+  // Fill data cho các tháng trong range (0 nếu không có data)
+  const incomeData = monthRange.map(month => dataMap[month]?.income || 0);
+  const expenseData = monthRange.map(month => dataMap[month]?.expense || 0);
+  
+  window.monthlyChartInstance = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Thu nhập',
+        data: incomeData,
+        backgroundColor: 'rgba(16, 185, 129, 0.8)',
+        borderColor: 'rgba(16, 185, 129, 1)',
+        borderWidth: 1
+      }, {
+        label: 'Chi tiêu',
+        data: expenseData,
+        backgroundColor: 'rgba(244, 63, 94, 0.8)',
+        borderColor: 'rgba(244, 63, 94, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      layout: {
+        padding: {
+          top: 65
+        }
+      },
+      // ⚡ TỐI ƯU: Sử dụng cấu hình cột cố định để đồng nhất với biểu đồ Category Detail
+      // Thay vì tính toán động dựa trên số tháng, sử dụng giá trị cố định
+      barPercentage: FIXED_BAR_CONFIG.barPercentage,
+      categoryPercentage: FIXED_BAR_CONFIG.categoryPercentage,
+      maxBarThickness: FIXED_BAR_CONFIG.maxBarThickness,
+      scales: {
+        x: {
+          ticks: {
+            autoSkip: false,
+            maxRotation: 45,
+            minRotation: 0,
+            font: {
+              family: 'Nunito, sans-serif',
+              size: 11
+            }
+          }
+        },
+        y: { 
+          beginAtZero: true, 
+          ticks: { 
+            callback: value => value.toLocaleString('vi-VN') + 'đ',
+            font: {
+              family: 'Nunito, sans-serif'
+            }
+          } 
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: { 
+          callbacks: { 
+            label: context => `${context.dataset.label}: ${context.raw.toLocaleString('vi-VN')}đ` 
+          },
+          titleFont: {
+            family: 'Nunito, sans-serif'
+          },
+          bodyFont: {
+            family: 'Nunito, sans-serif'
+          }
+        },
+        datalabels: {
+          anchor: 'end',
+          align: 'end',
+          color: '#94A3B8',
+          font: {
+            weight: 'bold',
+            size: 9
+          },
+          rotation: -90,
+          formatter: (value) => {
+            if (value === 0) return '';
+            return value.toLocaleString('vi-VN') + 'đ';
+          }
+        }
+      }
+    },
+    plugins: [ChartDataLabels]
+  });
+  
+  // Hiển thị canvas sau khi vẽ xong
+  monthlyChartElement.classList.add('show');
+
+  // Vẽ pie chart
+  drawMonthlyPieChart(expenseCategoryData);
+}
 /**
  * Lấy dữ liệu chi tiêu theo phân loại cho khoảng tháng từ API.
  * @param {number} startMonth - Tháng bắt đầu.
@@ -1702,7 +1826,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Gán sự kiện cho các nút chức năng
-  document.getElementById('fetchMonthlyDataBtn').addEventListener('click', window.fetchMonthlyData);
   document.getElementById('fetchTransactionsBtn').addEventListener('click', window.fetchTransactions);
   document.getElementById('addTransactionBtn').addEventListener('click', openAddForm);
   document.getElementById('searchTransactionsBtn').addEventListener('click', window.searchTransactions);
@@ -1736,8 +1859,8 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('startMonth').value = currentMonth;
     document.getElementById('endMonth').value = currentMonth;
     
-    // Tự động lọc
-    window.fetchMonthlyData();
+    // Tự động lọc với cache
+    window.fetchMonthlyDataWithCache('monthly', currentMonth, currentMonth);
   });
   
   // Xử lý nút "Hàng năm" - lọc từ tháng 1 đến tháng hiện tại
@@ -1752,8 +1875,8 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('startMonth').value = 1;
     document.getElementById('endMonth').value = currentMonth;
     
-    // Tự động lọc
-    window.fetchMonthlyData();
+    // Tự động lọc với cache
+    window.fetchMonthlyDataWithCache('yearly', 1, currentMonth);
   });
   
   // Xử lý nút "Tùy chọn" - hiển thị dropdown để người dùng chọn
@@ -1762,6 +1885,20 @@ document.addEventListener('DOMContentLoaded', function() {
     monthRangeSelector.style.display = 'flex';
     
     // Không tự động lọc, chờ người dùng chọn và nhấn nút "Lọc"
+  });
+  
+  // Cập nhật event cho nút "Lọc" trong chế độ tùy chọn để sử dụng cache
+  document.getElementById('fetchMonthlyDataBtn').addEventListener('click', function() {
+    const startMonth = parseInt(document.getElementById('startMonth').value);
+    const endMonth = parseInt(document.getElementById('endMonth').value);
+    
+    if (startMonth > endMonth) {
+      showToast("Tháng bắt đầu phải nhỏ hơn hoặc bằng tháng kết thúc!", "warning");
+      return;
+    }
+    
+    // Sử dụng cache cho chế độ custom
+    window.fetchMonthlyDataWithCache('custom', startMonth, endMonth);
   });
   
    // Gán sự kiện cho các nút phân trang
