@@ -1896,19 +1896,25 @@ document.getElementById('nextPageSearch').addEventListener('click', () => {
   const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
   const formattedFirstDay = formatDateToYYYYMMDD(firstDayOfMonth);
 
-  const transactionDateInput = document.getElementById('transactionDate');
-  if (transactionDateInput) {
-    transactionDateInput.value = formattedToday;
-  }
+  // Mở tab mặc định trước
+  window.openTab('tab1');
+
+  // ✨ SET NGÀY SAU KHI TAB ĐÃ MỞ - Sử dụng setTimeout để đảm bảo
+  setTimeout(() => {
+    const transactionDateInput = document.getElementById('transactionDate');
+    if (transactionDateInput) {
+      transactionDateInput.value = formattedToday;
+      console.log('✅ Đã set ngày hiện tại:', formattedToday, 'cho input:', transactionDateInput);
+    } else {
+      console.error('❌ Không tìm thấy element transactionDate');
+    }
+  }, 100);
 
   // Khởi tạo dropdown phân loại
   // ✨ PRELOAD CATEGORIES ngay khi app khởi động
-setTimeout(() => {
-  preloadCategories();
-}, 500);
-
-// Mở tab mặc định
-window.openTab('tab1');
+  setTimeout(() => {
+    preloadCategories();
+  }, 500);
   
   // Tự động điều chỉnh font size cho stat-box amount khi có thay đổi DOM
   setupStatBoxObserver();
