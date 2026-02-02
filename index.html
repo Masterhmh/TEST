@@ -83,14 +83,29 @@
     <!-- Tab 2: Báo Cáo Thu Chi Theo Tháng -->
 <div id="tab2" class="tab-content">
   <h1>BÁO CÁO TÀI CHÍNH</h1>
-  <p class="notification">Chọn khoảng thời gian và ấn <strong>"Lọc"</strong> để xem báo cáo.</p>
+  <p class="notification">Chọn chế độ lọc và ấn nút tương ứng để xem báo cáo.</p>
   <div id="errorMessageTab2" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
   <div id="successMessageTab2" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
   <div id="loadingTab2" style="display: none; text-align: center; margin: 1rem 0;">
     <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--primary-color);"></i>
     <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary); font-weight: 600;">Đang tải dữ liệu, vui lòng chờ...</p>
   </div>
-  <div class="input-group">
+  
+  <!-- Nhóm nút chế độ lọc -->
+  <div class="input-group" style="justify-content: center; gap: 0.5rem; margin-bottom: 1rem;">
+    <button id="filterMonthlyBtn" class="filter-mode-btn active">
+      <i class="fas fa-calendar-day"></i> Hàng tháng
+    </button>
+    <button id="filterYearlyBtn" class="filter-mode-btn">
+      <i class="fas fa-calendar-alt"></i> Hàng năm
+    </button>
+    <button id="filterCustomBtn" class="filter-mode-btn">
+      <i class="fas fa-sliders-h"></i> Tùy chọn
+    </button>
+  </div>
+  
+  <!-- Dropdown chọn tháng (chỉ hiện khi chọn Tùy chọn) -->
+  <div class="input-group" id="monthRangeSelector" style="display: none;">
     Từ:
     <select id="startMonth">
       <option value="1">Tháng 1</option><option value="2">Tháng 2</option><option value="3">Tháng 3</option>
