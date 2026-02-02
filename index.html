@@ -161,13 +161,56 @@
     <!-- Tab 4: Tìm Kiếm Giao Dịch -->
     <div id="tab4" class="tab-content">
       <h1>TÌM KIẾM GIAO DỊCH</h1>
-      <p class="notification">Nhập nội dung, số tiền hoặc phân loại chi tiết, sau đó ấn <strong>"Tìm kiếm"</strong> để xem kết quả.</p>
+      <p class="notification">Chọn khoảng thời gian và nhập tiêu chí tìm kiếm, sau đó ấn <strong>"Tìm kiếm"</strong> để xem kết quả.</p>
       <div id="errorMessageTab4" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
       <div id="successMessageTab4" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
       <div id="loadingTab4" style="display: none; text-align: center; margin: 1rem 0;">
         <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--primary-color);"></i>
         <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary); font-weight: 600;">Đang tải dữ liệu, vui lòng chờ...</p>
       </div>
+      
+      <!-- Nhóm nút chế độ lọc thời gian -->
+      <div class="input-group" style="justify-content: center; gap: 0.5rem; margin-bottom: 1rem;">
+        <button id="searchYearlyBtn" class="filter-mode-btn active">
+          <i class="fas fa-calendar-alt"></i> Cả năm
+        </button>
+        <button id="searchMonthlyBtn" class="filter-mode-btn">
+          <i class="fas fa-calendar-day"></i> Theo tháng
+        </button>
+        <button id="searchCustomBtn" class="filter-mode-btn">
+          <i class="fas fa-sliders-h"></i> Khoảng thời gian
+        </button>
+      </div>
+      
+      <!-- Dropdown chọn tháng (ẩn mặc định) -->
+      <div class="input-group" id="searchMonthSelector" style="display: none; margin-bottom: 1rem;">
+        <label>Tháng:</label>
+        <select id="searchSingleMonth">
+          <option value="1">Tháng 1</option><option value="2">Tháng 2</option><option value="3">Tháng 3</option>
+          <option value="4">Tháng 4</option><option value="5">Tháng 5</option><option value="6">Tháng 6</option>
+          <option value="7">Tháng 7</option><option value="8">Tháng 8</option><option value="9">Tháng 9</option>
+          <option value="10">Tháng 10</option><option value="11">Tháng 11</option><option value="12">Tháng 12</option>
+        </select>
+      </div>
+      
+      <!-- Dropdown chọn khoảng tháng (ẩn mặc định) -->
+      <div class="input-group" id="searchRangeSelector" style="display: none; margin-bottom: 1rem;">
+        Từ:
+        <select id="searchStartMonth">
+          <option value="1">Tháng 1</option><option value="2">Tháng 2</option><option value="3">Tháng 3</option>
+          <option value="4">Tháng 4</option><option value="5">Tháng 5</option><option value="6">Tháng 6</option>
+          <option value="7">Tháng 7</option><option value="8">Tháng 8</option><option value="9">Tháng 9</option>
+          <option value="10">Tháng 10</option><option value="11">Tháng 11</option><option value="12">Tháng 12</option>
+        </select>
+        Đến:
+        <select id="searchEndMonth">
+          <option value="1">Tháng 1</option><option value="2">Tháng 2</option><option value="3">Tháng 3</option>
+          <option value="4">Tháng 4</option><option value="5">Tháng 5</option><option value="6">Tháng 6</option>
+          <option value="7">Tháng 7</option><option value="8">Tháng 8</option><option value="9">Tháng 9</option>
+          <option value="10">Tháng 10</option><option value="11">Tháng 11</option><option value="12">Tháng 12</option>
+        </select>
+      </div>
+      
       <div class="input-group vertical">
         <div class="input-field">
           <label>Tìm theo nội dung:</label>
