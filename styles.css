@@ -7,47 +7,47 @@
    1. CSS VARIABLES - MODERN DESIGN SYSTEM
    ============================================================================ */
 :root {
-  /* 🎨 Colors - Modern Vibrant Palette */
-  --primary-color: #6366F1;
-  --primary-dark: #4F46E5;
-  --primary-light: #818CF8;
-  --secondary-color: #64748B;
-  --success-color: #10B981;
-  --danger-color: #F43F5E;
-  --warning-color: #F59E0B;
-  --info-color: #3B82F6;
+  /* 🎨 Colors - PREMIUM WEALTH Theme (Xanh Lục Đậm - Sang Trọng) */
+  --primary-color: #047857;        /* Deep Green - Xanh lục đậm */
+  --primary-dark: #065F46;         /* Darker Green */
+  --primary-light: #059669;        /* Emerald */
+  --secondary-color: #52525B;      /* Zinc Gray */
+  --success-color: #16A34A;        /* Rich Green */
+  --danger-color: #B91C1C;         /* Burgundy Red */
+  --warning-color: #EA580C;        /* Orange */
+  --info-color: #0284C7;           /* Sky Blue */
   
   /* 🌈 Gradients */
-  --gradient-primary: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
-  --gradient-success: linear-gradient(135deg, #10B981 0%, #059669 100%);
-  --gradient-danger: linear-gradient(135deg, #F43F5E 0%, #DC2626 100%);
-  --gradient-info: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+  --gradient-primary: linear-gradient(135deg, #047857 0%, #059669 100%);
+  --gradient-success: linear-gradient(135deg, #16A34A 0%, #22C55E 100%);
+  --gradient-danger: linear-gradient(135deg, #B91C1C 0%, #DC2626 100%);
+  --gradient-info: linear-gradient(135deg, #D97706 0%, #F59E0B 100%);
   
   /* 🎭 Backgrounds */
-  --background-color: #F8FAFC;
+  --background-color: #FAFAF9;     /* Warm Stone */
   --card-bg: #FFFFFF;
-  --text-color: #1E293B;
+  --text-color: #18181B;           /* Zinc 900 */
   
   /* Legacy compatibility */
-  --gradient-start: #6366F1;
-  --gradient-end: #8B5CF6;
-  --income-color: #10B981;
-  --expense-color: #F43F5E;
-  --balance-color: #3B82F6;
-  --edit-btn-color: #06B6D4;
-  --delete-btn-color: #EF4444;
+  --gradient-start: #047857;
+  --gradient-end: #059669;
+  --income-color: #16A34A;         /* Rich Green - Thu nhập */
+  --expense-color: #B91C1C;        /* Burgundy - Chi tiêu */
+  --balance-color: #D97706;        /* Amber Gold - Số dư */
+  --edit-btn-color: #0891B2;
+  --delete-btn-color: #B91C1C;
   
   /* 📝 Text Colors */
-  --text-primary: #1E293B;
-  --text-secondary: #64748B;
-  --text-light: #94A3B8;
+  --text-primary: #18181B;
+  --text-secondary: #52525B;
+  --text-light: #A1A1AA;
   
   /* 🔲 Borders & Shadows */
-  --border-color: #E2E8F0;
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.10);
-  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.12);
-  --shadow-hover: 0 8px 20px rgba(99, 102, 241, 0.15);
+  --border-color: #E4E4E7;
+  --shadow-sm: 0 1px 3px rgba(4, 120, 87, 0.08);
+  --shadow-md: 0 4px 12px rgba(4, 120, 87, 0.10);
+  --shadow-lg: 0 10px 25px rgba(4, 120, 87, 0.12);
+  --shadow-hover: 0 8px 20px rgba(4, 120, 87, 0.25);
   
   /* 📏 Spacing */
   --spacing-xs: 0.25rem;
@@ -70,30 +70,30 @@
 }
 
 /* ============================================================================
-   2. DARK MODE SUPPORT
+   2. DARK MODE SUPPORT - PREMIUM WEALTH Theme
    ============================================================================ */
 @media (prefers-color-scheme: dark) {
   :root {
-    --primary-color: #818CF8;
-    --secondary-color: #94A3B8;
-    --background-color: #0F172A;
-    --card-bg: #1E293B;
-    --text-color: #F1F5F9;
-    --gradient-start: #6366F1;
-    --gradient-end: #8B5CF6;
-    --income-color: #34D399;
-    --expense-color: #FB7185;
-    --balance-color: #60A5FA;
-    --edit-btn-color: #22D3EE;
-    --delete-btn-color: #F87171;
-    --stat-box-bg-start: #1E293B;
-    --stat-box-bg-end: #334155;
-    --input-bg: #1E293B;
-    --input-border: #475569;
-    --stat-title-color: #F1F5F9;
-    --border-color: #334155;
-    --text-primary: #F1F5F9;
-    --text-secondary: #94A3B8;
+    --primary-color: #10B981;        /* Emerald cho dark mode */
+    --secondary-color: #A1A1AA;      /* Zinc Gray */
+    --background-color: #09090B;     /* Zinc 950 */
+    --card-bg: #18181B;              /* Zinc 900 */
+    --text-color: #FAFAF9;           /* Stone 50 */
+    --gradient-start: #059669;
+    --gradient-end: #10B981;
+    --income-color: #22C55E;         /* Green 500 - Thu nhập sáng hơn */
+    --expense-color: #EF4444;        /* Red 500 - Chi tiêu sáng hơn */
+    --balance-color: #FBBF24;        /* Amber 400 - Số dư vàng */
+    --edit-btn-color: #06B6D4;       /* Cyan 500 */
+    --delete-btn-color: #EF4444;     /* Red 500 */
+    --stat-box-bg-start: #18181B;    /* Zinc 900 */
+    --stat-box-bg-end: #27272A;      /* Zinc 800 */
+    --input-bg: #27272A;             /* Zinc 800 */
+    --input-border: #3F3F46;         /* Zinc 700 */
+    --stat-title-color: #FAFAF9;     /* Stone 50 */
+    --border-color: #27272A;         /* Zinc 800 */
+    --text-primary: #FAFAF9;
+    --text-secondary: #A1A1AA;
   }
 
   /* Stat-box trong dark mode */
@@ -389,8 +389,8 @@ button:hover::before {
 
 button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.25), 
-              0 0 20px rgba(99, 102, 241, 0.15);
+  box-shadow: 0 8px 24px rgba(4, 120, 87, 0.25), 
+              0 0 20px rgba(4, 120, 87, 0.15);
 }
 
 button:active {
@@ -413,8 +413,8 @@ button i {
 }
 
 .btn-success:hover {
-  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.25), 
-              0 0 20px rgba(16, 185, 129, 0.15) !important;
+  box-shadow: 0 8px 24px rgba(22, 163, 74, 0.25), 
+              0 0 20px rgba(22, 163, 74, 0.15) !important;
 }
 
 .btn-danger {
@@ -422,8 +422,8 @@ button i {
 }
 
 .btn-danger:hover {
-  box-shadow: 0 8px 24px rgba(244, 63, 94, 0.25), 
-              0 0 20px rgba(244, 63, 94, 0.15) !important;
+  box-shadow: 0 8px 24px rgba(185, 28, 28, 0.25), 
+              0 0 20px rgba(185, 28, 28, 0.15) !important;
 }
 
 .cancel-btn {
