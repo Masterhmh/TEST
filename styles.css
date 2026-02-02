@@ -8,23 +8,23 @@
    ============================================================================ */
 :root {
   /* 🔥 Primary – Red Orange (Hỏa) */
-  --primary-color: #EA580C;        /* Đỏ cam chủ đạo */
-  --primary-dark: #C2410C;         /* Đỏ cam đậm */
-  --primary-light: #FB923C;        /* Cam sáng */
+  --primary-color: #EA580C;
+  --primary-dark: #C2410C;
+  --primary-light: #FB923C;
 
   /* ⚫ Neutral Contrast – Charcoal / Dark Gray */
-  --neutral-900: #0F172A;          /* Gần đen – chữ chính */
-  --neutral-800: #1F2937;          /* Than đen */
-  --neutral-700: #374151;          /* Xám đậm */
-  --neutral-500: #6B7280;          /* Xám trung */
-  --neutral-300: #D1D5DB;          /* Border */
-  --neutral-100: #F3F4F6;          /* Nền phụ */
+  --neutral-900: #0F172A;
+  --neutral-800: #1F2937;
+  --neutral-700: #374151;
+  --neutral-500: #6B7280;
+  --neutral-300: #D1D5DB;
+  --neutral-100: #F3F4F6;
 
-  /* 💚 Success – tiết chế (không lấn Hỏa) */
+  /* 💚 Success – tiết chế */
   --success-color: #16A34A;
   --income-color: #16A34A;
 
-  /* 🔴 Danger – Fire Red */
+  /* 🔴 Danger */
   --danger-color: #DC2626;
   --expense-color: #DC2626;
 
@@ -33,13 +33,13 @@
   --info-color: #F97316;
   --warning-color: #D97706;
 
-  /* 🌈 Gradients – nổi trên nền xám */
+  /* 🌈 Gradients */
   --gradient-primary: linear-gradient(135deg, #EA580C 0%, #FB923C 100%);
   --gradient-danger: linear-gradient(135deg, #DC2626 0%, #F87171 100%);
   --gradient-info: linear-gradient(135deg, #F97316 0%, #FDBA74 100%);
 
   /* 🎭 Backgrounds */
-  --background-color: #F9FAFB;     /* Nền sáng trung tính */
+  --background-color: #F9FAFB;
   --card-bg: #FFFFFF;
 
   /* 📝 Text */
@@ -53,46 +53,72 @@
   --shadow-md: 0 4px 12px rgba(0,0,0,0.12);
   --shadow-hover: 0 8px 24px rgba(234, 88, 12, 0.35);
 }
+
 /* ============================================================================
-   2. DARK MODE SUPPORT - WOOD ELEMENT Theme (Xanh Lá Cây)
+   2. DARK MODE SUPPORT – FIRE × CHARCOAL THEME
    ============================================================================ */
 @media (prefers-color-scheme: dark) {
   :root {
-    --primary-color: #4ADE80;        /* Green 400 - Xanh sáng cho dark */
-    --secondary-color: #A1A1AA;      /* Zinc Gray */
-    --background-color: #0C1713;     /* Dark green tint */
-    --card-bg: #14532D;              /* Green 900 */
-    --text-color: #F0FDF4;           /* Green 50 */
-    --gradient-start: #16A34A;
-    --gradient-end: #22C55E;
-    --income-color: #4ADE80;         /* Green 400 - Thu nhập sáng */
-    --expense-color: #F87171;        /* Red 400 - Chi tiêu sáng */
-    --balance-color: #FCD34D;        /* Amber 300 - Số dư vàng */
-    --edit-btn-color: #22D3EE;       /* Cyan 400 */
-    --delete-btn-color: #F87171;     /* Red 400 */
-    --stat-box-bg-start: #14532D;    /* Green 900 */
-    --stat-box-bg-end: #166534;      /* Green 800 */
-    --input-bg: #166534;             /* Green 800 */
-    --input-border: #15803D;         /* Green 700 */
-    --stat-title-color: #F0FDF4;     /* Green 50 */
-    --border-color: #166534;         /* Green 800 */
-    --text-primary: #F0FDF4;
-    --text-secondary: #BBF7D0;       /* Green 200 */
+    /* 🔥 Primary vẫn là Hỏa (giảm chói) */
+    --primary-color: #FB923C;
+    --primary-dark: #EA580C;
+
+    /* ⚫ Nền than đen cao cấp */
+    --background-color: #0B0F14;
+    --card-bg: #151A21;
+
+    /* 📝 Text */
+    --text-primary: #F8FAFC;
+    --text-secondary: #A1A1AA;
+    --text-light: #71717A;
+
+    /* 🟠 Balance / Info */
+    --balance-color: #FDBA74;
+    --info-color: #FDBA74;
+
+    /* 💚 Thu nhập */
+    --income-color: #22C55E;
+
+    /* 🔴 Chi tiêu */
+    --expense-color: #F87171;
+
+    /* ✏️ Buttons */
+    --edit-btn-color: #FB923C;
+    --delete-btn-color: #F87171;
+
+    /* 📦 Boxes */
+    --stat-box-bg-start: #151A21;
+    --stat-box-bg-end: #1F2937;
+
+    /* 🧩 Inputs */
+    --input-bg: #1F2937;
+    --input-border: #374151;
+
+    /* 🔲 Border */
+    --border-color: #1F2937;
   }
 
-  /* Stat-box trong dark mode */
+  /* Stat-box */
   .stat-box {
-    background: linear-gradient(135deg, var(--stat-box-bg-start), var(--stat-box-bg-end)) !important;
+    background: linear-gradient(
+      135deg,
+      var(--stat-box-bg-start),
+      var(--stat-box-bg-end)
+    ) !important;
   }
 
   .stat-box .title {
-    color: var(--stat-title-color) !important;
+    color: var(--text-secondary) !important;
   }
 
   /* Transaction & Keyword boxes */
   .transaction-box,
   .keyword-box {
-    background: linear-gradient(135deg, var(--stat-box-bg-start), var(--stat-box-bg-end)) !important;
+    background: linear-gradient(
+      135deg,
+      var(--stat-box-bg-start),
+      var(--stat-box-bg-end)
+    ) !important;
     border: 1px solid var(--input-border) !important;
   }
 
@@ -103,23 +129,24 @@
   select,
   textarea {
     background-color: var(--input-bg) !important;
-    color: var(--text-color) !important;
+    color: var(--text-primary) !important;
     border-color: var(--input-border) !important;
   }
 
   /* Calendar & Select icons */
   input[type="date"]::-webkit-calendar-picker-indicator,
   input[type="month"]::-webkit-calendar-picker-indicator {
-    filter: invert(90%);
+    filter: invert(85%);
   }
 
   select {
-    background-image: url('data:image/svg+xml;charset=UTF-8,<svg fill="%23F1F5F9" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') !important;
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg fill="%23FDBA74" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') !important;
     background-repeat: no-repeat !important;
-    background-position: right 12px center !important; /* Tăng từ 10px lên 12px */
+    background-position: right 12px center !important;
     background-size: 20px !important;
   }
 }
+
 
 /* ============================================================================
    3. GLOBAL RESET & BASE STYLES
