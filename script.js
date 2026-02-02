@@ -1493,7 +1493,6 @@ async function populateSearchCategories() {
  * Tìm kiếm giao dịch dựa trên các tiêu chí (tháng, nội dung, số tiền, phân loại).
  */
 window.searchTransactions = async function() {
-  const month = document.getElementById('searchMonth').value;
   const content = document.getElementById('searchContent').value.trim();
   let amount = document.getElementById('searchAmount').value;
   amount = amount ? parseNumber(amount).toString() : '';
@@ -1505,7 +1504,7 @@ window.searchTransactions = async function() {
   }
 
   // Tạo cacheKey dựa trên các tiêu chí tìm kiếm
-  const cacheKey = `${year}-${month || 'all'}-${content || ''}-${amount || ''}-${category || ''}`;
+  const cacheKey = `${year}-${content || ''}-${amount || ''}-${category || ''}`;
 
   // Kiểm tra cache
   if (cachedSearchResults && cachedSearchResults.cacheKey === cacheKey) {
@@ -1515,8 +1514,7 @@ window.searchTransactions = async function() {
 
   showLoading(true, 'tab4');
   try {
-    let targetUrl = `${apiUrl}?action=searchTransactions&sheetId=${sheetId}&page=${currentPageSearch}&limit=${searchPerPage}`;
-    if (month) targetUrl += `&month=${month}&year=${year}`;
+    let targetUrl = `${apiUrl}?action=searchTransactions&sheetId=${sheetId}&page=${currentPageSearch}&limit=${searchPerPage}&year=${year}`;
     if (content) targetUrl += `&content=${encodeURIComponent(content)}`;
     if (amount) targetUrl += `&amount=${encodeURIComponent(amount)}`;
     if (category) targetUrl += `&category=${encodeURIComponent(category)}`;
@@ -2109,7 +2107,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const currentMonth = new Date().getMonth() + 1;
   const startMonthSelect = document.getElementById('startMonth');
   const endMonthSelect = document.getElementById('endMonth');
-  const searchMonthSelect = document.getElementById('searchMonth');
   
   // ⚡ THAY ĐỔI: Luôn bắt đầu từ tháng 1, kết thúc ở tháng hiện tại
   if (startMonthSelect) startMonthSelect.value = '1';
