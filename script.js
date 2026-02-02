@@ -1100,6 +1100,9 @@ function renderMonthlyDataUI(monthlyData, expenseCategoryData, startMonth, endMo
               family: 'Nunito, sans-serif',
               size: 11
             }
+          },
+          grid: {
+            color: 'rgba(148, 163, 184, 0.1)'
           }
         },
         y: { 
@@ -1109,7 +1112,10 @@ function renderMonthlyDataUI(monthlyData, expenseCategoryData, startMonth, endMo
             font: {
               family: 'Nunito, sans-serif'
             }
-          } 
+          },
+          grid: {
+            color: 'rgba(148, 163, 184, 0.1)'
+          }
         }
       },
       plugins: {
@@ -1237,7 +1243,8 @@ function drawMonthlyPieChart(data) {
         const { ctx } = chart;
         ctx.save();
         const expenseColor = getComputedStyle(document.documentElement).getPropertyValue('--expense-color').trim() || '#F43F5E';
-        const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color').trim() || '#1E293B';
+        // ⚡ FIX: Lấy text-primary thay vì text-color để hiển thị tốt trong dark mode
+        const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim() || '#1E293B';
         const centerX = chart.width / 2;
         const centerY = chart.height / 2;
         ctx.font = '600 14px Nunito, sans-serif';
@@ -2348,6 +2355,9 @@ function drawCategoryMonthlyChart(data, categoryName, categoryColor) {
               callback: function(value) {
                 return value.toLocaleString('vi-VN') + 'đ';
               }
+            },
+            grid: {
+              color: 'rgba(148, 163, 184, 0.1)'
             }
           },
           x: {
