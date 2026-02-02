@@ -1901,6 +1901,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const filterMonthlyBtn = document.getElementById('filterMonthlyBtn');
   const filterYearlyBtn = document.getElementById('filterYearlyBtn');
   const filterCustomBtn = document.getElementById('filterCustomBtn');
+  const singleMonthSelector = document.getElementById('singleMonthSelector');
   const monthRangeSelector = document.getElementById('monthRangeSelector');
   
   // Gán sự kiện cho các nút filter mode trong Tab 4 (Search)
@@ -1926,25 +1927,23 @@ document.addEventListener('DOMContentLoaded', function() {
     activeBtn.classList.add('active');
   }
   
-  // Xử lý nút "Hàng tháng" - lọc tháng hiện tại
+  // Xử lý nút "Theo tháng" - hiển thị dropdown chọn tháng đơn
   filterMonthlyBtn.addEventListener('click', function() {
     setActiveFilterButton(this);
+    singleMonthSelector.style.display = 'flex';
     monthRangeSelector.style.display = 'none';
     
-    const currentDate = new Date();
-    const currentMonth = currentDate.getMonth() + 1; // getMonth() trả về 0-11
+    // Set giá trị mặc định là tháng hiện tại
+    const currentMonth = new Date().getMonth() + 1;
+    document.getElementById('singleMonth').value = currentMonth;
     
-    // Set cả startMonth và endMonth = tháng hiện tại
-    document.getElementById('startMonth').value = currentMonth;
-    document.getElementById('endMonth').value = currentMonth;
-    
-    // Tự động lọc với cache
-    window.fetchMonthlyDataWithCache('monthly', currentMonth, currentMonth);
+    // Không tự động lọc, chờ người dùng chọn và nhấn nút "Lọc"
   });
   
-  // Xử lý nút "Hàng năm" - lọc từ tháng 1 đến tháng hiện tại
+  // Xử lý nút "Cả năm" - lọc từ tháng 1 đến tháng hiện tại
   filterYearlyBtn.addEventListener('click', function() {
     setActiveFilterButton(this);
+    singleMonthSelector.style.display = 'none';
     monthRangeSelector.style.display = 'none';
     
     const currentDate = new Date();
@@ -1961,7 +1960,13 @@ document.addEventListener('DOMContentLoaded', function() {
   // Xử lý nút "Tùy chọn" - hiển thị dropdown để người dùng chọn
   filterCustomBtn.addEventListener('click', function() {
     setActiveFilterButton(this);
+    singleMonthSelector.style.display = 'none';
     monthRangeSelector.style.display = 'flex';
+    
+    // Set giá trị mặc định
+    const currentMonth = new Date().getMonth() + 1;
+    document.getElementById('startMonth').value = '1';
+    document.getElementById('endMonth').value = currentMonth;
     
     // Không tự động lọc, chờ người dùng chọn và nhấn nút "Lọc"
   });
@@ -1978,6 +1983,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Sử dụng cache cho chế độ custom
     window.fetchMonthlyDataWithCache('custom', startMonth, endMonth);
+  });
+  
+  // Event cho nút "Lọc" trong chế độ "Theo tháng"
+  document.getElementById('fetchSingleMonthBtn').addEventListener('click', function() {
+    const selectedMonth = parseInt(document.getElementById('singleMonth').value);
+    
+    // Lọc dữ liệu của tháng được chọn
+    window.fetchMonthlyDataWithCache('monthly', selectedMonth, selectedMonth);
   });
   
   // Xử lý nút "Cả năm" trong Tab 4 (Search)
