@@ -38,9 +38,9 @@
   <div class="top-nav">
     <div class="nav-item active" data-tab="tab1"><i class="fas fa-exchange-alt"></i><span>Giao dịch</span></div>
     <div class="nav-item" data-tab="tab2"><i class="fas fa-chart-pie"></i><span>Báo Cáo</span></div>
-    <div class="nav-item" data-tab="tab4"><i class="fas fa-search"></i><span>Tìm kiếm</span></div>
-    <div class="nav-item" data-tab="tab5"><i class="fas fa-tags"></i><span>Từ khóa</span></div>
-    <div class="nav-item" data-tab="tab6"><i class="fas fa-info-circle"></i><span>Giới thiệu</span></div>
+    <div class="nav-item" data-tab="tab3"><i class="fas fa-search"></i><span>Tìm kiếm</span></div>
+    <div class="nav-item" data-tab="tab4"><i class="fas fa-tags"></i><span>Từ khóa</span></div>
+    <div class="nav-item" data-tab="tab5"><i class="fas fa-info-circle"></i><span>Giới thiệu</span></div>
   </div>
 
   <!-- ==========================================================================
@@ -171,12 +171,12 @@
     
 
     <!-- Tab 4: Tìm Kiếm Giao Dịch -->
-    <div id="tab4" class="tab-content">
+    <div id="tab3" class="tab-content">
       <h1>TÌM KIẾM GIAO DỊCH</h1>
       <p class="notification">Chọn khoảng thời gian và nhập tiêu chí tìm kiếm, sau đó ấn <strong>"Tìm kiếm"</strong> để xem kết quả.</p>
-      <div id="errorMessageTab4" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
-      <div id="successMessageTab4" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
-      <div id="loadingTab4" style="display: none; text-align: center; margin: 1rem 0;">
+      <div id="errorMessageTab3" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
+      <div id="successMessageTab3" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
+      <div id="loadingTab3" style="display: none; text-align: center; margin: 1rem 0;">
         <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--primary-color);"></i>
         <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary); font-weight: 600;">Đang tải dữ liệu, vui lòng chờ...</p>
       </div>
@@ -240,7 +240,7 @@
         </div>
         <button id="searchTransactionsBtn"><i class="fas fa-search"></i> Tìm kiếm</button>
       </div>
-      <p id="placeholderTab4" class="notification" style="margin-top: 1rem;">Kết quả tìm kiếm hiển thị ở đây</p>
+      <p id="placeholderTab3" class="notification" style="margin-top: 1rem;">Kết quả tìm kiếm hiển thị ở đây</p>
       <div class="transactions-list" id="searchResultsContainer"></div>
       <div id="paginationSearch" style="text-align: center; margin-top: 1rem; display: none;">
         <button id="prevPageSearch" class="pagination-btn" disabled><i class="fas fa-chevron-left"></i> Trang trước</button>
@@ -250,12 +250,12 @@
     </div>
 
     <!-- Tab 5: Quản Lý Từ Khóa -->
-    <div id="tab5" class="tab-content">
+    <div id="tab4" class="tab-content">
       <h1>QUẢN LÝ TỪ KHÓA</h1>
       <p class="notification">Thêm hoặc xóa từ khóa để tự động phân loại giao dịch. Sau khi thay đổi, ấn <strong>"Tải dữ liệu"</strong> để xem danh sách từ khóa hiện tại.</p>
-      <div id="errorMessageTab5" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
-      <div id="successMessageTab5" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
-      <div id="loadingTab5" style="display: none; text-align: center; margin: 1rem 0;">
+      <div id="errorMessageTab4" style="color: red; text-align: center; display: none; margin-bottom: 1rem;"></div>
+      <div id="successMessageTab4" style="color: green; text-align: center; display: none; margin-bottom: 1rem;"></div>
+      <div id="loadingTab4" style="display: none; text-align: center; margin: 1rem 0;">
         <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--primary-color);"></i>
         <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary); font-weight: 600;">Đang tải dữ liệu, vui lòng chờ...</p>
       </div>
@@ -276,12 +276,12 @@
         </div>
         <button id="fetchKeywordsBtn"><i class="fas fa-sync"></i> Tải dữ liệu</button>
       </div>
-      <p id="placeholderTab5" class="notification" style="margin-top: 1rem;">Dữ liệu từ khóa hiển thị ở đây</p>
+      <p id="placeholderTab4" class="notification" style="margin-top: 1rem;">Dữ liệu từ khóa hiển thị ở đây</p>
       <div class="keywords-list" id="keywordsContainer"></div>
     </div>
 
     <!-- Tab 6: Giới Thiệu -->
-    <div id="tab6" class="tab-content">
+    <div id="tab5" class="tab-content">
       <h1>GIỚI THIỆU</h1>
       <div class="info-section">
         <div class="info-card">
