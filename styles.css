@@ -1752,9 +1752,28 @@ label {
 /* Responsive cho nút filter */
 @media (max-width: 480px) {
   .filter-mode-btn {
-    padding: 0.6rem 1rem;
+    padding: 0.5rem 0.7rem;
+    font-size: 0.75rem;
+    gap: 0.3rem;
+    flex: 1;
+    min-width: 0;
+    justify-content: center;
+  }
+  
+  .filter-mode-btn i {
     font-size: 0.85rem;
-    gap: 0.4rem;
+  }
+  
+  .filter-mode-btn span {
+    display: none; /* Ẩn text trên màn hình rất nhỏ, chỉ hiện icon */
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .filter-mode-btn {
+    padding: 0.6rem 0.9rem;
+    font-size: 0.8rem;
+    gap: 0.35rem;
   }
   
   .filter-mode-btn i {
