@@ -65,7 +65,18 @@
         <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary); font-weight: 600;">Đang tải dữ liệu, vui lòng chờ...</p>
       </div>
       <div class="input-group">
-        <input type="date" id="transactionDate">
+        <input type="date" id="transactionDate" value="">
+        <script>
+          // Set ngày hiện tại NGAY LẬP TỨC
+          (function() {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            const dateStr = yyyy + '-' + mm + '-' + dd;
+            document.getElementById('transactionDate').value = dateStr;
+          })();
+        </script>
         <button id="fetchTransactionsBtn"><i class="fas fa-filter"></i> Lọc</button>
         <button id="addTransactionBtn"><i class="fas fa-plus"></i> Thêm</button>
       </div>
