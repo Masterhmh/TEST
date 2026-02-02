@@ -1,4 +1,32 @@
 /* ==========================================================================
+   🚀 OPTIMIZED v2.0 - Added: Debounce + Smart Cache + Performance
+   ========================================================================== */
+
+// ⚡ PERFORMANCE ENHANCEMENTS
+const CACHE_DURATION = 5 * 60 * 1000; // 5 phút
+
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
+function isCacheValid(cacheObj) {
+  if (!cacheObj || !cacheObj.timestamp) return false;
+  return (Date.now() - cacheObj.timestamp) < CACHE_DURATION;
+}
+
+function createCacheObject(data) {
+  return { data: data, timestamp: Date.now() };
+}
+
+/* ==========================================================================
    1. Cài đặt ban đầu (Initial Setup)
    Lấy thông số API, Sheet ID từ URL và khởi tạo các biến toàn cục.
    ========================================================================== */
@@ -38,18 +66,10 @@ let categoryDetailsCache = {};
  * @param {string} type - Loại thông báo (info, success, error, warning).
  */
 function showToast(message, type = "info") {
-  const icons = {
-    success: 'fa-check-circle',
-    error: 'fa-exclamation-circle',
-    warning: 'fa-exclamation-triangle',
-    info: 'fa-info-circle'
-  };
-  
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
   toast.innerHTML = `
-    <div style="display: flex; align-items: center; gap: 0.75rem;">
-      <i class="fas ${icons[type] || icons.info}" style="font-size: 1.25rem;"></i>
+    <div>
       <span>${message}</span>
     </div>
   `;
@@ -250,9 +270,10 @@ window.fetchTransactions = async function() {
   const dateForApi = transactionDate;
   const [year, month, day] = transactionDate.split('-');
   const formattedDateForDisplay = `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`;
-  const cacheKey = `${formattedDateForDisplay}`;
+  const cacheKey = `transactions_${formattedDateForDisplay}`;
 
-  if (cachedTransactions && cachedTransactions.cacheKey === cacheKey) {
+  // ⚡ Smart cache with timestamp validation
+  if (cachedTransactions && cachedTransactions.cacheKey === cacheKey && isCacheValid(cachedTransactions)) {
     displayTransactions(cachedTransactions.data);
     return;
   }
@@ -264,7 +285,7 @@ window.fetchTransactions = async function() {
     const response = await fetch(finalUrl);
     const transactionData = await response.json();
     if (transactionData.error) throw new Error(transactionData.error);
-    cachedTransactions = { cacheKey, data: transactionData };
+    cachedTransactions = { cacheKey, data: transactionData, timestamp: Date.now() };
     displayTransactions(transactionData);
   } catch (error) {
     showToast("Lỗi khi lấy dữ liệu giao dịch: " + error.message, "error");
@@ -303,10 +324,8 @@ function displayTransactions(data) {
     return;
   }
 
-  // Ẩn placeholder và hiển thị pagination
   placeholderTab1.style.display = 'none';
   paginationDiv.style.display = 'block';
-
   container.innerHTML = `<div class="notification">Bạn có ${data.length} giao dịch trong ngày</div>`;
 
   let totalIncome = 0, totalExpense = 0;
@@ -327,47 +346,57 @@ function displayTransactions(data) {
   const endIndex = startIndex + transactionsPerPage;
   const paginatedData = data.slice(startIndex, endIndex);
 
+  // ⚡ Use DocumentFragment for better performance
+  const fragment = document.createDocumentFragment();
+  
   paginatedData.forEach((item, index) => {
-  const transactionBox = document.createElement('div');
-  transactionBox.className = 'transaction-box';
-  const amountColor = item.type === 'Thu nhập' ? 'var(--income-color)' : 'var(--expense-color)';
-  const typeClass = item.type === 'Thu nhập' ? 'income' : 'expense';
-  const transactionNumber = startIndex + index + 1;
-  transactionBox.innerHTML = `
-  <div class="layer-container" style="position: relative;">
-    <div class="layer-top" style="position: absolute; top: 0; right: 0;">
-      <div class="number">Giao dịch thứ: ${transactionNumber}</div>
-      <div class="id">Mã giao dịch: ${item.id}</div>
-    </div>
-    <div class="layer-bottom" style="width: 100%;">
-      <div class="date">${formatDate(item.date)}</div>
-      <div class="amount" style="color: ${amountColor};">${item.amount.toLocaleString('vi-VN')}đ</div>
-      <div class="content">Nội dung: ${item.content}${item.note ? ` (${item.note})` : ''}</div>
-      <div class="type ${typeClass}">Phân loại: ${item.type}</div>
-      <div class="category">Phân loại chi tiết: ${item.category}</div>
-    </div>
-  </div>
-  <div style="margin-top: 0.5rem;">
-    <button class="edit-btn edit" data-id="${item.id}"><i class="fas fa-edit"></i> Sửa</button>
-    <button class="delete-btn delete" data-id="${item.id}"><i class="fas fa-trash"></i> Xóa</button>
-  </div>
-`;
-  container.appendChild(transactionBox);
-});
+    const transactionBox = document.createElement('div');
+    transactionBox.className = 'transaction-box';
+    const amountColor = item.type === 'Thu nhập' ? 'var(--income-color)' : 'var(--expense-color)';
+    const typeClass = item.type === 'Thu nhập' ? 'income' : 'expense';
+    const transactionNumber = startIndex + index + 1;
+    transactionBox.innerHTML = `
+      <div class="layer-container" style="position: relative;">
+        <div class="layer-top" style="position: absolute; top: 0; right: 0;">
+          <div class="number">Giao dịch thứ: ${transactionNumber}</div>
+          <div class="id">Mã giao dịch: ${item.id}</div>
+        </div>
+        <div class="layer-bottom" style="width: 100%;">
+          <div class="date">${formatDate(item.date)}</div>
+          <div class="amount" style="color: ${amountColor};">${item.amount.toLocaleString('vi-VN')}đ</div>
+          <div class="content">Nội dung: ${item.content}${item.note ? ` (${item.note})` : ''}</div>
+          <div class="type ${typeClass}">Phân loại: ${item.type}</div>
+          <div class="category">Phân loại chi tiết: ${item.category}</div>
+        </div>
+      </div>
+      <div style="margin-top: 0.5rem;">
+        <button class="edit-btn edit" data-id="${item.id}"><i class="fas fa-edit"></i> Sửa</button>
+        <button class="delete-btn delete" data-id="${item.id}"><i class="fas fa-trash"></i> Xóa</button>
+      </div>
+    `;
+    fragment.appendChild(transactionBox);
+  });
+  
+  container.appendChild(fragment);
 
   pageInfo.textContent = `Trang ${currentPage} / ${totalPages}`;
   prevPageBtn.disabled = currentPage === 1;
   nextPageBtn.disabled = currentPage === totalPages;
 
-  document.querySelectorAll('.edit-btn').forEach(button => {
-    const transactionId = button.getAttribute('data-id');
-    const transaction = data.find(item => String(item.id) === String(transactionId));
-    if (!transaction) return console.error(`Không tìm thấy giao dịch với ID: ${transactionId}`);
-    button.addEventListener('click', () => openEditForm(transaction));
-  });
-
-  document.querySelectorAll('.delete-btn').forEach(button => {
-    button.addEventListener('click', () => deleteTransaction(button.getAttribute('data-id')));
+  // ⚡ Event delegation for better performance
+  container.addEventListener('click', (e) => {
+    const editBtn = e.target.closest('.edit-btn');
+    const deleteBtn = e.target.closest('.delete-btn');
+    
+    if (editBtn) {
+      const transactionId = editBtn.getAttribute('data-id');
+      const transaction = data.find(item => String(item.id) === String(transactionId));
+      if (transaction) openEditForm(transaction);
+    }
+    
+    if (deleteBtn) {
+      deleteTransaction(deleteBtn.getAttribute('data-id'));
+    }
   });
 }
 
@@ -841,10 +870,6 @@ window.fetchMonthlyData = async function() {
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        animation: {
-          duration: 800,
-          easing: 'easeInOutQuart'
-        },
         layout: {
           padding: {
             top: 65
@@ -949,7 +974,12 @@ async function fetchExpensesByCategoryForMonths(startMonth, endMonth) {
  * Vẽ pie chart % chi tiêu theo phân loại (giống tab2).
  * @param {Array} data - Dữ liệu expense by category.
  */
-function drawMonthlyPieChart(data) {
+async function drawMonthlyPieChart(data) {
+  // ⚡ Lazy load Chart.js if not already loaded
+  if (!window.Chart) {
+    await window.loadChartJS();
+  }
+  
   const ctxPie = document.getElementById('monthlyPieChart').getContext('2d');
   if (window.monthlyPieChartInstance) window.monthlyPieChartInstance.destroy();
 
@@ -977,12 +1007,6 @@ function drawMonthlyPieChart(data) {
       maintainAspectRatio: true,
       aspectRatio: 1,
       cutout: '60%',
-      animation: {
-        animateRotate: true,
-        animateScale: true,
-        duration: 800,
-        easing: 'easeInOutQuart'
-      },
       plugins: {
         legend: { display: false },
         tooltip: {
@@ -1867,12 +1891,9 @@ async function showCategoryDetail(categoryName, categoryAmount, categoryColor) {
       currentCategoryData = cachedData.chartData;
       cachedCategoryTransactions = cachedData.transactions;
       
-      // Tạo canvas mới
+      // Hiển thị canvas
       const chartContainer = document.querySelector('#categoryDetailView > div:nth-child(3)');
       chartContainer.innerHTML = '<canvas id="categoryMonthlyChart"></canvas>';
-      
-      // Đợi canvas được render
-      await new Promise(resolve => setTimeout(resolve, 50));
       
       // Vẽ biểu đồ từ cache
       drawCategoryMonthlyChart(cachedData.chartData, categoryName, categoryColor);
@@ -1896,20 +1917,15 @@ async function showCategoryDetail(categoryName, categoryAmount, categoryColor) {
       document.getElementById('categoryTransactionsContainer').innerHTML = '';
       document.getElementById('paginationCategoryDetail').style.display = 'none';
       
-      // Lấy dữ liệu chart
+      // Lấy dữ liệu và vẽ biểu đồ
       await fetchCategoryMonthlyData(categoryName, categoryColor);
       
-      // Lấy dữ liệu transactions
-      await fetchCategoryTransactions(categoryName);
-      
-      // Xóa loading và tạo canvas mới
+      // Xóa loading và hiển thị canvas
       chartContainer.innerHTML = '<canvas id="categoryMonthlyChart"></canvas>';
       
-      // Đợi một chút để canvas được render
-      await new Promise(resolve => setTimeout(resolve, 50));
-      
-      // Vẽ biểu đồ với canvas mới
-      drawCategoryMonthlyChart(currentCategoryData, categoryName, categoryColor);
+      // Vẽ lại biểu đồ với canvas mới
+      await fetchCategoryMonthlyData(categoryName, categoryColor);
+      await fetchCategoryTransactions(categoryName);
       
       // Lưu vào cache
       categoryDetailsCache[cacheKey] = {
@@ -1981,7 +1997,8 @@ async function fetchCategoryMonthlyData(categoryName, categoryColor) {
     // Data đã có format đúng từ API: [{month: 1, amount: 1000}, ...]
     currentCategoryData = data;
     
-    // KHÔNG vẽ biểu đồ ở đây - sẽ vẽ sau khi canvas sẵn sàng
+    // Vẽ biểu đồ
+    drawCategoryMonthlyChart(data, categoryName, categoryColor);
     
   } catch (error) {
     console.error('Lỗi khi lấy dữ liệu category monthly:', error);
@@ -2042,10 +2059,6 @@ function drawCategoryMonthlyChart(data, categoryName, categoryColor) {
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        animation: {
-          duration: 800,
-          easing: 'easeInOutQuart'
-        },
         layout: {
           padding: {
             top: 60
@@ -2236,68 +2249,3 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
-
-/* ==========================================================================
-   TÍNH NĂNG BỔ SUNG - Gọi thủ công nếu cần
-   ========================================================================== */
-
-/**
- * Setup Dark Mode Toggle (gọi thủ công: setupDarkModeToggle())
- */
-function setupDarkModeToggle() {
-  const toggleBtn = document.createElement('button');
-  toggleBtn.className = 'dark-mode-toggle';
-  toggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
-  toggleBtn.setAttribute('aria-label', 'Toggle Dark Mode');
-  document.body.appendChild(toggleBtn);
-  
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme === 'dark') {
-    document.body.classList.add('dark-mode');
-    toggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
-  }
-  
-  toggleBtn.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-    const isDark = document.body.classList.contains('dark-mode');
-    toggleBtn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    showToast(isDark ? 'Đã bật chế độ tối' : 'Đã bật chế độ sáng', 'success');
-  });
-}
-
-/**
- * Validate số tiền (sử dụng: const result = validateAmount(amount))
- */
-function validateAmount(amount) {
-  const numAmount = parseNumber(amount);
-  if (isNaN(numAmount) || numAmount <= 0) {
-    return { valid: false, message: 'Số tiền phải lớn hơn 0!' };
-  }
-  if (numAmount > 999999999999) {
-    return { valid: false, message: 'Số tiền quá lớn!' };
-  }
-  return { valid: true };
-}
-
-/**
- * Validate ngày (sử dụng: const result = validateDate(dateString))
- */
-function validateDate(dateString) {
-  if (!dateString) {
-    return { valid: false, message: 'Vui lòng chọn ngày!' };
-  }
-  const inputDate = new Date(dateString);
-  const today = new Date();
-  today.setHours(23, 59, 59, 999);
-  if (inputDate > today) {
-    return { valid: false, message: 'Không thể chọn ngày trong tương lai!' };
-  }
-  if (isNaN(inputDate.getTime())) {
-    return { valid: false, message: 'Ngày không hợp lệ!' };
-  }
-  return { valid: true };
-}
-
-// Để bật dark mode, thêm dòng này vào cuối DOMContentLoaded:
-// setupDarkModeToggle();
