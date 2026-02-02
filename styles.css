@@ -133,6 +133,18 @@
   .stat-box .title {
     color: var(--text-secondary) !important;
   }
+  
+  /* ⚡ FIX: Số giao dịch thứ và mã giao dịch trong dark mode */
+  .transaction-box .number,
+  .layer-top .number {
+    color: var(--text-primary) !important;
+    font-weight: 700;
+  }
+  
+  .transaction-box .id,
+  .layer-top .id {
+    color: var(--text-secondary) !important;
+  }
 
   /* Transaction & Keyword boxes */
   .transaction-box,
@@ -1747,5 +1759,93 @@ label {
   
   .filter-mode-btn i {
     font-size: 0.9rem;
+  }
+}
+
+/* ============================================================================
+   FIX: NÚT QUAY LẠI - CATEGORY DETAIL
+   ============================================================================ */
+#backToCategoryBtn {
+  background: var(--card-bg) !important;
+  color: var(--text-primary) !important;
+  border: 2px solid var(--primary-color) !important;
+  box-shadow: var(--shadow-md) !important;
+  transition: all var(--transition-base);
+}
+
+#backToCategoryBtn:hover {
+  background: var(--primary-color) !important;
+  color: white !important;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover) !important;
+}
+
+#backToCategoryBtn i {
+  color: inherit !important;
+  margin-right: 0.5rem;
+}
+
+/* ============================================================================
+   FIX: DARK MODE - TEXT VÀ BIỂU ỐNG
+   ============================================================================ */
+@media (prefers-color-scheme: dark) {
+  /* Fix: Tổng chi tiêu ở giữa biểu đồ tròn */
+  #monthlyPieChart,
+  #categoryPieChart {
+    color: var(--text-primary) !important;
+  }
+  
+  /* Fix: Grid lines trong biểu đồ cột */
+  canvas {
+    filter: brightness(1.1);
+  }
+  
+  /* Fix: Chữ trong transaction box */
+  .transaction-box .number {
+    color: var(--text-primary) !important;
+    font-weight: 700 !important;
+  }
+  
+  .transaction-box .id {
+    color: var(--text-secondary) !important;
+  }
+  
+  /* Fix: Nút quay lại trong dark mode */
+  #backToCategoryBtn {
+    background: var(--card-bg) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--primary-color) !important;
+  }
+  
+  #backToCategoryBtn:hover {
+    background: var(--primary-color) !important;
+    color: white !important;
+  }
+  
+  #backToCategoryBtn i {
+    color: inherit !important;
+    opacity: 1 !important;
+  }
+}
+
+/* ============================================================================
+   FIX: LIGHT MODE - NÚT QUAY LẠI
+   ============================================================================ */
+@media (prefers-color-scheme: light) {
+  #backToCategoryBtn {
+    background: white !important;
+    color: var(--primary-color) !important;
+    border: 2px solid var(--primary-color) !important;
+    font-weight: 600;
+  }
+  
+  #backToCategoryBtn:hover {
+    background: var(--primary-color) !important;
+    color: white !important;
+  }
+  
+  #backToCategoryBtn i {
+    color: inherit !important;
+    opacity: 1 !important;
   }
 }
