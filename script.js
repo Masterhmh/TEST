@@ -35,6 +35,13 @@ let filterModeCache = {
   custom: {}        // Cache cho chế độ "Tùy chọn" (key: "startMonth-endMonth")
 };
 
+// ⚡ Cache cho 3 chế độ tìm kiếm Tab 4 (Cả năm, Theo tháng, Khoảng thời gian)
+let searchModeCache = {
+  yearly: {},       // Cache cho chế độ "Cả năm" (key: "content-amount-category")
+  monthly: {},      // Cache cho chế độ "Theo tháng" (key: "month-content-amount-category")
+  custom: {}        // Cache cho chế độ "Khoảng thời gian" (key: "startMonth-endMonth-content-amount-category")
+};
+
 // ⚡ TỐI ƯU: Toast queue để tránh nhiều toast cùng lúc
 let toastQueue = [];
 let isShowingToast = false;
@@ -1527,15 +1534,27 @@ window.searchTransactions = async function() {
     }
   }
 
-  // Tạo cacheKey dựa trên các tiêu chí tìm kiếm bao gồm khoảng thời gian
-  const cacheKey = `${year}-${startMonth}-${endMonth}-${content || ''}-${amount || ''}-${category || ''}`;
+  // Tạo cacheKey dựa trên chế độ và tiêu chí tìm kiếm
+  let cacheKey;
+  if (searchMode === 'yearly') {
+    cacheKey = `${content || ''}-${amount || ''}-${category || ''}`;
+  } else if (searchMode === 'monthly') {
+    cacheKey = `${startMonth}-${content || ''}-${amount || ''}-${category || ''}`;
+  } else {
+    cacheKey = `${startMonth}-${endMonth}-${content || ''}-${amount || ''}-${category || ''}`;
+  }
 
-  // Kiểm tra cache
-  if (cachedSearchResults && cachedSearchResults.cacheKey === cacheKey) {
-    displaySearchResults(cachedSearchResults.transactions);
+  // Kiểm tra cache theo chế độ
+  const cachedData = searchModeCache[searchMode][cacheKey];
+  if (cachedData) {
+    console.log(`📦 Sử dụng cache cho chế độ ${searchMode}, key: ${cacheKey}`);
+    displaySearchResults(cachedData.transactions);
+    cachedSearchResults = cachedData; // Cập nhật cachedSearchResults cho pagination
+    currentPageSearch = cachedData.currentPage || 1;
     return;
   }
 
+  console.log(`🌐 Gọi API cho chế độ ${searchMode}, key: ${cacheKey}`);
   showLoading(true, 'tab4');
   try {
     let targetUrl = `${apiUrl}?action=searchTransactions&sheetId=${sheetId}&page=${currentPageSearch}&limit=${searchPerPage}&year=${year}`;
@@ -1558,13 +1577,21 @@ window.searchTransactions = async function() {
     console.log("API Response:", searchData);
     if (searchData.error) throw new Error(searchData.error);
 
-    cachedSearchResults = {
+    // Tạo object cache
+    const cacheObject = {
       transactions: searchData.transactions || [],
       totalTransactions: searchData.totalTransactions || 0,
       totalPages: searchData.totalPages || 1,
       currentPage: searchData.currentPage || 1,
-      cacheKey: cacheKey // Lưu cacheKey
+      cacheKey: cacheKey
     };
+    
+    // Lưu vào cache theo chế độ
+    searchModeCache[searchMode][cacheKey] = cacheObject;
+    console.log(`💾 Đã lưu cache cho chế độ ${searchMode}, key: ${cacheKey}`);
+    
+    // Cập nhật cachedSearchResults cho pagination
+    cachedSearchResults = cacheObject;
     currentPageSearch = searchData.currentPage || 1;
 
     displaySearchResults(searchData.transactions);
