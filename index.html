@@ -94,17 +94,29 @@
   <!-- Nhóm nút chế độ lọc -->
   <div class="input-group" style="justify-content: center; gap: 0.5rem; margin-bottom: 1rem;">
     <button id="filterMonthlyBtn" class="filter-mode-btn active">
-      <i class="fas fa-calendar-day"></i> Hàng tháng
+      <i class="fas fa-calendar-day"></i><span> Theo tháng</span>
     </button>
     <button id="filterYearlyBtn" class="filter-mode-btn">
-      <i class="fas fa-calendar-alt"></i> Hàng năm
+      <i class="fas fa-calendar-alt"></i><span> Cả năm</span>
     </button>
     <button id="filterCustomBtn" class="filter-mode-btn">
-      <i class="fas fa-sliders-h"></i> Tùy chọn
+      <i class="fas fa-sliders-h"></i><span> Tùy chọn</span>
     </button>
   </div>
   
-  <!-- Dropdown chọn tháng (chỉ hiện khi chọn Tùy chọn) -->
+  <!-- Dropdown chọn tháng đơn (chỉ hiện khi chọn Theo tháng) -->
+  <div class="input-group" id="singleMonthSelector" style="display: flex; margin-bottom: 1rem;">
+    <label>Tháng:</label>
+    <select id="singleMonth">
+      <option value="1">Tháng 1</option><option value="2">Tháng 2</option><option value="3">Tháng 3</option>
+      <option value="4">Tháng 4</option><option value="5">Tháng 5</option><option value="6">Tháng 6</option>
+      <option value="7">Tháng 7</option><option value="8">Tháng 8</option><option value="9">Tháng 9</option>
+      <option value="10">Tháng 10</option><option value="11">Tháng 11</option><option value="12">Tháng 12</option>
+    </select>
+    <button id="fetchSingleMonthBtn"><i class="fas fa-filter"></i> Lọc</button>
+  </div>
+  
+  <!-- Dropdown chọn khoảng tháng (chỉ hiện khi chọn Tùy chọn) -->
   <div class="input-group" id="monthRangeSelector" style="display: none;">
     Từ:
     <select id="startMonth">
