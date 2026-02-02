@@ -28,212 +28,59 @@ const searchPerPage = 10;
 // Cache chi tiết cho từng category (để tránh load lại khi click vào legend nhiều lần)
 let categoryDetailsCache = {};
 
+// ⚡ TỐI ƯU: Toast queue để tránh nhiều toast cùng lúc
+let toastQueue = [];
+let isShowingToast = false;
+
 /* ==========================================================================
    2. Hàm tiện ích (Utility Functions)
    Các hàm hỗ trợ hiển thị thông báo, định dạng ngày giờ và quản lý giao diện.
    ========================================================================== */
-/* ==========================================================================
-   🎯 MODERN TOAST SYSTEM - ENHANCED VERSION
-   ========================================================================== */
-let toastContainer = null;
-
 /**
- * Khởi tạo toast container
+ * Hiển thị thông báo dạng toast với queue system và animations mượt.
+ * ⚡ TỐI ƯU: Sử dụng queue để tránh nhiều toast cùng lúc, requestAnimationFrame cho animation mượt 60fps
+ * @param {string} message - Nội dung thông báo.
+ * @param {string} type - Loại thông báo (info, success, error, warning).
  */
-function initToastContainer() {
-  if (!toastContainer) {
-    toastContainer = document.createElement('div');
-    toastContainer.className = 'toast-container';
-    document.body.appendChild(toastContainer);
+function showToast(message, type = "info") {
+  toastQueue.push({ message, type });
+  if (!isShowingToast) {
+    processToastQueue();
   }
 }
 
-/**
- * Hiển thị toast notification hiện đại với icon và progress bar
- * @param {string} message - Nội dung chính
- * @param {string} type - Loại: success, error, warning, info
- * @param {string} title - Tiêu đề (optional)
- * @param {string} subtitle - Phụ đề (optional)
- * @param {number} duration - Thời gian hiển thị (ms), mặc định 3000
- */
-function showToast(message, type = "info", title = null, subtitle = null, duration = 3000) {
-  initToastContainer();
-
-  // Icon mapping
-  const icons = {
-    success: '✓',
-    error: '✕',
-    warning: '⚠',
-    info: 'ℹ'
-  };
-
-  // Title mapping nếu không có
-  const defaultTitles = {
-    success: 'Thành công',
-    error: 'Lỗi',
-    warning: 'Cảnh báo',
-    info: 'Thông tin'
-  };
-
-  const toastTitle = title || defaultTitles[type] || 'Thông báo';
-  const icon = icons[type] || 'ℹ';
-
-  // Tạo toast element
+function processToastQueue() {
+  if (toastQueue.length === 0) {
+    isShowingToast = false;
+    return;
+  }
+  
+  isShowingToast = true;
+  const { message, type } = toastQueue.shift();
+  
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
-  
   toast.innerHTML = `
-    <div class="toast-icon">${icon}</div>
-    <div class="toast-content">
-      <div class="toast-title">${toastTitle}</div>
-      <div class="toast-message">${message}</div>
-      ${subtitle ? `<div class="toast-message" style="font-size: 12px; opacity: 0.8;">${subtitle}</div>` : ''}
+    <div>
+      <span>${message}</span>
     </div>
-    <button class="toast-close" aria-label="Đóng">×</button>
-    <div class="toast-progress"></div>
   `;
-
-  // Thêm vào container
-  toastContainer.appendChild(toast);
-
-  // Close button handler
-  const closeBtn = toast.querySelector('.toast-close');
-  closeBtn.addEventListener('click', () => removeToast(toast));
-
-  // Hiển thị toast với animation
-  requestAnimationFrame(() => {
-    toast.classList.add('show');
-  });
-
-  // Tự động ẩn sau duration
-  const hideTimeout = setTimeout(() => {
-    removeToast(toast);
-  }, duration);
-
-  // Lưu timeout để có thể cancel nếu user close sớm
-  toast.hideTimeout = hideTimeout;
-}
-
-/**
- * Xóa toast với animation
- */
-function removeToast(toast) {
-  if (toast.hideTimeout) {
-    clearTimeout(toast.hideTimeout);
-  }
+  document.body.appendChild(toast);
   
-  toast.classList.remove('show');
-  toast.classList.add('hide');
+  // ⚡ Sử dụng requestAnimationFrame cho animation mượt hơn
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      toast.classList.add('show');
+    });
+  });
   
   setTimeout(() => {
-    if (toast.parentNode) {
-      toast.parentNode.removeChild(toast);
-    }
-  }, 300);
-}
-
-/* ==========================================================================
-   ⚡ PERFORMANCE UTILITIES
-   ========================================================================== */
-/**
- * Debounce function để giảm số lần gọi hàm
- * @param {Function} func - Function cần debounce
- * @param {number} wait - Thời gian chờ (ms)
- */
-function debounce(func, wait) {
-  let timeout;
-  return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
-}
-
-/**
- * Throttle function để giới hạn tần suất thực thi
- * @param {Function} func - Function cần throttle
- * @param {number} limit - Giới hạn thời gian (ms)
- */
-function throttle(func, limit) {
-  let inThrottle;
-  return function(...args) {
-    if (!inThrottle) {
-      func.apply(this, args);
-      inThrottle = true;
-      setTimeout(() => inThrottle = false, limit);
-    }
-  };
-}
-
-/**
- * Destroy chart instance để tránh memory leak
- * @param {Object} chartInstance - Chart.js instance
- * @returns {null}
- */
-function destroyChart(chartInstance) {
-  if (chartInstance) {
-    chartInstance.destroy();
-  }
-  return null;
-}
-
-/**
- * Tạo chart với smooth animation
- * @param {CanvasRenderingContext2D} ctx - Canvas context
- * @param {Object} config - Chart configuration
- * @returns {Chart} Chart instance
- */
-function createChartWithAnimation(ctx, config) {
-  const animatedConfig = {
-    ...config,
-    options: {
-      ...config.options,
-      animation: {
-        duration: 750,
-        easing: 'easeInOutQuart'
-      },
-      transitions: {
-        active: {
-          animation: {
-            duration: 300
-          }
-        }
-      }
-    }
-  };
-  
-  return new Chart(ctx, animatedConfig);
-}
-
-/**
- * Hiển thị skeleton loading cho chart
- * @param {string} canvasId - ID của canvas element
- * @param {boolean} show - Hiển thị hay ẩn
- */
-function showChartSkeleton(canvasId, show) {
-  const canvas = document.getElementById(canvasId);
-  if (!canvas) return;
-  
-  const parent = canvas.parentElement;
-  let skeleton = parent.querySelector('.chart-skeleton');
-  
-  if (show) {
-    if (!skeleton) {
-      skeleton = document.createElement('div');
-      skeleton.className = 'chart-skeleton';
-      parent.insertBefore(skeleton, canvas);
-    }
-    canvas.style.display = 'none';
-    skeleton.style.display = 'block';
-  } else {
-    if (skeleton) {
-      skeleton.style.display = 'none';
-    }
-    canvas.style.display = 'block';
-  }
+    toast.classList.remove('show');
+    setTimeout(() => {
+      toast.remove();
+      processToastQueue(); // Xử lý toast tiếp theo trong queue
+    }, 300);
+  }, 3000);
 }
 
 /**
@@ -257,16 +104,12 @@ function showModalError(modalId, message) {
  */
 function showLoading(show, tabId) {
   const loadingElement = document.getElementById(`loading${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`);
-  if (loadingElement) {
-    // Sử dụng requestAnimationFrame để smooth animation
-    requestAnimationFrame(() => {
-      loadingElement.style.display = show ? 'block' : 'none';
-    });
-  }
+  if (loadingElement) loadingElement.style.display = show ? 'block' : 'none';
 }
 
 /**
  * Hiển thị hoặc ẩn popup loading toàn màn hình.
+ * ⚡ TỐI ƯU: Thêm opacity và scale transitions mượt mà
  * @param {boolean} show - Hiển thị (true) hoặc ẩn (false).
  */
 function showLoadingPopup(show) {
@@ -285,7 +128,8 @@ function showLoadingPopup(show) {
       justify-content: center;
       align-items: center;
       z-index: 3000;
-      backdrop-filter: blur(4px);
+      opacity: 0;
+      transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     `;
     loadingPopup.innerHTML = `
       <div style="
@@ -297,21 +141,41 @@ function showLoadingPopup(show) {
         flex-direction: column;
         align-items: center;
         gap: 1rem;
+        transform: scale(0.9);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       ">
-        <div class="loading-spinner"></div>
+        <div style="
+          border: 4px solid #16A34A;
+          border-top: 4px solid transparent;
+          border-radius: 50%;
+          width: 40px;
+          height: 40px;
+          animation: spin 1s linear infinite;
+        "></div>
         <span style="
           font-size: 1rem;
           color: #1F2A44;
-          font-weight: 600;
+          font-weight: 500;
         ">Đang xử lý...</span>
       </div>
     `;
     document.body.appendChild(loadingPopup);
   }
   
-  requestAnimationFrame(() => {
-    loadingPopup.style.display = show ? 'flex' : 'none';
-  });
+  // ⚡ Sử dụng requestAnimationFrame cho animation mượt
+  if (show) {
+    loadingPopup.style.display = 'flex';
+    requestAnimationFrame(() => {
+      loadingPopup.style.opacity = '1';
+      loadingPopup.querySelector('div').style.transform = 'scale(1)';
+    });
+  } else {
+    loadingPopup.style.opacity = '0';
+    loadingPopup.querySelector('div').style.transform = 'scale(0.9)';
+    setTimeout(() => {
+      loadingPopup.style.display = 'none';
+    }, 300);
+  }
 }
 
 /**
@@ -369,39 +233,68 @@ function parseNumber(value) {
   return parseInt(value.replace(/[^0-9]/g, '')) || 0;
 }
 
+/**
+ * Debounce function để tối ưu input events.
+ * ⚡ TỐI ƯU: Giảm số lần xử lý khi người dùng nhập liệu nhanh
+ * @param {Function} func - Hàm cần debounce.
+ * @param {number} wait - Thời gian chờ (ms).
+ * @returns {Function} Hàm đã được debounce.
+ */
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
 /* ==========================================================================
    3. Hàm điều hướng (Navigation Functions)
    Hàm xử lý chuyển đổi giữa các tab trong ứng dụng.
    ========================================================================== */
 /**
  * Mở tab được chọn và cập nhật giao diện.
+ * ⚡ TỐI ƯU: Thêm smooth fade và scale transitions khi chuyển tab
  * @param {string} tabId - ID của tab cần mở (tab1, tab2, ...).
  */
 window.openTab = function(tabId) {
   const tabs = document.querySelectorAll('.nav-item');
   const contents = document.querySelectorAll('.tab-content');
   
-  // Remove active class với animation
-  tabs.forEach(tab => tab.classList.remove('active'));
-  contents.forEach(content => {
-    if (content.classList.contains('active')) {
-      content.style.opacity = '0';
-      setTimeout(() => {
-        content.classList.remove('active');
-      }, 150);
-    }
-  });
-  
-  // Add active class với animation
+  // ⚡ Sử dụng requestAnimationFrame cho animation mượt
   requestAnimationFrame(() => {
-    const targetContent = document.getElementById(tabId);
-    targetContent.classList.add('active');
-    requestAnimationFrame(() => {
-      targetContent.style.opacity = '1';
+    tabs.forEach(tab => tab.classList.remove('active'));
+    
+    contents.forEach(content => {
+      if (content.classList.contains('active')) {
+        content.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+        content.style.opacity = '0';
+        content.style.transform = 'scale(0.98)';
+        setTimeout(() => {
+          content.classList.remove('active');
+        }, 200);
+      }
     });
+    
+    setTimeout(() => {
+      const targetTab = document.getElementById(tabId);
+      targetTab.classList.add('active');
+      targetTab.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+      targetTab.style.opacity = '0';
+      targetTab.style.transform = 'scale(0.98)';
+      
+      requestAnimationFrame(() => {
+        targetTab.style.opacity = '1';
+        targetTab.style.transform = 'scale(1)';
+      });
+      
+      document.querySelector(`.nav-item[data-tab="${tabId}"]`).classList.add('active');
+    }, 200);
   });
-  
-  document.querySelector(`.nav-item[data-tab="${tabId}"]`).classList.add('active');
   
   if (tabId === 'tab4') {
     const container = document.getElementById('searchResultsContainer');
@@ -441,11 +334,7 @@ window.openTab = function(tabId) {
  */
 window.fetchTransactions = async function() {
   const transactionDate = document.getElementById('transactionDate').value;
-  if (!transactionDate) {
-    showToast("Vui lòng chọn ngày để xem giao dịch!", "warning", "Thiếu thông tin");
-    return;
-  }
-  
+  if (!transactionDate) return showToast("Vui lòng chọn ngày để xem giao dịch!", "warning");
   const dateForApi = transactionDate;
   const [year, month, day] = transactionDate.split('-');
   const formattedDateForDisplay = `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`;
@@ -453,7 +342,6 @@ window.fetchTransactions = async function() {
 
   if (cachedTransactions && cachedTransactions.cacheKey === cacheKey) {
     displayTransactions(cachedTransactions.data);
-    showToast("Dữ liệu được tải từ bộ nhớ cache", "info", "Cache", "Tải nhanh hơn");
     return;
   }
 
@@ -466,10 +354,8 @@ window.fetchTransactions = async function() {
     if (transactionData.error) throw new Error(transactionData.error);
     cachedTransactions = { cacheKey, data: transactionData };
     displayTransactions(transactionData);
-    const count = Array.isArray(transactionData) ? transactionData.length : 0;
-    showToast(`Tải thành công ${count} giao dịch`, "success", "Hoàn tất", `Ngày ${formattedDateForDisplay}`);
   } catch (error) {
-    showToast(error.message, "error", "Lỗi tải dữ liệu", "Vui lòng thử lại");
+    showToast("Lỗi khi lấy dữ liệu giao dịch: " + error.message, "error");
     displayTransactions({ error: true });
   } finally {
     showLoading(false, 'tab1');
@@ -795,7 +681,7 @@ async function saveTransaction(updatedTransaction) {
     });
     const result = await response.json();
     if (result.error) throw new Error(result.error);
-    showToast("Cập nhật giao dịch thành công!", "success", "Hoàn tất", "Dữ liệu đã được cập nhật");
+    showToast("Cập nhật giao dịch thành công!", "success");
     closeEditForm();
     cachedTransactions = null;
     cachedMonthlyExpenses = null;
@@ -925,7 +811,7 @@ async function deleteTransaction(transactionId) {
 
       const result = await response.json();
       if (result.error) throw new Error(result.error);
-      showToast("Xóa giao dịch thành công!", "success", "Hoàn tất", "Giao dịch đã bị xóa");
+      showToast("Xóa giao dịch thành công!", "success");
       cachedTransactions = null;
       cachedMonthlyExpenses = null;
       cachedSearchResults = null;
@@ -961,15 +847,9 @@ function closeConfirmDeleteModal() {
 window.fetchMonthlyData = async function() {
   const startMonth = parseInt(document.getElementById('startMonth').value);
   const endMonth = parseInt(document.getElementById('endMonth').value);
-  if (startMonth > endMonth) {
-    showToast("Tháng bắt đầu phải nhỏ hơn hoặc bằng tháng kết thúc!", "warning", "Lỗi chọn tháng");
-    return;
-  }
+  if (startMonth > endMonth) return showToast("Tháng bắt đầu phải nhỏ hơn hoặc bằng tháng kết thúc!", "warning");
 
   showLoading(true, 'tab2');
-  showChartSkeleton('monthlyChart', true);
-  showChartSkeleton('monthlyPieChart', true);
-  
   try {
     // Gọi API cho bar chart (thu/chi theo tháng)
     const targetUrl = `${apiUrl}?action=getMonthlyData&startMonth=${startMonth}&endMonth=${endMonth}&sheetId=${sheetId}`;
@@ -986,7 +866,7 @@ window.fetchMonthlyData = async function() {
     if (placeholderTab2) placeholderTab2.style.display = 'none';
     if (chartTitleTab2) chartTitleTab2.style.display = 'block';
     if (pieChartTitleTab2) pieChartTitleTab2.style.display = 'block';
-    if (chartContainer) chartContainer.classList.add('show');
+    if (chartContainer) chartContainer.classList.add('show'); // Hiển thị chart-container
 
     // Tính tổng thu, tổng chi, số dư từ dữ liệu monthly
     let totalIncome = 0;
@@ -1005,13 +885,10 @@ window.fetchMonthlyData = async function() {
       <div class="stat-box balance"><div class="title">Số dư</div><div class="amount">${totalBalance.toLocaleString('vi-VN')}đ</div></div>
     `;
 
-    // Destroy old charts trước khi tạo mới
-    if (window.monthlyChartInstance) {
-      window.monthlyChartInstance = destroyChart(window.monthlyChartInstance);
-    }
-    
     // Vẽ bar chart theo range tháng người dùng chọn
     const ctx = document.getElementById('monthlyChart').getContext('2d');
+    const monthlyChartElement = document.getElementById('monthlyChart');
+    if (window.monthlyChartInstance) window.monthlyChartInstance.destroy();
     
     // Tạo mảng tháng từ startMonth đến endMonth
     const monthRange = [];
@@ -1031,7 +908,7 @@ window.fetchMonthlyData = async function() {
     const incomeData = monthRange.map(month => dataMap[month]?.income || 0);
     const expenseData = monthRange.map(month => dataMap[month]?.expense || 0);
     
-    window.monthlyChartInstance = createChartWithAnimation(ctx, {
+    window.monthlyChartInstance = new Chart(ctx, {
       type: 'bar',
       data: {
         labels: labels,
@@ -1135,8 +1012,6 @@ window.fetchMonthlyData = async function() {
     showToast("Lỗi khi lấy dữ liệu: " + error.message, "error");
   } finally {
     showLoading(false, 'tab2');
-    showChartSkeleton('monthlyChart', false);
-    showChartSkeleton('monthlyPieChart', false);
   }
 };
 /**
@@ -1170,12 +1045,7 @@ function drawMonthlyPieChart(data) {
   // Định dạng tổng chi tiêu
   let centerText = totalExpense.toLocaleString('vi-VN') + 'đ';
 
-  // Destroy old chart
-  if (window.monthlyPieChartInstance) {
-    window.monthlyPieChartInstance = destroyChart(window.monthlyPieChartInstance);
-  }
-
-  window.monthlyPieChartInstance = createChartWithAnimation(ctxPie, {
+  window.monthlyPieChartInstance = new Chart(ctxPie, {
     type: 'doughnut',
     data: {
       labels: labels,
@@ -1333,7 +1203,7 @@ function getColorByIndex(index) {
  */
 window.fetchMonthlyExpenses = async function() {
   const month = document.getElementById('monthSelect').value;
-  if (!month) return showToast("Vui lòng chọn tháng để xem giao dịch!", "warning", "Thiếu thông tin");
+  if (!month) return showToast("Vui lòng chọn tháng để xem giao dịch!", "warning");
   const year = new Date().getFullYear();
   const cacheKey = `${year}-${month}`;
 
@@ -1488,7 +1358,7 @@ window.searchTransactions = async function() {
   const year = new Date().getFullYear();
 
   if (!content && !amount && !category) {
-    return showToast("Vui lòng nhập ít nhất một tiêu chí", "warning", "Thiếu thông tin", "Nhập: nội dung, số tiền hoặc phân loại");
+    return showToast("Vui lòng nhập ít nhất một tiêu chí: nội dung, số tiền, hoặc phân loại chi tiết!", "warning");
   }
 
   // Tạo cacheKey dựa trên các tiêu chí tìm kiếm
@@ -1714,7 +1584,7 @@ window.addKeyword = async function() {
     });
     const result = await response.json();
     if (result.error) throw new Error(result.error);
-    showToast("Thêm từ khóa thành công!", "success", "Hoàn tất", "Từ khóa đã được lưu");
+    showToast("Thêm từ khóa thành công!", "success");
     document.getElementById('keywordInput').value = '';
     window.fetchKeywords();
   } catch (error) {
@@ -1795,7 +1665,7 @@ window.deleteKeyword = async function() {
       throw new Error(result.error);
     }
 
-    showToast("Xóa từ khóa thành công!", "success", "Hoàn tất", "Từ khóa đã bị xóa");
+    showToast("Xóa từ khóa thành công!", "success");
     document.getElementById('keywordInput').value = '';
     window.fetchKeywords();
   } catch (error) {
