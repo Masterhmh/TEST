@@ -157,7 +157,7 @@ html {
 body {
   font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   margin: 0;
-  padding: 84px 20px 20px; /* ⚡ Tăng từ 80px lên 84px để tránh overlap với nav-bar */
+  padding: 86px 20px 20px; /* ⚡ Tăng từ 84px lên 86px để bù cho padding-top của nav tăng thêm */
   background-color: var(--background-color);
   color: var(--text-color);
   line-height: 1.6;
@@ -213,7 +213,7 @@ body {
   display: flex;
   justify-content: space-around;
   background: var(--gradient-primary);
-  padding: 12px 0; /* ⚡ Tăng từ 10px lên 12px để tránh cắt phần sáng của icon active */
+  padding: 14px 0 12px 0; /* ⚡ Tăng padding-top lên 14px để glow effect không bị cắt */
   box-shadow: var(--shadow-md);
   z-index: 1002;
   overflow-x: auto;
@@ -274,7 +274,23 @@ body {
 /* Icon active: to hơn + sáng hơn với drop shadow */
 .nav-item.active i {
   transform: scale(1.15);
-  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+  filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.6)); /* ⚡ Dời shadow xuống dưới một chút */
+  position: relative;
+}
+
+/* ⚡ Thêm glow effect bằng pseudo-element để tránh bị cắt */
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  top: 4px; /* Đẩy xuống một chút */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 30px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .nav-item span {
