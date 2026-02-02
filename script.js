@@ -2388,25 +2388,55 @@ function drawCategoryMonthlyChart(data, categoryName, categoryColor) {
 }
 
 /**
- * Lấy danh sách giao dịch của category trong tháng hiện tại
+ * Lấy danh sách giao dịch của category trong khoảng thời gian đã lọc
  */
 async function fetchCategoryTransactions(categoryName) {
   try {
-    const currentMonth = new Date().getMonth() + 1;
+    // Lấy khoảng thời gian từ cachedChartData
+    if (!cachedChartData) {
+      throw new Error('Không có dữ liệu biểu đồ. Vui lòng lọc dữ liệu trước.');
+    }
+    
+    const startMonth = cachedChartData.startMonth;
+    const endMonth = cachedChartData.endMonth;
     const currentYear = new Date().getFullYear();
     
-    const targetUrl = `${apiUrl}?action=getTransactionsByMonth&month=${currentMonth}&year=${currentYear}&sheetId=${sheetId}`;
-    const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
-    const response = await fetch(finalUrl);
-    const transactions = await response.json();
-    
-    if (transactions.error) throw new Error(transactions.error);
-    
-    // Lọc giao dịch theo category
-    const categoryTransactions = transactions.filter(t => t.category === categoryName);
-    cachedCategoryTransactions = categoryTransactions;
-    
-    displayCategoryTransactions(categoryTransactions);
+    // Nếu chỉ lọc 1 tháng
+    if (startMonth === endMonth) {
+      const targetUrl = `${apiUrl}?action=getTransactionsByMonth&month=${startMonth}&year=${currentYear}&sheetId=${sheetId}`;
+      const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
+      const response = await fetch(finalUrl);
+      const transactions = await response.json();
+      
+      if (transactions.error) throw new Error(transactions.error);
+      
+      // Lọc giao dịch theo category
+      const categoryTransactions = transactions.filter(t => t.category === categoryName);
+      cachedCategoryTransactions = categoryTransactions;
+      displayCategoryTransactions(categoryTransactions);
+    } 
+    // Nếu lọc nhiều tháng
+    else {
+      let allTransactions = [];
+      
+      // Lấy giao dịch từng tháng
+      for (let month = startMonth; month <= endMonth; month++) {
+        const targetUrl = `${apiUrl}?action=getTransactionsByMonth&month=${month}&year=${currentYear}&sheetId=${sheetId}`;
+        const finalUrl = proxyUrl + encodeURIComponent(targetUrl);
+        const response = await fetch(finalUrl);
+        const transactions = await response.json();
+        
+        if (transactions.error) throw new Error(transactions.error);
+        
+        // Thêm vào danh sách tổng
+        allTransactions = allTransactions.concat(transactions);
+      }
+      
+      // Lọc giao dịch theo category
+      const categoryTransactions = allTransactions.filter(t => t.category === categoryName);
+      cachedCategoryTransactions = categoryTransactions;
+      displayCategoryTransactions(categoryTransactions);
+    }
     
   } catch (error) {
     console.error('Lỗi khi lấy giao dịch category:', error);
@@ -2427,12 +2457,25 @@ function displayCategoryTransactions(transactions) {
   container.innerHTML = '';
   
   if (!transactions || transactions.length === 0) {
-    container.innerHTML = '<div class="notification">Không có giao dịch nào trong tháng hiện tại</div>';
+    container.innerHTML = '<div class="notification">Không có giao dịch nào trong khoảng thời gian đã lọc</div>';
     paginationDiv.style.display = 'none';
     return;
   }
   
-  container.innerHTML = `<div class="notification">Có ${transactions.length} giao dịch trong tháng hiện tại</div>`;
+  // Lấy thông tin khoảng thời gian từ cachedChartData
+  const startMonth = cachedChartData ? cachedChartData.startMonth : null;
+  const endMonth = cachedChartData ? cachedChartData.endMonth : null;
+  
+  let periodText = 'trong khoảng thời gian đã lọc';
+  if (startMonth && endMonth) {
+    if (startMonth === endMonth) {
+      periodText = `trong tháng ${startMonth}`;
+    } else {
+      periodText = `từ tháng ${startMonth} đến tháng ${endMonth}`;
+    }
+  }
+  
+  container.innerHTML = `<div class="notification">Có ${transactions.length} giao dịch ${periodText}</div>`;
   
   // Pagination
   const totalPages = Math.ceil(transactions.length / categoryDetailPerPage);
