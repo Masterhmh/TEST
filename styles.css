@@ -52,6 +52,7 @@
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
   --shadow-md: 0 4px 12px rgba(0,0,0,0.12);
   --shadow-hover: 0 8px 24px rgba(234, 88, 12, 0.35);
+  --shadow-active: 0 4px 12px rgba(234, 88, 12, 0.2);
 
   /* 🔘 Border Radius */
   --radius-sm: 8px;
@@ -435,8 +436,8 @@ button:hover::before {
 
 button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(21, 128, 61, 0.25), 
-              0 0 20px rgba(21, 128, 61, 0.15);
+  box-shadow: 0 8px 24px rgba(234, 88, 12, 0.25), 
+              0 0 20px rgba(234, 88, 12, 0.15);
 }
 
 /* Hold effect - Hiệu ứng khi giữ nút */
@@ -469,7 +470,7 @@ button i {
 /* Hold effect cho btn-success */
 .btn-success:active {
   transform: scale(0.96) translateY(1px);
-  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.2) !important;
+  box-shadow: var(--shadow-active) !important;
   filter: brightness(0.95);
 }
 
@@ -485,7 +486,7 @@ button i {
 /* Hold effect cho btn-danger */
 .btn-danger:active {
   transform: scale(0.96) translateY(1px);
-  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.2) !important;
+  box-shadow: var(--shadow-active) !important;
   filter: brightness(0.95);
 }
 
@@ -506,7 +507,7 @@ button i {
 /* Hold effect cho cancel button */
 .cancel-btn:active {
   transform: scale(0.96) translateY(1px);
-  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.2) !important;
+  box-shadow: var(--shadow-active) !important;
   filter: brightness(0.95);
 }
 
@@ -517,7 +518,7 @@ button i {
 /* Hold effect cho save button */
 .save-btn:active {
   transform: scale(0.96) translateY(1px);
-  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.2) !important;
+  box-shadow: var(--shadow-active) !important;
   filter: brightness(0.95);
 }
 
@@ -611,7 +612,7 @@ select:focus,
 textarea:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1);
   transform: translateY(-1px);
 }
 
