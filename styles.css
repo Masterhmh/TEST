@@ -54,6 +54,34 @@
   --shadow-hover: 0 8px 24px rgba(234, 88, 12, 0.35);
   --shadow-active: 0 4px 12px rgba(234, 88, 12, 0.2);
 
+  /* ============================================================================
+     🎨 BUTTON EFFECTS - THAY ĐỔI MÀU TẠI ĐÂY
+     ----------------------------------------------------------------------------
+     Để thay đổi màu sắc của TẤT CẢ các nút trong ứng dụng,
+     chỉ cần sửa các giá trị RGB trong các biến dưới đây:
+     
+     📌 Màu cam mặc định: 234, 88, 12
+     📌 Ví dụ màu xanh dương: 37, 99, 235
+     📌 Ví dụ màu tím: 139, 92, 246
+     📌 Ví dụ màu xanh lá: 34, 197, 94
+     📌 Ví dụ màu hồng: 236, 72, 153
+     
+     ⚠️ LƯU Ý: Chỉ thay đổi 3 số RGB, giữ nguyên độ trong suốt (số thứ 4)
+     ============================================================================ */
+  
+  /* 🎯 Màu khi hover button (ánh sáng xung quanh) */
+  --btn-hover-shadow: 0 8px 24px rgba(234, 88, 12, 0.25);
+  --btn-hover-glow: 0 0 20px rgba(234, 88, 12, 0.15);
+  
+  /* 🖱️ Màu khi nhấn/giữ button (active state) */
+  --btn-active-shadow: 0 4px 12px rgba(234, 88, 12, 0.2);
+  
+  /* 🔍 Màu khi focus vào input/select/textarea */
+  --input-focus-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1);
+  
+  /* 📱 Màu cho filter button active (Theo tháng, Cả năm, Tùy chọn) */
+  --filter-active-shadow: 0 8px 24px rgba(234, 88, 12, 0.35);
+
   /* 🔘 Border Radius */
   --radius-sm: 8px;
   --radius-md: 12px;
@@ -120,6 +148,18 @@
 
     /* 🔲 Border */
     --border-color: #1F2937;
+
+    /* ============================================================================
+       🎨 BUTTON EFFECTS - DARK MODE - THAY ĐỔI MÀU TẠI ĐÂY
+       ----------------------------------------------------------------------------
+       Màu cam nhạt hơn cho dark mode: 251, 146, 60
+       (Giữ nguyên hoặc thay đổi theo ý thích)
+       ============================================================================ */
+    --btn-hover-shadow: 0 8px 24px rgba(251, 146, 60, 0.25);
+    --btn-hover-glow: 0 0 20px rgba(251, 146, 60, 0.15);
+    --btn-active-shadow: 0 4px 12px rgba(251, 146, 60, 0.2);
+    --input-focus-shadow: 0 0 0 3px rgba(251, 146, 60, 0.1);
+    --filter-active-shadow: 0 8px 24px rgba(251, 146, 60, 0.35);
   }
 
   /* Stat-box */
@@ -436,14 +476,13 @@ button:hover::before {
 
 button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(234, 88, 12, 0.25), 
-              0 0 20px rgba(234, 88, 12, 0.15);
+  box-shadow: var(--btn-hover-shadow), var(--btn-hover-glow);
 }
 
 /* Hold effect - Hiệu ứng khi giữ nút */
 button:active {
   transform: scale(0.96) translateY(1px);
-  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.2) !important;
+  box-shadow: var(--btn-active-shadow) !important;
   filter: brightness(0.95);
 }
 
@@ -612,7 +651,7 @@ select:focus,
 textarea:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1);
+  box-shadow: var(--input-focus-shadow);
   transform: translateY(-1px);
 }
 
@@ -1773,7 +1812,7 @@ label {
 /* Hold effect cho filter mode buttons */
 .filter-mode-btn:active {
   transform: scale(0.96) translateY(1px);
-  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.2) !important;
+  box-shadow: var(--btn-active-shadow) !important;
   filter: brightness(0.95);
 }
 
@@ -1781,13 +1820,13 @@ label {
   background: var(--gradient-primary);
   color: white;
   border-color: var(--primary-color);
-  box-shadow: var(--shadow-hover);
+  box-shadow: var(--filter-active-shadow);
 }
 
 /* Active state vẫn giữ hiệu ứng hold */
 .filter-mode-btn.active:active {
   transform: scale(0.96) translateY(1px);
-  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.2) !important;
+  box-shadow: var(--btn-active-shadow) !important;
   filter: brightness(0.95);
 }
 
@@ -1856,14 +1895,13 @@ label {
 
 #backToCategoryBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(234, 88, 12, 0.35), 
-              0 0 20px rgba(234, 88, 12, 0.2) !important;
+  box-shadow: var(--btn-hover-shadow), var(--btn-hover-glow) !important;
 }
 
 /* Hold effect cho nút Quay lại */
 #backToCategoryBtn:active {
   transform: scale(0.96) translateY(1px);
-  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.2) !important;
+  box-shadow: var(--btn-active-shadow) !important;
   filter: brightness(0.95);
 }
 
@@ -1906,13 +1944,12 @@ label {
   
   #backToCategoryBtn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(251, 146, 60, 0.35), 
-                0 0 20px rgba(251, 146, 60, 0.2) !important;
+    box-shadow: var(--btn-hover-shadow), var(--btn-hover-glow) !important;
   }
   
   #backToCategoryBtn:active {
     transform: scale(0.96) translateY(1px);
-    box-shadow: 0 4px 12px rgba(251, 146, 60, 0.2) !important;
+    box-shadow: var(--btn-active-shadow) !important;
     filter: brightness(0.95);
   }
   
