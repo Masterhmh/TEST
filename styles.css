@@ -442,7 +442,7 @@ button:hover {
 /* Hold effect - Hiệu ứng khi giữ nút */
 button:active {
   transform: scale(0.96) translateY(1px);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.2) !important;
   filter: brightness(0.95);
 }
 
@@ -469,7 +469,7 @@ button i {
 /* Hold effect cho btn-success */
 .btn-success:active {
   transform: scale(0.96) translateY(1px);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.2) !important;
   filter: brightness(0.95);
 }
 
@@ -485,7 +485,7 @@ button i {
 /* Hold effect cho btn-danger */
 .btn-danger:active {
   transform: scale(0.96) translateY(1px);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.2) !important;
   filter: brightness(0.95);
 }
 
@@ -506,7 +506,7 @@ button i {
 /* Hold effect cho cancel button */
 .cancel-btn:active {
   transform: scale(0.96) translateY(1px);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.2) !important;
   filter: brightness(0.95);
 }
 
@@ -517,7 +517,7 @@ button i {
 /* Hold effect cho save button */
 .save-btn:active {
   transform: scale(0.96) translateY(1px);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.2) !important;
   filter: brightness(0.95);
 }
 
@@ -1772,7 +1772,7 @@ label {
 /* Hold effect cho filter mode buttons */
 .filter-mode-btn:active {
   transform: scale(0.96) translateY(1px);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.2) !important;
   filter: brightness(0.95);
 }
 
@@ -1786,7 +1786,7 @@ label {
 /* Active state vẫn giữ hiệu ứng hold */
 .filter-mode-btn.active:active {
   transform: scale(0.96) translateY(1px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.2) !important;
   filter: brightness(0.95);
 }
 
@@ -1862,7 +1862,7 @@ label {
 /* Hold effect cho nút Quay lại */
 #backToCategoryBtn:active {
   transform: scale(0.96) translateY(1px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.2) !important;
   filter: brightness(0.95);
 }
 
@@ -1911,7 +1911,7 @@ label {
   
   #backToCategoryBtn:active {
     transform: scale(0.96) translateY(1px);
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 4px 12px rgba(251, 146, 60, 0.2) !important;
     filter: brightness(0.95);
   }
   
