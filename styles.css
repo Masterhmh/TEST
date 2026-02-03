@@ -55,32 +55,33 @@
   --shadow-active: 0 4px 12px rgba(234, 88, 12, 0.2);
 
   /* ============================================================================
-     🎨 BUTTON EFFECTS - THAY ĐỔI MÀU TẠI ĐÂY
+     🎨 BUTTON EFFECTS - THAY ĐỔI MÀU TẠI ĐÂY (CỰC ĐơN GIẢN!)
      ----------------------------------------------------------------------------
-     Để thay đổi màu sắc của TẤT CẢ các nút trong ứng dụng,
-     chỉ cần sửa các giá trị RGB trong các biến dưới đây:
+     Để thay đổi màu sắc của TẤT CẢ các nút, chỉ cần sửa MÃ MÀU dưới đây:
      
-     📌 Màu cam mặc định: 234, 88, 12
-     📌 Ví dụ màu xanh dương: 37, 99, 235
-     📌 Ví dụ màu tím: 139, 92, 246
-     📌 Ví dụ màu xanh lá: 34, 197, 94
-     📌 Ví dụ màu hồng: 236, 72, 153
+     📌 Cú pháp: #RRGGBB (6 ký tự hex)
      
-     ⚠️ LƯU Ý: Chỉ thay đổi 3 số RGB, giữ nguyên độ trong suốt (số thứ 4)
+     💡 Gợi ý màu phổ biến:
+     - Cam (mặc định):  #EA580C
+     - Xanh dương:      #2563EB
+     - Tím:             #8B5CF6
+     - Xanh lá:         #22C55E
+     - Hồng:            #EC4899
+     - Đỏ:              #DC2626
+     - Vàng:            #EAB308
+     
+     ⚠️ CHỈ THAY ĐỔI 1 DÒNG BÊN DƯỚI, TẤT CẢ NÚT SẼ ĐỔI MÀU!
      ============================================================================ */
   
-  /* 🎯 Màu khi hover button (ánh sáng xung quanh) */
-  --btn-hover-shadow: 0 8px 24px rgba(234, 88, 12, 0.25);
-  --btn-hover-glow: 0 0 20px rgba(234, 88, 12, 0.15);
+  /* 🎯 MÀU CHÍNH CHO TẤT CẢ CÁC NÚT - THAY ĐỔI TẠI ĐÂY */
+  --btn-effect-color: #EA580C;  /* ← CHỈ THAY MÃ MÀU NÀY! */
   
-  /* 🖱️ Màu khi nhấn/giữ button (active state) */
-  --btn-active-shadow: 0 4px 12px rgba(234, 88, 12, 0.2);
-  
-  /* 🔍 Màu khi focus vào input/select/textarea */
-  --input-focus-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1);
-  
-  /* 📱 Màu cho filter button active (Theo tháng, Cả năm, Tùy chọn) */
-  --filter-active-shadow: 0 8px 24px rgba(234, 88, 12, 0.35);
+  /* ⚙️ Các hiệu ứng tự động (KHÔNG CẦN SỬA) */
+  --btn-hover-shadow: 0 8px 24px color-mix(in srgb, var(--btn-effect-color) 25%, transparent);
+  --btn-hover-glow: 0 0 20px color-mix(in srgb, var(--btn-effect-color) 15%, transparent);
+  --btn-active-shadow: 0 4px 12px color-mix(in srgb, var(--btn-effect-color) 20%, transparent);
+  --input-focus-shadow: 0 0 0 3px color-mix(in srgb, var(--btn-effect-color) 10%, transparent);
+  --filter-active-shadow: 0 8px 24px color-mix(in srgb, var(--btn-effect-color) 35%, transparent);
 
   /* 🔘 Border Radius */
   --radius-sm: 8px;
@@ -152,14 +153,18 @@
     /* ============================================================================
        🎨 BUTTON EFFECTS - DARK MODE - THAY ĐỔI MÀU TẠI ĐÂY
        ----------------------------------------------------------------------------
-       Màu cam nhạt hơn cho dark mode: 251, 146, 60
-       (Giữ nguyên hoặc thay đổi theo ý thích)
+       Màu cho Dark Mode (thường nhạt hơn Light Mode để dễ nhìn)
        ============================================================================ */
-    --btn-hover-shadow: 0 8px 24px rgba(251, 146, 60, 0.25);
-    --btn-hover-glow: 0 0 20px rgba(251, 146, 60, 0.15);
-    --btn-active-shadow: 0 4px 12px rgba(251, 146, 60, 0.2);
-    --input-focus-shadow: 0 0 0 3px rgba(251, 146, 60, 0.1);
-    --filter-active-shadow: 0 8px 24px rgba(251, 146, 60, 0.35);
+    
+    /* 🎯 MÀU CHÍNH CHO DARK MODE - THAY ĐỔI TẠI ĐÂY */
+    --btn-effect-color: #FB923C;  /* ← Cam nhạt hơn cho dark mode */
+    
+    /* ⚙️ Các hiệu ứng tự động (KHÔNG CẦN SỬA) */
+    --btn-hover-shadow: 0 8px 24px color-mix(in srgb, var(--btn-effect-color) 25%, transparent);
+    --btn-hover-glow: 0 0 20px color-mix(in srgb, var(--btn-effect-color) 15%, transparent);
+    --btn-active-shadow: 0 4px 12px color-mix(in srgb, var(--btn-effect-color) 20%, transparent);
+    --input-focus-shadow: 0 0 0 3px color-mix(in srgb, var(--btn-effect-color) 10%, transparent);
+    --filter-active-shadow: 0 8px 24px color-mix(in srgb, var(--btn-effect-color) 35%, transparent);
   }
 
   /* Stat-box */
