@@ -106,7 +106,6 @@
   
   <!-- Dropdown chọn tháng đơn (chỉ hiện khi chọn Theo tháng) -->
   <div class="input-group" id="singleMonthSelector" style="display: flex; margin-bottom: 1rem;">
-    <label>Tháng:</label>
     <select id="singleMonth">
       <option value="1">Tháng 1</option><option value="2">Tháng 2</option><option value="3">Tháng 3</option>
       <option value="4">Tháng 4</option><option value="5">Tháng 5</option><option value="6">Tháng 6</option>
@@ -114,6 +113,11 @@
       <option value="10">Tháng 10</option><option value="11">Tháng 11</option><option value="12">Tháng 12</option>
     </select>
     <button id="fetchSingleMonthBtn"><i class="fas fa-filter"></i> Lọc</button>
+  </div>
+  
+  <!-- Nút Lọc cho chế độ Cả năm -->
+  <div class="input-group" id="yearlyFilterBtn" style="display: none; margin-bottom: 1rem; justify-content: center;">
+    <button id="fetchYearlyDataBtn"><i class="fas fa-filter"></i> Lọc</button>
   </div>
   
   <!-- Dropdown chọn khoảng tháng (chỉ hiện khi chọn Tùy chọn) -->
@@ -196,7 +200,6 @@
       
       <!-- Dropdown chọn tháng (ẩn mặc định) -->
       <div class="input-group" id="searchMonthSelector" style="display: none; margin-bottom: 1rem;">
-        <label>Tháng:</label>
         <select id="searchSingleMonth">
           <option value="1">Tháng 1</option><option value="2">Tháng 2</option><option value="3">Tháng 3</option>
           <option value="4">Tháng 4</option><option value="5">Tháng 5</option><option value="6">Tháng 6</option>
