@@ -1931,6 +1931,7 @@ document.addEventListener('DOMContentLoaded', function() {
   filterMonthlyBtn.addEventListener('click', function() {
     setActiveFilterButton(this);
     singleMonthSelector.style.display = 'flex';
+    document.getElementById('yearlyFilterBtn').style.display = 'none';
     monthRangeSelector.style.display = 'none';
     
     // Set giá trị mặc định là tháng hiện tại
@@ -1944,6 +1945,7 @@ document.addEventListener('DOMContentLoaded', function() {
   filterYearlyBtn.addEventListener('click', function() {
     setActiveFilterButton(this);
     singleMonthSelector.style.display = 'none';
+    document.getElementById('yearlyFilterBtn').style.display = 'flex';
     monthRangeSelector.style.display = 'none';
     
     const currentDate = new Date();
@@ -1953,14 +1955,14 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('startMonth').value = 1;
     document.getElementById('endMonth').value = currentMonth;
     
-    // Tự động lọc với cache
-    window.fetchMonthlyDataWithCache('yearly', 1, currentMonth);
+    // Không tự động lọc, chờ người dùng nhấn nút "Lọc"
   });
   
   // Xử lý nút "Tùy chọn" - hiển thị dropdown để người dùng chọn
   filterCustomBtn.addEventListener('click', function() {
     setActiveFilterButton(this);
     singleMonthSelector.style.display = 'none';
+    document.getElementById('yearlyFilterBtn').style.display = 'none';
     monthRangeSelector.style.display = 'flex';
     
     // Set giá trị mặc định
@@ -1991,6 +1993,15 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Lọc dữ liệu của tháng được chọn
     window.fetchMonthlyDataWithCache('monthly', selectedMonth, selectedMonth);
+  });
+  
+  // Event cho nút "Lọc" trong chế độ "Cả năm"
+  document.getElementById('fetchYearlyDataBtn').addEventListener('click', function() {
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1;
+    
+    // Lọc dữ liệu từ tháng 1 đến tháng hiện tại
+    window.fetchMonthlyDataWithCache('yearly', 1, currentMonth);
   });
   
   // Xử lý nút "Cả năm" trong Tab 4 (Search)
@@ -2115,6 +2126,7 @@ document.getElementById('nextPageSearch').addEventListener('click', () => {
   // Khởi tạo hiển thị dropdown "Theo tháng" mặc định cho Tab 2 (Báo Cáo)
   if (singleMonthSelector && monthRangeSelector) {
     singleMonthSelector.style.display = 'flex';
+    document.getElementById('yearlyFilterBtn').style.display = 'none';
     monthRangeSelector.style.display = 'none';
     // Set giá trị mặc định là tháng hiện tại
     const currentMonth = new Date().getMonth() + 1;
